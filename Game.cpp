@@ -102,11 +102,31 @@ void Game::run() {
 }
 
 /**
- * @brief Creates window
+ * @brief Creates window from config file
  * 
  */
 void Game::initializeWindow() {
-    this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Test Game C++");
+    std::ifstream inputFile("Config/window.ini");
+
+    std::string title = "None";
+    sf::VideoMode window_bounds(800, 600);
+    unsigned framerate_limit = 120;
+    bool vertical_sync_enabled = false;
+
+    if(inputFile.is_open()) {
+        std::getline(inputFile, title);
+        inputFile >> window_bounds.width >> window_bounds.height;
+        inputFile >> framerate_limit;
+        inputFile >> vertical_sync_enabled;
+    } else {
+        exit(1);
+    }
+
+    inputFile.close();
+
+    this->window = new sf::RenderWindow(window_bounds, title);
+    this->window->setFramerateLimit(framerate_limit);
+    this->window->setVerticalSyncEnabled(vertical_sync_enabled);
 }
 
 /**
@@ -114,16 +134,18 @@ void Game::initializeWindow() {
  *        For visualization, go to < sf::Keyboard >'s definition by right clicking it
  */
 void Game::initializeKeys() {
-    this->supportedKeys["Escape"] = sf::Keyboard::Key::Escape; // Adds escape to available, supported keys
-    this->supportedKeys["A"] = sf::Keyboard::Key::A;
-    this->supportedKeys["D"] = sf::Keyboard::Key::D;
-    this->supportedKeys["W"] = sf::Keyboard::Key::W;
-    this->supportedKeys["S"] = sf::Keyboard::Key::S;
+    std::ifstream inputFile("Config/supported_keys.ini");
 
-    // Posts all keys in map to console (debugging)
-    for(auto i : this->supportedKeys) {
-        std::cout << i.first << " " << i.second << "\n";
+    if(inputFile.is_open()) {
+        std::string key;
+        int key_value = 0;
+
+        while(inputFile >> key >> key_value) {
+            this->supportedKeys[key] = key_value;
+        }
     }
+
+    inputFile.close();
 }
 /**
  * @brief Pushes new state to state stack

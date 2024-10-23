@@ -4,6 +4,8 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <stack>
 #include <map>

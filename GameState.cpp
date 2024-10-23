@@ -53,6 +53,7 @@ void GameState::endState() {
  * @param dt deltaTime
  */
 void GameState::update(const float& dt) {
+    this->updateMousePositions();
     this->updateInput(dt);
 
     this->player.update(dt);
@@ -73,13 +74,20 @@ void GameState::render(sf::RenderTarget* target) {
 }
 
 /**
- * @brief Initializes available keybinds for specific GameState object
+ * @brief Initializes available keybinds for specific GameState object by loading gamestate keybinds from file
  * 
  */
 void GameState::initializeKeybinds() {
-    this->keybinds["CLOSE"] = this->supportedKeys->at("Escape");
-    this->keybinds["MOVE_LEFT"] = this->supportedKeys->at("A");
-    this->keybinds["MOVE_RIGHT"] = this->supportedKeys->at("D");
-    this->keybinds["MOVE_UP"] = this->supportedKeys->at("W");
-    this->keybinds["MOVE_DOWN"] = this->supportedKeys->at("S");
+    std::ifstream inputFile("Config/gamestate_keybinds.ini");
+
+    if(inputFile.is_open()) {
+        std::string key = "";
+        std::string key2 = "";
+
+        while(inputFile >> key >> key2) {
+            this->keybinds[key] = this->supportedKeys->at(key2);
+        }
+    }
+
+    inputFile.close();
 }

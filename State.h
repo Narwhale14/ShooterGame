@@ -26,6 +26,7 @@ class State {
         virtual void endState() = 0;
 
         // Update
+        virtual void updateMousePositions();
         virtual void updateInput(const float& dt) = 0;
         virtual void update(const float& dt) = 0;
 
@@ -37,6 +38,10 @@ class State {
         std::map<std::string, int>* supportedKeys; // A point to avoid copying list of keys
         std::map<std::string, int> keybinds; // Each state has its own keybinds ofc
         bool quit;
+
+        sf::Vector2i mousePosScreen; // The raw mouse position
+        sf::Vector2i mousePosWindow; // The mouse position relative to the window
+        sf::Vector2f mousePosView; // Keeps track of mouse within view relative to character
 
         // Resources
         std::vector<sf::Texture> textures;
