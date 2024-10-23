@@ -32,4 +32,4 @@
 *.app
 
 Object/*
-!Object
+!Object/.gitkeep
