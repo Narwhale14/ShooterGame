@@ -4,7 +4,7 @@
  * @brief GameState implementation file
  * @date 2024-10-23
  */
-#include "GameState.h"
+#include "../Resource/GameState.h"
 
 /**
  * @brief Construct a new Game State:: Game State object
