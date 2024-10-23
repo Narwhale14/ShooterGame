@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "../Resource/Entity.h"
 
 Entity::Entity() {
     this->shape.setSize(sf::Vector2f(50.f, 50.f));

@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "../Resource/Game.h"
 
 /**
  * @brief Construct a new Game:: Game object
@@ -107,7 +107,7 @@ void Game::run() {
  */
 void Game::initializeWindow() {
     std::ifstream inputFile("Config/window.ini");
-
+    
     std::string title = "None";
     sf::VideoMode window_bounds(800, 600);
     unsigned framerate_limit = 120;

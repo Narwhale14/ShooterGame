@@ -4,9 +4,9 @@
  * @brief Main file
  * @date 2024-10-23
  * 
- * @compile: g++ *.cpp -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+ * @compile: g++ Source/*.cpp -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
  */
-#include "Game.h"
+#include "../Resource/Game.h"
 
 int main() {
     Game game;

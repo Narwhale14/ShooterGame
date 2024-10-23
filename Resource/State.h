@@ -10,7 +10,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "Entity.h"
+#include "../Resource/Entity.h"
 
 class State {
     public:
