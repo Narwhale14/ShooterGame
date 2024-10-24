@@ -15,17 +15,16 @@ class GameState : public State {
         GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~GameState();
 
-        // Functions
         void endState();
 
         void updateInput(const float& dt);
         void update(const float& dt);
         void render(sf::RenderTarget* target = NULL);
     private:
-        Entity player;
+        Player* player;
 
-        // Functions
         void initializeKeybinds();
+        void initializeTextures();
 };
 
 #endif
