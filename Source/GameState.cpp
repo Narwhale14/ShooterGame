@@ -13,11 +13,15 @@
  * @param supportedKeys takes list of supported keys from Game class and runs it through State classes constructor
  */
 GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
+    // Both of these functions essentially just exist to clean up the constructor
     this->initializeKeybinds();
+    this->initializeTextures();
+    
+    this->player = new Player(0, 0, &this->textures["PLAYER"]);
 }
 
 GameState::~GameState() {
-
+    delete this->player;
 }
 
 /**
@@ -30,13 +34,13 @@ void GameState::updateInput(const float& dt) {
 
     // Updates player input
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_LEFT"))))
-        this->player.move(dt, -1.f, 0.f);
+        this->player->move(dt, -1.f, 0.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_RIGHT"))))
-        this->player.move(dt, 1.f, 0.f);
+        this->player->move(dt, 1.f, 0.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_UP"))))
-        this->player.move(dt, 0.f, -1.f);
+        this->player->move(dt, 0.f, -1.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
-        this->player.move(dt, 0.f, 1.f);
+        this->player->move(dt, 0.f, 1.f);
 }
 
 /**
@@ -56,7 +60,8 @@ void GameState::update(const float& dt) {
     this->updateMousePositions();
     this->updateInput(dt);
 
-    this->player.update(dt);
+    this->player->update(dt);
+    this->player->pointToCursor(mousePosView);
 }
 
 /**
@@ -70,7 +75,7 @@ void GameState::render(sf::RenderTarget* target) {
         target = this->window;
     }
 
-    this->player.render(target);
+    this->player->render(target);
 }
 
 /**
@@ -90,4 +95,17 @@ void GameState::initializeKeybinds() {
     }
 
     inputFile.close();
+}
+
+/**
+ * @brief Loads all textures into map
+ * 
+ */
+void GameState::initializeTextures() {
+    sf::Texture temp; // Use this whenever loading a texture
+
+    if(temp.loadFromFile("Textures/player.png")) {
+        std::cout << "Player file loaded!\n";
+        this->textures["PLAYER"] = temp; // Names player texture PLAYER
+    }
 }

@@ -14,26 +14,18 @@
 
 class Game {
     public:
-        // Constructors/Destructor
         Game();
-        virtual ~Game();
+        ~Game();
 
-        // Regular
-        void endApplication();
-
-        // Update
         void updateDt();
         void updateSFMLEvents();
         void update();
 
-        // Render
         void render();
 
-        // Core
         void run();
 
     private:
-        // Variables
         sf::RenderWindow *window;
         sf::Event sfEvent;
 
@@ -49,10 +41,8 @@ class Game {
         // Supported keys for the game
         std::map<std::string, int> supportedKeys;
 
-        // Initialization
         void initializeWindow();
         void initializeKeys();
-        void initializeStates();
 };
 
 #endif

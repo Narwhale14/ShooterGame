@@ -5,9 +5,11 @@
  * Calls to build the window and pushes a new state to the state stack
  */
 Game::Game() {
+    // Both of these are essentially just functions that purposefully clean up the constructor
     this->initializeWindow();
     this->initializeKeys();
-    this->initializeStates();
+    
+    this->states.push(new GameState(this->window, &this->supportedKeys));
 }
 
 /**
@@ -21,14 +23,6 @@ Game::~Game() {
         delete this->states.top();
         this->states.pop();
     }
-}
-
-/**
- * @brief Runs when user wants to end application
- * 
- */
-void Game::endApplication() {
-    std::cout << "Ending application\n";
 }
 
 /**
@@ -69,7 +63,6 @@ void Game::update() {
         }
     } else {
         // Application's end
-        this->endApplication();
         this->window->close();
     }
 }
@@ -146,11 +139,4 @@ void Game::initializeKeys() {
     }
 
     inputFile.close();
-}
-/**
- * @brief Pushes new state to state stack
- * 
- */
-void Game::initializeStates() {
-    this->states.push(new GameState(this->window, &this->supportedKeys));
 }
