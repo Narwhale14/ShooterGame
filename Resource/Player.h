@@ -19,6 +19,7 @@ class Player : public Entity {
         
         virtual void pointToCursor(const sf::Vector2f mousePos);
     private:
+        
 };
 
 #endif

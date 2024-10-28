@@ -11,6 +11,7 @@
 #define STATE_H
 
 #include "Player.h"
+#include "Mortar.h"
 
 class State {
     public:

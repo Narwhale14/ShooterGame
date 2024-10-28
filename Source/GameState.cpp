@@ -16,12 +16,15 @@ GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* suppo
     // Both of these functions essentially just exist to clean up the constructor
     this->initializeKeybinds();
     this->initializeTextures();
-    
+
     this->player = new Player(0, 0, &this->textures["PLAYER"]);
+    this->shoot = new Mortar(30.f,&this->textures["XPLOSION"]);
+    
 }
 
 GameState::~GameState() {
     delete this->player;
+    delete this->shoot;
 }
 
 /**
@@ -59,7 +62,6 @@ void GameState::endState() {
 void GameState::update(const float& dt) {
     this->updateMousePositions();
     this->updateInput(dt);
-
     this->player->update(dt);
     this->player->pointToCursor(mousePosView);
 }
@@ -76,6 +78,11 @@ void GameState::render(sf::RenderTarget* target) {
     }
 
     this->player->render(target);
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("SHOOT")))){
+        this->shoot->fire(mousePosView);
+        this->shoot->render(target);
+    }
 }
 
 /**
@@ -107,5 +114,10 @@ void GameState::initializeTextures() {
     if(temp.loadFromFile("Textures/player.png")) {
         std::cout << "Player file loaded!\n";
         this->textures["PLAYER"] = temp; // Names player texture PLAYER
+    }
+    
+    if(temp.loadFromFile("Textures/xplosion.png")) {
+        std::cout << "Xplosion file loaded!\n";
+        this->textures["XPLOSION"] = temp; // Names player texture PLAYER
     }
 }
