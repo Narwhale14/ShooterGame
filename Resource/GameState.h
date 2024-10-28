@@ -22,6 +22,7 @@ class GameState : public State {
         void render(sf::RenderTarget* target = NULL);
     private:
         Player* player;
+        Mortar* shoot;
 
         void initializeKeybinds();
         void initializeTextures();
