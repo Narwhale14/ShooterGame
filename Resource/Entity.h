@@ -8,30 +8,17 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <stack>
-#include <cmath>
-#include <map>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
+#include "Mortar.h"
 
 class Entity {
     public:
-        Entity(sf::Texture* texture = nullptr);
+        Entity();
         virtual ~Entity();
 
         void createSprite(sf::Texture* texture);
-        virtual void move(const float& dt, const float dir_x, const float dir_y);
+        void move(const float& dt, const float dir_x, const float dir_y);
 
-        virtual void update(const float& dt);
-        virtual void render(sf::RenderTarget* target);
+        virtual void render(sf::RenderTarget* target) = 0;
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;

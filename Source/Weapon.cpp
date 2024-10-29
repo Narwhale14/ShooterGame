@@ -7,8 +7,17 @@
  */
 #include "../Resource/Weapon.h"
 
-Weapon::Weapon(sf::Texture* texture) {
-    this->texture = nullptr;
+Weapon::Weapon() {
+    texture = nullptr;
+    sprite = nullptr;
+}
+
+bool Weapon::getFiringStatus() {
+    return firing;
+}
+
+void Weapon::setFiringStatus(bool status) {
+    firing = status;
 }
 
 /**
@@ -17,23 +26,23 @@ Weapon::Weapon(sf::Texture* texture) {
  * @param target 
  */
 void Weapon::render(sf::RenderTarget* target) {
-    if(this->sprite) {
-        target->draw(*this->sprite);
+    if(sprite) {
+        target->draw(*sprite);
     }
 }
 
 /**
- * @brief Initializes sprite and sets its origin to the center + scales it down to 5%
+ * @brief Initializes sprite and sets its origin to the center + scales it down to 10%
  * 
  * @param texture a pointer pointing to a texture
  */
 void Weapon::createSprite(sf::Texture* texture) {
     this->texture = texture;
-    this->sprite = new sf::Sprite(*this->texture);
+    sprite = new sf::Sprite(*this->texture);
 
     // Sets origin to middle of shape
-    this->sprite->setScale(0.1f, 0.1f);
-    this->sprite->setOrigin(this->sprite->getGlobalBounds().width / 2, this->sprite->getGlobalBounds().height / 2);
+    sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
+    sprite->setScale(0.1f, 0.1f);
 }
 
 /**
@@ -41,11 +50,5 @@ void Weapon::createSprite(sf::Texture* texture) {
  *        Deletes dynamically allocated sprite and texture
  */
 Weapon::~Weapon() {
-    delete this->sprite;
-
-    std::cout << "Mortar deleted";
-}
-
-void Weapon::update(const float& dt) {
-
+    delete sprite;
 }

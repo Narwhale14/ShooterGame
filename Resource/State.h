@@ -11,7 +11,6 @@
 #define STATE_H
 
 #include "Player.h"
-#include "Mortar.h"
 
 class State {
     public:
@@ -20,10 +19,10 @@ class State {
 
         const bool& getQuit() const;
 
-        virtual void checkForQuit();
+        void checkForQuit();
         virtual void endState() = 0;
 
-        virtual void updateMousePositions();
+        void updateMousePositions();
         virtual void updateInput(const float& dt) = 0;
         virtual void update(const float& dt) = 0;
 

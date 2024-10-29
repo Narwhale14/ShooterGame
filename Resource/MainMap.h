@@ -10,10 +10,10 @@
 
 #include "State.h"
 
-class GameState : public State {
+class MainMap : public State {
     public:
-        GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
-        virtual ~GameState();
+        MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
+        virtual ~MainMap();
 
         void endState();
 
@@ -22,7 +22,6 @@ class GameState : public State {
         void render(sf::RenderTarget* target = NULL);
     private:
         Player* player;
-        Mortar* shoot;
 
         void initializeKeybinds();
         void initializeTextures();

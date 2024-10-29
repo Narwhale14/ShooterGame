@@ -25,16 +25,21 @@
 
 class Weapon{
     public:
-        Weapon(sf::Texture* texture = nullptr);
+        Weapon();
         virtual ~Weapon();
 
-        virtual void update(const float& dt);
-        virtual void render(sf::RenderTarget* target);
+        bool getFiringStatus();
+        void setFiringStatus(bool status);
+
+        virtual void fire(sf::Vector2f mouseLoc) = 0;
+
+        void render(sf::RenderTarget* target);
         void createSprite(sf::Texture* texture);
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
 
+        bool firing;
 };
 
 #endif
