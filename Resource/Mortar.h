@@ -8,7 +8,7 @@ class Mortar : public Weapon {
         Mortar(float r = 0, sf::Texture* texture = nullptr);
         ~Mortar();
 
-        void fire(sf::Vector2f mouseLoc);
+        virtual void fire(sf::Vector2f mouseLoc);
     private:
         float range;
 };

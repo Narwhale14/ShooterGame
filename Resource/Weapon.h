@@ -31,6 +31,8 @@ class Weapon{
         bool getFiringStatus();
         void setFiringStatus(bool status);
 
+        virtual void fire(sf::Vector2f mouseLoc) = 0;
+
         void render(sf::RenderTarget* target);
         void createSprite(sf::Texture* texture);
     protected:

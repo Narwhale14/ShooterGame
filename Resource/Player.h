@@ -21,7 +21,7 @@ class Player : public Entity {
         virtual void render(sf::RenderTarget* target);
     private:
         std::string handheldType;
-        Mortar* handheld;   
+        Weapon* handheld;   
 };
 
 #endif
