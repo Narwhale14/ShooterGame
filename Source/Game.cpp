@@ -6,10 +6,10 @@
  */
 Game::Game() {
     // Both of these are essentially just functions that purposefully clean up the constructor
-    this->initializeWindow();
-    this->initializeKeys();
+    initializeWindow();
+    initializeKeys();
     
-    this->states.push(new GameState(this->window, &this->supportedKeys));
+    states.push(new MainMap(window, &supportedKeys));
 }
 
 /**
@@ -17,30 +17,11 @@ Game::Game() {
  * Deletes window (pointer) and cycles through state stack deleting and popping state
  */
 Game::~Game() {
-    delete this->window;
+    delete window;
 
-    while(!this->states.empty()) {
-        delete this->states.top();
-        this->states.pop();
-    }
-}
-
-/**
- * @brief Updates the dt variable with the time it takes to update and render one frame
- * 
- */
-void Game::updateDt() {
-    this->dt = this->dtClock.restart().asSeconds();
-}
-
-/**
- * @brief Constantly checks for any updates with SFML events
- * 
- */
-void Game::updateSFMLEvents() {
-    while(this->window->pollEvent(this->sfEvent)) {
-        if(this->sfEvent.type == sf::Event::Closed)
-            this->window->close();
+    while(!states.empty()) {
+        delete states.top();
+        states.pop();
     }
 }
 
@@ -49,21 +30,26 @@ void Game::updateSFMLEvents() {
  * if 0 states on stack, end program
  */
 void Game::update() {
-    this->updateSFMLEvents();
+    dt = dtClock.restart().asSeconds();
+
+    while(window->pollEvent(sfEvent)) {
+        if(sfEvent.type == sf::Event::Closed)
+            window->close();
+    }
 
     // Updates the state that's first in queue
-    if(!this->states.empty()) {
-        this->states.top()->update(this->dt);
+    if(!states.empty()) {
+        states.top()->update(dt);
 
-        if(this->states.top()->getQuit()) {
+        if(states.top()->getQuit()) {
             // Code that happens when user quits a state
-            this->states.top()->endState();
-            delete this->states.top();
-            this->states.pop();
+            states.top()->endState();
+            delete states.top();
+            states.pop();
         }
     } else {
         // Application's end
-        this->window->close();
+        window->close();
     }
 }
 
@@ -72,14 +58,14 @@ void Game::update() {
  * 
  */
 void Game::render() {
-    this->window->clear();
+    window->clear();
 
     // Renders the state first in queue (top of stack)
-    if(!this->states.empty()) {
-        this->states.top()->render(this->window);
+    if(!states.empty()) {
+        states.top()->render(window);
     }
 
-    this->window->display();
+    window->display();
 }
 
 /**
@@ -87,10 +73,9 @@ void Game::render() {
  * 
  */
 void Game::run() {
-    while(this->window->isOpen()) {
-        this->updateDt();
-        this->update();
-        this->render();
+    while(window->isOpen()) {
+        update();
+        render();
     }
 }
 
@@ -117,9 +102,9 @@ void Game::initializeWindow() {
 
     inputFile.close();
 
-    this->window = new sf::RenderWindow(window_bounds, title);
-    this->window->setFramerateLimit(framerate_limit);
-    this->window->setVerticalSyncEnabled(vertical_sync_enabled);
+    window = new sf::RenderWindow(window_bounds, title);
+    window->setFramerateLimit(framerate_limit);
+    window->setVerticalSyncEnabled(vertical_sync_enabled);
 }
 
 /**
@@ -134,7 +119,7 @@ void Game::initializeKeys() {
         int key_value = 0;
 
         while(inputFile >> key >> key_value) {
-            this->supportedKeys[key] = key_value;
+            supportedKeys[key] = key_value;
         }
     }
 

@@ -1,4 +1,4 @@
-sfml-app: Object/main.o Object/Entity.o Object/Weapon.o Object/Game.o Object/State.o Object/GameState.o Object/Player.o Object/Mortar.o
+sfml-app: Object/main.o Object/Entity.o Object/Weapon.o Object/Game.o Object/State.o Object/MainMap.o Object/Player.o Object/Mortar.o
 	g++ -g -Wall Object/*.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
 
 Object/main.o: Source/main.cpp Resource/Game.h
@@ -16,8 +16,8 @@ Object/Game.o: Source/Game.cpp Resource/Game.h
 Object/State.o: Source/State.cpp Resource/State.h
 	g++ -Wall -c Source/State.cpp -o Object/State.o
 
-Object/GameState.o: Source/GameState.cpp Resource/GameState.h
-	g++ -Wall -c Source/GameState.cpp -o Object/GameState.o
+Object/MainMap.o: Source/MainMap.cpp Resource/MainMap.h
+	g++ -Wall -c Source/MainMap.cpp -o Object/MainMap.o
 
 Object/Player.o: Source/Player.cpp Resource/Player.h
 	g++ -Wall -c Source/Player.cpp -o Object/Player.o

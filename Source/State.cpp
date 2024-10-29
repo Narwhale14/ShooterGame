@@ -16,7 +16,7 @@ State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys
     this->window = window;
     this->supportedKeys = supportedKeys;
 
-    this->quit = false;
+    quit = false;
 }
 
 State::~State() {
@@ -30,7 +30,7 @@ State::~State() {
  * @return false 
  */
 const bool& State::getQuit() const {
-    return this->quit;
+    return quit;
 }
 
 /**
@@ -38,8 +38,8 @@ const bool& State::getQuit() const {
  * 
  */
 void State::checkForQuit() {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE")))) {
-        this->quit = true;
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("CLOSE")))) {
+        quit = true;
     }
 }
 
@@ -48,5 +48,5 @@ void State::checkForQuit() {
  * 
  */
 void State::updateMousePositions() {
-    this->mousePosView = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
+    mousePosView = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 }

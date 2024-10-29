@@ -10,19 +10,15 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "GameState.h"
+#include "MainMap.h"
 
 class Game {
     public:
         Game();
         ~Game();
 
-        void updateDt();
-        void updateSFMLEvents();
         void update();
-
         void render();
-
         void run();
 
     private:
