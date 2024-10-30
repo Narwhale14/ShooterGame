@@ -12,7 +12,7 @@
 
 class Player : public Entity {
     public:
-        Player(float x = 0, float y = 0, std::map<std::string, sf::Texture>* textures = nullptr);
+        Player(std::map<std::string, sf::Texture>* textures = nullptr, int x = 0, int y = 0, float s = 0.075f);
         ~Player();
         
         virtual void pointToCursor(const sf::Vector2f mousePos);

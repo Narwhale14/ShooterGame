@@ -12,8 +12,11 @@
 
 class Entity {
     public:
-        Entity();
+        Entity(int scale = 0.075f);
         virtual ~Entity();
+
+        void setScale(float s);
+        void setPosition(sf::Vector2f pos);
 
         void createSprite(sf::Texture* texture);
         void move(const float& dt, const float dir_x, const float dir_y);
@@ -22,11 +25,10 @@ class Entity {
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
+        float scale;
 
         float movementSpeed;
         float angle;
-
-        int health;
 };
 
 #endif

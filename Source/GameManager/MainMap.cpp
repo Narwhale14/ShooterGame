@@ -13,11 +13,11 @@
  * @param supportedKeys takes list of supported keys from Game class and runs it through State classes constructor
  */
 MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
-    // Both of these functions essentially just exist to clean up the constructor
     initializeKeybinds();
     initializeTextures();
 
-    player = new Player(0, 0, &textures);
+    player = new Player(&textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
+
     keyPressed=false;
 }
 
@@ -107,13 +107,15 @@ void MainMap::initializeKeybinds() {
 void MainMap::initializeTextures() {
     sf::Texture temp; // Use this whenever loading a texture
 
-    if(temp.loadFromFile("Textures/player.png")) {
-        std::cout << "Player file loaded!\n";
-        textures["PLAYER"] = temp; // Names player texture PLAYER
-    }
+    if(temp.loadFromFile("Textures/player_normal.png"))
+        textures["PLAYER_NORMAL"] = temp;
+
+    if(temp.loadFromFile("Textures/player_aimed.png"))
+        textures["PLAYER_AIMED"] = temp;
     
-    if(temp.loadFromFile("Textures/explosion.png")) {
-        std::cout << "Explosion file loaded!\n";
-        textures["EXPLOSION"] = temp; // Names explosion texture EXPLOSION
-    }
+    if(temp.loadFromFile("Textures/explosion.png"))
+        textures["EXPLOSION"] = temp;
+
+    if(temp.loadFromFile("Textures/bullet.png"))
+        textures["BULLET"] = temp;
 }
