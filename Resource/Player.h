@@ -16,7 +16,7 @@ class Player : public Entity {
         ~Player();
         
         virtual void pointToCursor(const sf::Vector2f mousePos);
-        virtual void useHandheld(const sf::Vector2f mousePos);
+        virtual bool useHandheld(const sf::Vector2f mousePos);
 
         virtual void render(sf::RenderTarget* target);
     private:
