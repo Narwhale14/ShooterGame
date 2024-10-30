@@ -7,12 +7,16 @@
  * @param y initial ypos
  * @param texture texture
  */
-Player::Player(float x, float y, std::map<std::string, sf::Texture>* textures) {
-    createSprite(&(*textures)["PLAYER"]);
-    sprite->setPosition(x, y);
+Player::Player(std::map<std::string, sf::Texture>* textures, int x, int y, float s) {
+    createSprite(&(*textures)["PLAYER_NORMAL"]);
 
-    //handheld = new Mortar(30.f, &(*textures)["EXPLOSION"]);
-    handheld = new Pistol(200.f, &(*textures)["EXPLOSION"]);
+    this->setScale(s);
+    this->setPosition(sf::Vector2f(x, y));
+
+    handheld = new Pistol(200.f, &(*textures)["BULLET"]);
+
+    //health = new HealthBar(50, 50);
+    //health->setPosition(x, y - sprite->getGlobalBounds().height);
 }
 
 /**
@@ -59,4 +63,8 @@ void Player::render(sf::RenderTarget* target) {
     }
 
     //handheld->setFiringStatus(false);
+}
+
+void Player::renderHealth(sf::RenderTarget* target) {
+    
 }

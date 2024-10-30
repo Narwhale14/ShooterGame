@@ -5,9 +5,10 @@
  * 
  * @param texture a pointer pointing to a texture
  */
-Entity::Entity() {
+Entity::Entity(int scale) {
     texture = nullptr;
     sprite = nullptr;
+    this->scale = scale;
 
     movementSpeed = 100.f;
     angle = 0.f;
@@ -19,6 +20,27 @@ Entity::Entity() {
  */
 Entity::~Entity() {
     delete sprite;
+    delete health;
+}
+
+/**
+ * @brief Sets the scale
+ * 
+ * @param scale 
+ */
+void Entity::setScale(float s) {
+    sprite->setScale(s, s);
+    this->scale = s;
+}
+
+/**
+ * @brief Set the position of entity
+ * 
+ * @param x 
+ * @param y 
+ */
+void Entity::setPosition(sf::Vector2f pos) {
+    sprite->setPosition(pos);
 }
 
 /**
@@ -32,7 +54,10 @@ void Entity::createSprite(sf::Texture* texture) {
 
     // Sets origin to middle of shape
     sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
-    sprite->setScale(0.05f, 0.05f);
+    this->setScale(scale);
+
+    health = new HealthBar(sprite->getGlobalBounds().width, sprite->getGlobalBounds().height / 10);
+    health->setPosition(sprite->getPosition().x, sprite->getPosition().y - sprite->getGlobalBounds().height);
 }
 
 /**
@@ -45,5 +70,6 @@ void Entity::createSprite(sf::Texture* texture) {
 void Entity::move(const float& dt, const float dir_x, const float dir_y) {
     if(sprite) {
         sprite->move(dir_x * movementSpeed * dt, dir_y * movementSpeed * dt);
+        // move health bar
     }
 }

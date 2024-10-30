@@ -7,7 +7,7 @@
 
 #include "../../Resource/Entity/Enemy.h"
 
-Enemy::Enemy() : Entity() {
+Enemy::Enemy() {
 
 }
 

@@ -12,16 +12,17 @@
 
 class Player : public Entity {
     public:
-        Player(float x = 0, float y = 0, std::map<std::string, sf::Texture>* textures = nullptr);
+        Player(std::map<std::string, sf::Texture>* textures = nullptr, int x = 0, int y = 0, float s = 0.075f);
         ~Player();
         
         virtual void pointToCursor(const sf::Vector2f mousePos);
         virtual bool useHandheld(const sf::Vector2f mousePos);
 
         virtual void render(sf::RenderTarget* target);
+        virtual void renderHealth(sf::RenderTarget* target);
     private:
         std::string handheldType;
-        Weapon* handheld;   
+        Weapon* handheld;
 };
 
 #endif
