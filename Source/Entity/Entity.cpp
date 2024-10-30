@@ -12,9 +12,6 @@ Entity::Entity(int scale) {
 
     movementSpeed = 100.f;
     angle = 0.f;
-
-    health = new HealthBar(sprite->getGlobalBounds().width, sprite->getGlobalBounds().height / 10);
-    health->setPosition(sprite->getPosition().x, sprite->getPosition().y - sprite->getGlobalBounds().height);
 }
 
 /**
@@ -58,6 +55,9 @@ void Entity::createSprite(sf::Texture* texture) {
     // Sets origin to middle of shape
     sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
     this->setScale(scale);
+
+    health = new HealthBar(sprite->getGlobalBounds().width, sprite->getGlobalBounds().height / 10);
+    health->setPosition(sprite->getPosition().x, sprite->getPosition().y - sprite->getGlobalBounds().height);
 }
 
 /**
