@@ -34,8 +34,8 @@ class HealthBar {
     private:
         int health;
 
-        sf::RectangleShape barBack;
-        sf::RectangleShape barMain;
+        sf::RectangleShape* barBack;
+        sf::RectangleShape* barMain;
 };
 
 #endif
