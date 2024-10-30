@@ -11,7 +11,8 @@ Player::Player(float x, float y, std::map<std::string, sf::Texture>* textures) {
     createSprite(&(*textures)["PLAYER"]);
     sprite->setPosition(x, y);
 
-    handheld = new Mortar(30.f, &(*textures)["EXPLOSION"]);
+    //handheld = new Mortar(30.f, &(*textures)["EXPLOSION"]);
+    handheld = new Pistol(200.f, &(*textures)["EXPLOSION"]);
 }
 
 /**
@@ -35,10 +36,12 @@ void Player::pointToCursor(const sf::Vector2f mousePos) {
     sprite->setRotation(angle - 90);
 }
 
-void Player::useHandheld(const sf::Vector2f mousePos) {
-    if(!handheld->getFiringStatus()) {
-        handheld->fire(mousePos);
-    }
+bool Player::useHandheld(const sf::Vector2f mousePos) {
+    //if(!handheld->getFiringStatus()) {
+        handheld->fire(mousePos,sprite->getPosition());
+    //}
+    return handheld->getFiringStatus();
+    std::cout << handheld->getFiringStatus()<<"\n";
 }
 
 /**
@@ -55,5 +58,5 @@ void Player::render(sf::RenderTarget* target) {
         handheld->render(target);
     }
 
-    handheld->setFiringStatus(false);
+    //handheld->setFiringStatus(false);
 }

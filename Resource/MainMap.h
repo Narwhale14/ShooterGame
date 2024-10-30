@@ -22,6 +22,7 @@ class MainMap : public State {
         void render(sf::RenderTarget* target = NULL);
     private:
         Player* player;
+        bool keyPressed;
 
         void initializeKeybinds();
         void initializeTextures();

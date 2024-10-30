@@ -9,6 +9,7 @@
 #define ENTITY_H
 
 #include "Mortar.h"
+#include "Pistol.h"
 
 class Entity {
     public:

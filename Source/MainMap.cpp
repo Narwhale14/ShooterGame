@@ -18,6 +18,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(0, 0, &textures);
+    keyPressed=false;
 }
 
 MainMap::~MainMap() {
@@ -42,7 +43,9 @@ void MainMap::updateInput(const float& dt) {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
         player->move(dt, 0.f, 1.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
-        player->useHandheld(mousePosView);
+        keyPressed=true;
+    if(keyPressed)
+        keyPressed=player->useHandheld(mousePosView);
 }
 
 /**

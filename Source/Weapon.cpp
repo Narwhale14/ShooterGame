@@ -7,15 +7,33 @@
  */
 #include "../Resource/Weapon.h"
 
+/**
+ * @brief Construct a new Weapon:: Weapon object
+ * 
+ */
 Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
+    firing=false;
+    origPlayer={0.f,0.f};
+    origMouse={0.f,0.f};
 }
 
+/**
+ * @brief retrieve the firing state
+ * 
+ * @return true 
+ * @return false 
+ */
 bool Weapon::getFiringStatus() {
     return firing;
 }
 
+/**
+ * @brief set the firing state
+ * 
+ * @param status 
+ */
 void Weapon::setFiringStatus(bool status) {
     firing = status;
 }
