@@ -22,10 +22,13 @@ class Entity {
         void move(const float& dt, const float dir_x, const float dir_y);
 
         virtual void render(sf::RenderTarget* target) = 0;
+        virtual void renderHealth(sf::RenderTarget* target) = 0;
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
         float scale;
+
+        //HealthBar* health;
 
         float movementSpeed;
         float angle;

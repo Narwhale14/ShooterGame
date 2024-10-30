@@ -19,9 +19,10 @@ class Player : public Entity {
         virtual bool useHandheld(const sf::Vector2f mousePos);
 
         virtual void render(sf::RenderTarget* target);
+        virtual void renderHealth(sf::RenderTarget* target);
     private:
         std::string handheldType;
-        Weapon* handheld;   
+        Weapon* handheld;
 };
 
 #endif

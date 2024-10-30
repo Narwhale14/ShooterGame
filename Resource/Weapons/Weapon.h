@@ -9,19 +9,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <stack>
-#include <cmath>
-#include <map>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
+#include "../Entity/HealthBar.h"
 
 class Weapon{
     public:
