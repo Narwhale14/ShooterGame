@@ -8,8 +8,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Mortar.h"
-#include "Pistol.h"
+#include "../Weapons/Pistol.h"
 
 class Entity {
     public:
@@ -26,6 +25,8 @@ class Entity {
 
         float movementSpeed;
         float angle;
+
+        int health;
 };
 
 #endif

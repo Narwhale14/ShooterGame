@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2024-10-29
  */
-#include "../Resource/Pistol.h"
+#include "../../Resource/Weapons/Pistol.h"
 
 /**
  * @brief Construct a new Pistol:: Pistol object

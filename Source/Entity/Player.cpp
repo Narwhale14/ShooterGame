@@ -1,4 +1,4 @@
-#include "../Resource/Player.h"
+#include "../../Resource/Entity/Player.h"
 
 /**
  * @brief Construct a new Player:: Player object
