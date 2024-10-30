@@ -28,7 +28,7 @@ class Entity {
         sf::Sprite* sprite;
         float scale;
 
-        //HealthBar* health;
+        HealthBar* health;
 
         float movementSpeed;
         float angle;

@@ -12,6 +12,9 @@ Entity::Entity(int scale) {
 
     movementSpeed = 100.f;
     angle = 0.f;
+
+    health = new HealthBar(sprite->getGlobalBounds().width, sprite->getGlobalBounds().height / 10);
+    health->setPosition(sprite->getPosition().x, sprite->getPosition().y - sprite->getGlobalBounds().height);
 }
 
 /**
@@ -20,6 +23,7 @@ Entity::Entity(int scale) {
  */
 Entity::~Entity() {
     delete sprite;
+    delete health;
 }
 
 /**
@@ -66,5 +70,6 @@ void Entity::createSprite(sf::Texture* texture) {
 void Entity::move(const float& dt, const float dir_x, const float dir_y) {
     if(sprite) {
         sprite->move(dir_x * movementSpeed * dt, dir_y * movementSpeed * dt);
+        // move health bar
     }
 }

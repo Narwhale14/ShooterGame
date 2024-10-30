@@ -10,11 +10,18 @@
 HealthBar::HealthBar(float size_x, float size_y) {
     if(size_x > 0 && size_y > 0) {
         barBack.setSize(sf::Vector2f(size_x, size_y));
+        barMain.setSize(sf::Vector2f(size_x / 2, size_y / 2));
     } else {
+        // Placeholder default values
         barBack.setSize(sf::Vector2f(10, 10));
+        barBack.setSize(sf::Vector2f(10, 2));
     }
 
     barBack.setFillColor(sf::Color(128, 128, 128));
+    barMain.setFillColor(sf::Color::Green);
+
+    barBack.setOrigin(barBack.getGlobalBounds().width / 2, barBack.getGlobalBounds().height / 2);
+    barMain.setOrigin(barMain.getGlobalBounds().width / 2, barMain.getGlobalBounds().height / 2);
 }
 
 HealthBar::~HealthBar() {
