@@ -1,4 +1,4 @@
-#include "../Resource/Entity.h"
+#include "../../Resource/Entity/Entity.h"
 
 /**
  * @brief Construct a new Entity:: Entity object

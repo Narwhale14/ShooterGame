@@ -1,4 +1,11 @@
-#include "../Resource/Mortar.h"
+/**
+ * @file Mortar.cpp
+ * @author William Wotherspoon
+ * @brief single shot pistol class definitions
+ * @version 0.1
+ * @date 2024-8-29
+ */
+#include "../../Resource/Weapons/Mortar.h"
 
 Mortar::Mortar(float r, sf::Texture* texture){
     range=r;

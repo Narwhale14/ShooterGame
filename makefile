@@ -1,32 +1,35 @@
-sfml-app: Object/main.o Object/Entity.o Object/Weapon.o Object/Game.o Object/State.o Object/MainMap.o Object/Player.o Object/Mortar.o Object/Pistol.o
+sfml-app: Object/main.o Object/Entity.o Object/Weapon.o Object/Game.o Object/State.o Object/MainMap.o Object/Player.o Object/Mortar.o Object/Pistol.o Object/Enemy.o
 	g++ -g -Wall Object/*.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
 
-Object/main.o: Source/main.cpp Resource/Game.h
+Object/main.o: Source/main.cpp Resource/GameManager/Game.h
 	g++ -Wall -c Source/main.cpp -o Object/main.o
 
-Object/Entity.o: Source/Entity.cpp Resource/Entity.h
-	g++ -Wall -c Source/Entity.cpp -o Object/Entity.o
+Object/Entity.o: Source/Entity/Entity.cpp Resource/Entity/Entity.h
+	g++ -Wall -c Source/Entity/Entity.cpp -o Object/Entity.o
 
-Object/Weapon.o: Source/Weapon.cpp Resource/Weapon.h
-	g++ -Wall -c Source/Weapon.cpp -o Object/Weapon.o
+Object/Weapon.o: Source/Weapons/Weapon.cpp Resource/Weapons/Weapon.h
+	g++ -Wall -c Source/Weapons/Weapon.cpp -o Object/Weapon.o
 
-Object/Game.o: Source/Game.cpp Resource/Game.h
-	g++ -Wall -c Source/Game.cpp -o Object/Game.o
+Object/Game.o: Source/GameManager/Game.cpp Resource/GameManager/Game.h
+	g++ -Wall -c Source/GameManager/Game.cpp -o Object/Game.o
 
-Object/State.o: Source/State.cpp Resource/State.h
-	g++ -Wall -c Source/State.cpp -o Object/State.o
+Object/State.o: Source/GameManager/State.cpp Resource/GameManager/State.h
+	g++ -Wall -c Source/GameManager/State.cpp -o Object/State.o
 
-Object/MainMap.o: Source/MainMap.cpp Resource/MainMap.h
-	g++ -Wall -c Source/MainMap.cpp -o Object/MainMap.o
+Object/MainMap.o: Source/GameManager/MainMap.cpp Resource/GameManager/MainMap.h
+	g++ -Wall -c Source/GameManager/MainMap.cpp -o Object/MainMap.o
 
-Object/Player.o: Source/Player.cpp Resource/Player.h
-	g++ -Wall -c Source/Player.cpp -o Object/Player.o
+Object/Player.o: Source/Entity/Player.cpp Resource/Entity/Player.h
+	g++ -Wall -c Source/Entity/Player.cpp -o Object/Player.o
 
-Object/Mortar.o: Source/Mortar.cpp Resource/Mortar.h
-	g++ -Wall -c Source/Mortar.cpp -o Object/Mortar.o
+Object/Mortar.o: Source/Weapons/Mortar.cpp Resource/Weapons/Mortar.h
+	g++ -Wall -c Source/Weapons/Mortar.cpp -o Object/Mortar.o
 
-Object/Pistol.o: Source/Pistol.cpp Resource/Pistol.h
-	g++ -Wall -c Source/Pistol.cpp -o Object/Pistol.o
+Object/Pistol.o: Source/Weapons/Pistol.cpp Resource/Weapons/Pistol.h
+	g++ -Wall -c Source/Weapons/Pistol.cpp -o Object/Pistol.o
+
+Object/Enemy.o: Source/Entity/Enemy.cpp Resource/Entity/Enemy.h
+	g++ -Wall -c Source/Entity/Enemy.cpp -o Object/Enemy.o
 
 clean:
 	rm Object/*

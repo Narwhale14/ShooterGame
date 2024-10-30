@@ -5,7 +5,7 @@
  * @date 2024-10-23
  */
 
-#include "../Resource/Game.h"
+#include "../Resource/GameManager/Game.h"
 
 int main() {
     Game game;

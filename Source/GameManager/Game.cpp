@@ -1,4 +1,11 @@
-#include "../Resource/Game.h"
+/**
+ * @file Game.cpp
+ * @author Niall Murray
+ * @brief Game class initialization
+ * @date 2024-10-29
+ */
+
+#include "../../Resource/GameManager/Game.h"
 
 /**
  * @brief Construct a new Game:: Game object

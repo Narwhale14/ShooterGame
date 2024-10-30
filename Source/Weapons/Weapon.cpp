@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2024-10-24 
  */
-#include "../Resource/Weapon.h"
+#include "../../Resource/Weapons/Weapon.h"
 
 /**
  * @brief Construct a new Weapon:: Weapon object
