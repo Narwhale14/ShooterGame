@@ -20,7 +20,7 @@ class State {
         const bool& getQuit() const;
 
         void checkForQuit();
-        virtual void endState() = 0;
+        void endState();
 
         void updateMousePositions();
         virtual void updateInput(const float& dt) = 0;

@@ -13,7 +13,7 @@
  * @param r range of shot
  * @param texture texture of shot
  */
-Pistol::Pistol(float r, sf::Texture* texture){
+Bullet::Bullet(float r, sf::Texture* texture){
     range=r;
     adjRng=0;
     adjX=0;
@@ -21,7 +21,7 @@ Pistol::Pistol(float r, sf::Texture* texture){
     createSprite(texture);
 }
 
-Pistol::~Pistol() {
+Bullet::~Bullet() {
 
 }
 
@@ -31,7 +31,7 @@ Pistol::~Pistol() {
  * @param mouseLoc location of mouse
  * @param playerLoc location of player
  */
-void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
+void Bullet::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
     if(!firing){
         origMouse=mouseLoc;

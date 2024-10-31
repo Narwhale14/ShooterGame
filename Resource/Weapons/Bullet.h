@@ -1,5 +1,5 @@
 /**
- * @file Pistol.h
+ * @file Bullet.h
  * @author William Wotherspoon
  * @brief single shot pistol class declaration
  * @version 0.1
@@ -8,15 +8,15 @@
  * @copyright Copyright (c) 2024
  * 
  */
-#ifndef PISTOL_H
-#define PISTOL_H
+#ifndef BULLET_H
+#define BULLET_H
 
 #include "Weapon.h"
 
-class Pistol : public Weapon {
+class Bullet : public Weapon {
     public:
-        Pistol(float r = 0, sf::Texture* texture = nullptr);
-        ~Pistol();
+        Bullet(float r, sf::Texture* texture);
+        ~Bullet();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
     private:
         float range;

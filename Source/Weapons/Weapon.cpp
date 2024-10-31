@@ -43,9 +43,9 @@ void Weapon::setFiringStatus(bool status) {
  * 
  * @param target 
  */
-void Weapon::render(sf::RenderTarget* target) {
+void Weapon::render(sf::RenderTarget& target) {
     if(sprite) {
-        target->draw(*sprite);
+        target.draw(*sprite);
     }
 }
 
