@@ -16,6 +16,7 @@ class HealthBar {
         ~HealthBar();
 
         void setPosition(float pos_x, float pos_y);
+        void negateHealth(int damage);
         bool getDead() const;
 
         void render(sf::RenderTarget& target);
@@ -25,6 +26,8 @@ class HealthBar {
 
         sf::RectangleShape* barBack;
         sf::RectangleShape* barMain;
+
+        sf::Color color;
 };
 
 #endif

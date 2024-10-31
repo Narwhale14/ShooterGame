@@ -17,10 +17,13 @@ HealthBar::HealthBar(float size_x, float size_y, float pos_x, float pos_y) {
 
     setPosition(pos_x, pos_y);
 
+    color = sf::Color(0, 255, 0);
+
     barBack->setFillColor(sf::Color(64, 64, 64));
-    barMain->setFillColor(sf::Color::Green);
+    barMain->setFillColor(color);
 
     dead = false;
+    health = 100;
 }
 
 HealthBar::~HealthBar() {
@@ -31,6 +34,16 @@ HealthBar::~HealthBar() {
 void HealthBar::setPosition(float pos_x, float pos_y) {
     barBack->setPosition(pos_x, pos_y);
     barMain->setPosition(pos_x, pos_y);
+}
+
+void HealthBar::negateHealth(int damage) {
+    if(health - damage >= 0) {
+        health -= damage;
+    } else if(health < damage) {
+        health = 0;
+    }
+
+    barMain->setSize(sf::Vector2f(barMain->getSize().x * (health / 100.f), barMain->getSize().y));
 }
 
 bool HealthBar::getDead() const {
