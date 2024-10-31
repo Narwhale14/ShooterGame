@@ -5,11 +5,11 @@
  * 
  * @param texture a pointer pointing to a texture
  */
-Entity::Entity(int scale) {
+Entity::Entity() {
     texture = nullptr;
     sprite = nullptr;
-    this->scale = scale;
-
+    hitbox = nullptr;
+    
     movementSpeed = 100.f;
     angle = 0.f;
 }
@@ -21,6 +21,7 @@ Entity::Entity(int scale) {
 Entity::~Entity() {
     delete sprite;
     delete health;
+    delete hitbox;
 }
 
 /**
@@ -30,7 +31,7 @@ Entity::~Entity() {
  */
 void Entity::setScale(float s) {
     sprite->setScale(s, s);
-    this->scale = s;
+    scale = s;
 }
 
 /**
@@ -44,7 +45,7 @@ void Entity::setPosition(sf::Vector2f pos) {
 }
 
 /**
- * @brief Initializes sprite and sets its origin to the center + scales it down to 5%
+ * @brief Initializes sprite and sets its origin to the center
  * 
  * @param texture a pointer pointing to a texture
  */
@@ -54,10 +55,39 @@ void Entity::createSprite(sf::Texture* texture) {
 
     // Sets origin to middle of shape
     sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
-    this->setScale(scale);
+    setScale(scale);
+}
 
-    health = new HealthBar(sprite->getGlobalBounds().width, sprite->getGlobalBounds().height / 10);
-    health->setPosition(sprite->getPosition().x, sprite->getPosition().y - sprite->getGlobalBounds().height);
+/**
+ * @brief Creates hitbox
+ * 
+ * @param s sprite for hitbox
+ * @param offset_x x offset (pos)
+ * @param offset_y y offset (pos)
+ * @param width width of hitbox
+ * @param height height of hitbox
+ */
+void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height) {
+    hitbox = new Hitbox(s, offset_x, offset_y, width, height);
+}
+
+/**
+ * @brief Creates healthbar
+ * 
+ * @param size_x 
+ * @param size_y 
+ */
+void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_y) {
+    health = new HealthBar(size_x, size_y, pos_x, pos_y);
+}
+
+/**
+ * @brief Updates components in entity
+ * 
+ */
+void Entity::update() {
+    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
+    hitbox->update();
 }
 
 /**
@@ -68,8 +98,6 @@ void Entity::createSprite(sf::Texture* texture) {
  * @param dir_y from -1 to 1 in terms velocity on the Y axis
  */
 void Entity::move(const float& dt, const float dir_x, const float dir_y) {
-    if(sprite) {
+    if(sprite)
         sprite->move(dir_x * movementSpeed * dt, dir_y * movementSpeed * dt);
-        // move health bar
-    }
 }

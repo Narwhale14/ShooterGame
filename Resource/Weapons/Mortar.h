@@ -5,7 +5,7 @@
 
 class Mortar : public Weapon {
     public:
-        Mortar(float r = 0, sf::Texture* texture = nullptr);
+        Mortar(float r, sf::Texture* texture);
         ~Mortar();
 
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);

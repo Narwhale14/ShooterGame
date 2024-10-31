@@ -49,14 +49,6 @@ void MainMap::updateInput(const float& dt) {
 }
 
 /**
- * @brief Function called whenever state ends
- * 
- */
-void MainMap::endState() {
-    std::cout << "Ending GameState!\n";
-}
-
-/**
  * @brief Updates GameState based on deltaTime and any entities
  * 
  * @param dt deltaTime
@@ -64,6 +56,8 @@ void MainMap::endState() {
 void MainMap::update(const float& dt) {
     updateMousePositions();
     updateInput(dt);
+
+    player->update();
     player->pointToCursor(mousePosView);
 }
 
@@ -74,11 +68,10 @@ void MainMap::update(const float& dt) {
  */
 void MainMap::render(sf::RenderTarget* target) {
     // If target is a nullptr, then set target to the window used from State class
-    if(!target) {
+    if(!target)
         target = window;
-    }
 
-    player->render(target);
+    player->render(*target);
 }
 
 /**

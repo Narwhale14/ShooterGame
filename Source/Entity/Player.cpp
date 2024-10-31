@@ -9,14 +9,14 @@
  */
 Player::Player(std::map<std::string, sf::Texture>* textures, int x, int y, float s) {
     createSprite(&(*textures)["PLAYER_NORMAL"]);
+    
+    setScale(s);
+    setPosition(sf::Vector2f(x, y));
 
-    this->setScale(s);
-    this->setPosition(sf::Vector2f(x, y));
+    createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
+    createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
 
-    handheld = new Pistol(200.f, &(*textures)["BULLET"]);
-
-    //health = new HealthBar(50, 50);
-    //health->setPosition(x, y - sprite->getGlobalBounds().height);
+    handheld = new Bullet(200.f, &(*textures)["BULLET"]);
 }
 
 /**
@@ -53,18 +53,18 @@ bool Player::useHandheld(const sf::Vector2f mousePos) {
  * 
  * @param target 
  */
-void Player::render(sf::RenderTarget* target) {
-    if(sprite) {
-        target->draw(*sprite);
-    }
-    
-    if(handheld->getFiringStatus()) {
+void Player::render(sf::RenderTarget& target) {
+    if(handheld->getFiringStatus())
         handheld->render(target);
-    }
+
+    if(health)
+        health->render(target);
+
+    if(hitbox)
+        hitbox->render(target);
+
+    if(sprite)
+        target.draw(*sprite);
 
     //handheld->setFiringStatus(false);
-}
-
-void Player::renderHealth(sf::RenderTarget* target) {
-    
 }

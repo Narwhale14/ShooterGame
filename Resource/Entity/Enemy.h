@@ -15,6 +15,8 @@ class Enemy : public Entity {
         Enemy();
         virtual ~Enemy();
 
+        //virtual void initializeHitbox();
+
         virtual void render(sf::RenderTarget* target);
     private:
 };

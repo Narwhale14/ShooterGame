@@ -34,6 +34,14 @@ const bool& State::getQuit() const {
 }
 
 /**
+ * @brief Ends state
+ * 
+ */
+void State::endState() {
+    quit = true;
+}
+
+/**
  * @brief Checks if user wants to quit state
  * 
  */

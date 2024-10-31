@@ -15,11 +15,9 @@ class MainMap : public State {
         MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMap();
 
-        void endState();
-
         void updateInput(const float& dt);
         void update(const float& dt);
-        void render(sf::RenderTarget* target = NULL);
+        void render(sf::RenderTarget* target = nullptr);
     private:
         Player* player;
         bool keyPressed;
