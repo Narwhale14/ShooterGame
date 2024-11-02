@@ -31,12 +31,12 @@ Bullet::~Bullet() {
  * @param mouseLoc location of mouse
  * @param playerLoc location of player
  */
-void Bullet::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
+bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus)
 {
-    if(!firing){
+    if(!fireStatus){
         origMouse=mouseLoc;
         origPlayer=playerLoc;
-        std::cout<<"New location\n";
+        //std::cout<<"New location\n";
         float direct=0;
         adjX=origPlayer.x-origMouse.x;
         adjY=origPlayer.y-origMouse.y;
@@ -47,7 +47,7 @@ void Bullet::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     }
 
     sprite->setPosition(sprite->getPosition().x-adjX,sprite->getPosition().y-adjY);
-    firing = true;
+    fireStatus = true;
     
     if(range!=adjRng){
         adjRng++;
@@ -55,6 +55,12 @@ void Bullet::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         adjRng=0;
         adjX=0;
         adjY=0;
-        firing=false;
+        fireStatus=false;
     }
+    return fireStatus;
+}
+
+void Bullet::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
+{
+
 }
