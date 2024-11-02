@@ -18,6 +18,7 @@ class Bullet : public Weapon {
         Bullet(float r, sf::Texture* texture);
         ~Bullet();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
+        bool fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus);
     private:
         float range;
         float adjY; //direction for the bullet to travel on Y

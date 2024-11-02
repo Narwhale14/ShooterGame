@@ -8,7 +8,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "../Weapons/Bullet.h"
+#include "../Weapons/Mortar.h"
 
 class Entity {
     public:
