@@ -29,7 +29,6 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         firing=test->fireBull(mouseLoc,playerLoc, firing);
         // if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
         //     i=ammo;
-        
     }
 }
 
