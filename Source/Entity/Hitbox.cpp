@@ -7,7 +7,7 @@
 
 #include "../../Resource/Entity/Hitbox.h"
 
-Hitbox::Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height) {
+Hitbox::Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color) {
     sprite = s;
     offsetX = offset_x;
     offsetY = offset_y;
@@ -18,7 +18,7 @@ Hitbox::Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float
     box->setFillColor(sf::Color::Transparent);
 
     box->setOutlineThickness(1.f);
-    box->setOutlineColor(sf::Color::Green);
+    box->setOutlineColor(color);
 }
 
 Hitbox::~Hitbox() {

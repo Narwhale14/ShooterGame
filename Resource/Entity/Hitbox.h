@@ -24,7 +24,7 @@
 
 class Hitbox {
     public:
-        Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height);
+        Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
         ~Hitbox();
 
         bool checkCollision(const sf::FloatRect* rect);
