@@ -2,7 +2,6 @@
 #define PISTOL_H
 
 #include "Bullet.h"
-#include "../GameManager/State.h"
 
 class Pistol : public Weapon {
     public:
