@@ -18,6 +18,8 @@ Bullet::Bullet(float r, sf::Texture* texture){
     adjRng=0;
     adjX=0;
     adjY=0;
+    origPlayer={0.f,0.f};
+    origMouse={0.f,0.f};
     createSprite(texture);
 }
 
@@ -60,7 +62,46 @@ bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
     return fireStatus;
 }
 
-void Bullet::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
+bool Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus)
 {
+    if(!fireStatus){
+        origMouse=mouseLoc;
+        origPlayer=playerLoc;
+    }
+    if(range>adjRng){
+        float direct=0;
+        adjX=origPlayer.x-origMouse.x;
+        adjY=origPlayer.y-origMouse.y;
+        direct=sqrt((adjX*adjX)+(adjY*adjY));
+        adjX/=direct;
+        adjY/=direct;
+        sprite->setPosition(sprite->getPosition().x-adjX,sprite->getPosition().y-adjY);
+        fireStatus = true;
+        adjRng++;
+    }
+    if(range==adjRng){
+        fireStatus=false;
+    }
 
+    return fireStatus;
+}
+
+void Bullet::render(sf::RenderTarget& target) {
+    if(sprite) {
+        target.draw(*sprite);
+    }
+}
+
+/**
+ * @brief Initializes sprite and sets its origin to the center + scales it down to 10%
+ * 
+ * @param texture a pointer pointing to a texture
+ */
+void Bullet::createSprite(sf::Texture* texture) {
+    this->texture = texture;
+    sprite = new sf::Sprite(*this->texture);
+
+    // Sets origin to middle of shape
+    sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
+    sprite->setScale(0.1f, 0.1f);
 }

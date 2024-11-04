@@ -15,8 +15,6 @@ Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
     firing=false;
-    origPlayer={0.f,0.f};
-    origMouse={0.f,0.f};
 }
 
 /**

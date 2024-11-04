@@ -8,14 +8,12 @@ class Pistol : public Weapon {
         Pistol(float r, sf::Texture* texture);
         ~Pistol();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
-        bool fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus);
+        void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void render(sf::RenderTarget& target);
         std::vector<Bullet*> capacity;
     private:
-        float range;
-        int ammo;
         Bullet *test;
-
+        bool ammoEmpty;
 };
 
 #endif
