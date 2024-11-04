@@ -67,8 +67,8 @@ void Entity::createSprite(sf::Texture* texture) {
  * @param width width of hitbox
  * @param height height of hitbox
  */
-void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height) {
-    hitbox = new Hitbox(s, offset_x, offset_y, width, height);
+void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color) {
+    hitbox = new Hitbox(s, offset_x, offset_y, width, height, color);
 }
 
 /**
