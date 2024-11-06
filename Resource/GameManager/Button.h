@@ -3,7 +3,7 @@
 
 #include "../Entity/Enemy.h"
 
-class Button: public sf::Drawable {
+class Button {
     public:
         Button(sf::Texture& texture, sf::Font& font, std::string s, sf::Vector2f size);
         ~Button() { };
@@ -24,7 +24,7 @@ class Button: public sf::Drawable {
         void initializeText();
 
         void update(sf::Event& e, sf::RenderWindow& window);
-        virtual void draw(sf::RenderTarget& target,sf::RenderStates states) const;
+        void render(sf::RenderTarget& target);
 
     private:
         sf::Sprite mButton;

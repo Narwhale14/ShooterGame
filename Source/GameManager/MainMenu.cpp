@@ -19,11 +19,23 @@ MainMenu::MainMenu(sf::RenderWindow* window, std::map<std::string, int>* support
     initializeFonts();
 
     playButton = new Button(textures["BUTTON"], fonts["COLLEGE"], "PLAY", sf::Vector2f(100.f, 100.f));
+    playButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2));
 }
 
 MainMenu::~MainMenu() {
     delete playButton;
+
     std::cout << "Main menu poof\n";
+}
+
+/**
+ * @brief Checks if user wants to quit state
+ * 
+ */
+void MainMenu::checkForQuit() {
+    if(playButton->getState() == 2) {
+        quit = true;
+    }
 }
 
 /**
@@ -43,6 +55,9 @@ void MainMenu::updateInput(const float& dt) {
 void MainMenu::update(const float& dt) {
     updateMousePositions();
     updateInput(dt);
+
+    while(window->pollEvent(event))
+        playButton->update(event, *window);
 }
 
 /**
@@ -54,6 +69,8 @@ void MainMenu::render(sf::RenderTarget* target) {
     // If target is a nullptr, then set target to the window used from State class
     if(!target)
         target = window;
+
+    playButton->render(*target);
 }
 
 /**

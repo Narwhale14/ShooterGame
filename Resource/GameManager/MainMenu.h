@@ -15,10 +15,14 @@ class MainMenu : public State {
         MainMenu(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMenu();
 
+        virtual void checkForQuit();
+
         void updateInput(const float& dt);
         void update(const float& dt);
+
         void render(sf::RenderTarget* target = nullptr);
     private:
+        sf::Event event;
         Button* playButton;
 
         void initializeKeybinds();

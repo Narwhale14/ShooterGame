@@ -97,6 +97,7 @@ void Button::update(sf::Event& e, sf::RenderWindow& window) {
     if(e.type == sf::Event::MouseMoved) {
         if(mouseInButton) {
             mText.setFillColor(mTextHover);
+            mBtnState = hovered;
         } else {
             mText.setFillColor(mTextNormal);
         }
@@ -106,6 +107,7 @@ void Button::update(sf::Event& e, sf::RenderWindow& window) {
         if(e.mouseButton.button==sf::Mouse::Left) {
             if(mouseInButton) {
                 mButton.setRotation(180);
+                mBtnState = clicked;
             } else {
                 mButton.setRotation(0);
             }
@@ -116,6 +118,7 @@ void Button::update(sf::Event& e, sf::RenderWindow& window) {
         if (e.mouseButton.button == sf::Mouse::Left) {
             if(mouseInButton) {
                 mText.setFillColor(mTextHover);
+                mBtnState = hovered;
                 mButton.setRotation(0);
             } else {
                 mText.setFillColor(mTextNormal);
@@ -131,9 +134,9 @@ void Button::update(sf::Event& e, sf::RenderWindow& window) {
  * @param target 
  * @param states 
  */
-void Button::draw(sf::RenderTarget& target,sf::RenderStates states) const {
-    target.draw(mButton, states);
-    target.draw(mText, states);
+void Button::render(sf::RenderTarget& target) {
+    target.draw(mButton);
+    target.draw(mText);
 }
 
 /**
@@ -164,9 +167,7 @@ void Button::initializeText() {
     mText.setCharacterSize(fontSize);
 
     mText.setString(mPhrase);
-
     mText.setOrigin(mText.getGlobalBounds().width / 2, mText.getGlobalBounds().height / 2);
-
     mText.setPosition(mPosition.x, mPosition.y - fontSize / 4);
 
     mTextNormal = sf::Color::Green;
