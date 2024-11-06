@@ -22,6 +22,7 @@ class Weapon{
         virtual void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc) = 0;
         virtual void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)=0;
         virtual void render(sf::RenderTarget& target);
+        virtual void renderBull(sf::RenderTarget& target);
         void createSprite(sf::Texture* texture);
     protected:
         sf::Texture* texture;

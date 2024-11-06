@@ -17,7 +17,7 @@ Player::Player(std::map<std::string, sf::Texture>* textures, int x, int y, float
     createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
 
     //handheld = new Bullet(200.f, &(*textures)["BULLET"]);
-    handheld = new Pistol(200.f, &(*textures)["BULLET"]);
+    handheld = new Pistol(200.f, &(*textures)["BULLET"],&(*textures)["GLOCK"]);
 }
 
 /**
@@ -59,7 +59,7 @@ bool Player::stopHandheld(const sf::Vector2f mousePos)
  */
 void Player::render(sf::RenderTarget& target) {
     if(handheld->getFiringStatus())
-        handheld->render(target);
+        handheld->renderBull(target);
 
     if(health)
         health->render(target);
@@ -69,4 +69,6 @@ void Player::render(sf::RenderTarget& target) {
 
     if(sprite)
         target.draw(*sprite);
+    
+    //handheld->render(target);
 }

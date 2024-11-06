@@ -47,6 +47,12 @@ void Weapon::render(sf::RenderTarget& target) {
     }
 }
 
+void Weapon::renderBull(sf::RenderTarget& target) {
+    if(sprite) {
+        target.draw(*sprite);
+    }
+}
+
 /**
  * @brief Initializes sprite and sets its origin to the center + scales it down to 10%
  * 
