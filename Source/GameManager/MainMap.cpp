@@ -28,6 +28,16 @@ MainMap::~MainMap() {
 }
 
 /**
+ * @brief Checks if user wants to quit state
+ * 
+ */
+void MainMap::checkForQuit() {
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("CLOSE")))) {
+        quit = true;
+    }
+}
+
+/**
  * @brief Checks for input required in the state
  * 
  * @param dt deltaTime

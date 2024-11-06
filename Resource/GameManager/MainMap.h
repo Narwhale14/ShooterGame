@@ -15,6 +15,8 @@ class MainMap : public State {
         MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMap();
 
+        virtual void checkForQuit();
+
         void updateInput(const float& dt);
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
