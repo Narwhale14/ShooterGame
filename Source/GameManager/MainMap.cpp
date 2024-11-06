@@ -23,6 +23,8 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
 MainMap::~MainMap() {
     delete player;
+
+    std::cout << "Main map poof\n";
 }
 
 /**
@@ -31,7 +33,7 @@ MainMap::~MainMap() {
  * @param dt deltaTime
  */
 void MainMap::updateInput(const float& dt) {
-    this->checkForQuit();
+    checkForQuit();
 
     // Updates player input
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
@@ -82,7 +84,7 @@ void MainMap::render(sf::RenderTarget* target) {
  * 
  */
 void MainMap::initializeKeybinds() {
-    std::ifstream inputFile("Config/gamestate_keybinds.ini");
+    std::ifstream inputFile("Config/mainmap_keybinds.ini");
 
     if(inputFile.is_open()) {
         std::string key = "";
