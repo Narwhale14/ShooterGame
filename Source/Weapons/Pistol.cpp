@@ -13,12 +13,12 @@
  * @param r range of the pistol
  * @param texture bullets texture
  */
-Pistol::Pistol(float r, sf::Texture* texture){
+Pistol::Pistol(float r, sf::Texture* bTexture, sf::Texture* wTexture){
     range=r;
-    fireRate=10; //would not recommend going higher then 40
-    //createSprite(texture);
+    fireRate=50; //would not recommend going higher then 40
+    createSprite(wTexture);
     //Bullet *temp = new Bullet(r,texture);
-    BulletShot=new Bullet(r,texture);
+    BulletShot=new Bullet(r,bTexture);
     // if(fireRate>0){
     //     for(int i=0;i<fireRate;i++){
     //         capacity.push_back(temp);
@@ -73,8 +73,19 @@ void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  * 
  * @param target 
  */
-void Pistol::render(sf::RenderTarget& target)
+void Pistol::renderBull(sf::RenderTarget& target)
 {
     //capacity[0]->render(target);
     BulletShot->render(target);
 }
+
+// void Pistol::render(sf::RenderTarget& target)
+// {
+//     //capacity[0]->render(target);
+//     if(sprite)
+//         target.draw(*sprite);
+// }
+
+
+
+

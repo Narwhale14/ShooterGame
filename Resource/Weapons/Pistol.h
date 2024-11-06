@@ -12,11 +12,13 @@
 
 class Pistol : public Weapon {
     public:
-        Pistol(float r, sf::Texture* texture);
+        //Pistol(float r, sf::Texture* texture);
+        Pistol(float r, sf::Texture* bTexture, sf::Texture* wTexture);
         ~Pistol();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
-        void render(sf::RenderTarget& target);
+        void renderBull(sf::RenderTarget& target);
+        //void render(sf::RenderTarget& target);
         //std::vector<Bullet*> capacity;
     private:
         Bullet *BulletShot;
