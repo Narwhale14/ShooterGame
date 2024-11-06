@@ -49,6 +49,12 @@ bool Player::useHandheld(const sf::Vector2f mousePos) {
     return handheld->getFiringStatus();
 }
 
+bool Player::stopHandheld(const sf::Vector2f mousePos)
+{
+    handheld->stopFire(mousePos,sprite->getPosition());
+    return handheld->getFiringStatus();
+}
+
 /**
  * @brief Posts sprite to window
  * 

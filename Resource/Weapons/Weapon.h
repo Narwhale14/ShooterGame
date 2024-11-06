@@ -20,16 +20,14 @@ class Weapon{
         void setFiringStatus(bool status);
 
         virtual void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc) = 0;
-        virtual bool fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus)=0;
-
+        virtual void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)=0;
         virtual void render(sf::RenderTarget& target);
         void createSprite(sf::Texture* texture);
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
-        sf::Vector2f origMouse;
-        sf::Vector2f origPlayer;
-
+        float range;
+        int fireRate;
         bool firing;
 };
 

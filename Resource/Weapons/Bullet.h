@@ -13,17 +13,23 @@
 
 #include "Weapon.h"
 
-class Bullet : public Weapon {
+class Bullet{
     public:
         Bullet(float r, sf::Texture* texture);
         ~Bullet();
-        void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         bool fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus);
+        bool stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus);
+        void render(sf::RenderTarget& target);
+        void createSprite(sf::Texture* texture);
     private:
         float range;
         float adjY; //direction for the bullet to travel on Y
         float adjX; //direction for the bullet to travel on X
         float adjRng; //used to calculate when max range has been reached
+        sf::Texture* texture;
+        sf::Sprite* sprite;
+        sf::Vector2f origMouse;
+        sf::Vector2f origPlayer;
 };
 
 #endif

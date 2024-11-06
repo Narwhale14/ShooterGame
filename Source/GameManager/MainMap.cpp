@@ -42,10 +42,13 @@ void MainMap::updateInput(const float& dt) {
         player->move(dt, 0.f, -1.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
         player->move(dt, 0.f, 1.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
         keyPressed=true;
-    if(keyPressed)
-        keyPressed=player->useHandheld(mousePosView);
+        player->useHandheld(mousePosView);
+    }
+    if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
+            keyPressed=player->stopHandheld(mousePosView);
+    }
 }
 
 /**
