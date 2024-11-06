@@ -37,6 +37,10 @@ sf::FloatRect Hitbox::getGlobalBounds() {
     return box->getGlobalBounds();
 }
 
+void Hitbox::setScale(sf::Vector2f scale) {
+    box->setScale(scale);
+}
+
 void Hitbox::update() {
     box->setPosition(sprite->getPosition().x + offsetX, sprite->getPosition().y + offsetY);
 }
