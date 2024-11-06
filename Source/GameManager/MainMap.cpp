@@ -17,7 +17,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(&textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-
+    
     keyPressed=false;
 }
 

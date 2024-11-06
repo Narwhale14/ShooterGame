@@ -125,11 +125,21 @@ void Button::update(sf::Event& e, sf::RenderWindow& window) {
     }
 }
 
+/**
+ * @brief 
+ * 
+ * @param target 
+ * @param states 
+ */
 void Button::draw(sf::RenderTarget& target,sf::RenderStates states) const {
     target.draw(mButton, states);
     target.draw(mText, states);
 }
 
+/**
+ * @brief Saves code for the constructor
+ * 
+ */
 void Button::initializeButton() {
     mButton.setTexture(mTexture);
 
@@ -143,6 +153,10 @@ void Button::initializeButton() {
     mBtnState = normal;
 }
 
+/**
+ * @brief Also saves code for the contructor. 
+ * 
+ */
 void Button::initializeText() {
     mText.setFont(mFont);
 
