@@ -42,16 +42,6 @@ void State::endState() {
 }
 
 /**
- * @brief Checks if user wants to quit state
- * 
- */
-void State::checkForQuit() {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("CLOSE")))) {
-        quit = true;
-    }
-}
-
-/**
  * @brief Updates mouse positions
  * 
  */

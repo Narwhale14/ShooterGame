@@ -19,7 +19,7 @@ class State {
 
         const bool& getQuit() const;
 
-        void checkForQuit();
+        virtual void checkForQuit() = 0;
         void endState();
 
         void updateMousePositions();
