@@ -14,17 +14,19 @@
  * @param texture texture of shot
  */
 Bullet::Bullet(float r, sf::Texture* texture){
+    createSprite(texture);
+    hitbox = new Hitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green);
     range=r;
     adjRng=0;
     adjX=0;
     adjY=0;
     origPlayer={0.f,0.f};
     origMouse={0.f,0.f};
-    createSprite(texture);
+    
 }
 
 Bullet::~Bullet() {
-
+    delete hitbox;
 }
 
 /**
@@ -49,6 +51,7 @@ bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
     }
 
     sprite->setPosition(sprite->getPosition().x-adjX,sprite->getPosition().y-adjY);
+    hitbox->update();
     fireStatus = true;
     
     if(range!=adjRng){
@@ -85,6 +88,7 @@ bool Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
         adjX/=direct;
         adjY/=direct;
         sprite->setPosition(sprite->getPosition().x-adjX,sprite->getPosition().y-adjY);
+        hitbox->update();
         fireStatus = true;
         adjRng++;
     }
@@ -98,6 +102,7 @@ bool Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
 void Bullet::render(sf::RenderTarget& target) {
     if(sprite) {
         target.draw(*sprite);
+        hitbox->render(target);
     }
 }
 
