@@ -27,7 +27,7 @@ class Weapon{
         sf::Texture* texture;
         sf::Sprite* sprite;
         float range;
-        int ammo;
+        int fireRate;
         bool firing;
 };
 

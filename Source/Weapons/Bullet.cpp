@@ -62,6 +62,15 @@ bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
     return fireStatus;
 }
 
+/**
+ * @brief finish the display of the last fired bullet and fire no more
+ * 
+ * @param mouseLoc location of player mouse
+ * @param playerLoc players location
+ * @param fireStatus where the weapon is firing or not
+ * @return true 
+ * @return false 
+ */
 bool Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus)
 {
     if(!fireStatus){
