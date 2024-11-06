@@ -43,6 +43,8 @@ void MainMenu::updateInput(const float& dt) {
 void MainMenu::update(const float& dt) {
     updateMousePositions();
     updateInput(dt);
+
+    playButton->update(dt);
 }
 
 /**
@@ -54,6 +56,8 @@ void MainMenu::render(sf::RenderTarget* target) {
     // If target is a nullptr, then set target to the window used from State class
     if(!target)
         target = window;
+
+    playButton->render(*target);
 }
 
 /**

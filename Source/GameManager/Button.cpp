@@ -131,9 +131,9 @@ void Button::update(sf::Event& e, sf::RenderWindow& window) {
  * @param target 
  * @param states 
  */
-void Button::draw(sf::RenderTarget& target,sf::RenderStates states) const {
-    target.draw(mButton, states);
-    target.draw(mText, states);
+void Button::render(sf::RenderTarget& target) {
+    target.draw(mButton);
+    target.draw(mText);
 }
 
 /**
