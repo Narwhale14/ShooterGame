@@ -30,6 +30,7 @@ class Hitbox {
         bool checkCollision(const sf::FloatRect* rect);
         sf::Vector2f getPosition();
         sf::FloatRect getGlobalBounds();
+        void setScale(sf::Vector2f scale);
 
         void update();
         void render(sf::RenderTarget& target);
