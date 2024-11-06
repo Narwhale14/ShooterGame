@@ -1,4 +1,4 @@
-sfml-app: Object/main.o Object/Entity.o Object/Weapon.o Object/Game.o Object/State.o Object/MainMap.o Object/Player.o Object/Mortar.o Object/Bullet.o Object/Enemy.o Object/HealthBar.o Object/Hitbox.o Object/Pistol.o
+sfml-app: Object/main.o Object/Entity.o Object/Weapon.o Object/Game.o Object/State.o Object/MainMap.o Object/Player.o Object/Mortar.o Object/Bullet.o Object/Enemy.o Object/HealthBar.o Object/Hitbox.o Object/Pistol.o Object/MainMenu.o Object/Button.o
 	g++ -g -Wall Object/*.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
 
 Object/main.o: Source/main.cpp Resource/GameManager/Game.h
@@ -39,6 +39,12 @@ Object/HealthBar.o: Source/Entity/HealthBar.cpp Resource/Entity/HealthBar.h
 
 Object/Hitbox.o: Source/Entity/Hitbox.cpp Resource/Entity/Hitbox.h
 	g++ -Wall -c Source/Entity/Hitbox.cpp -o Object/Hitbox.o
+
+Object/MainMenu.o: Source/GameManager/MainMenu.cpp Resource/GameManager/MainMenu.h
+	g++ -Wall -c Source/GameManager/MainMenu.cpp -o Object/MainMenu.o
+
+Object/Button.o: Source/GameManager/Button.cpp Resource/GameManager/Button.h
+	g++ -Wall -c Source/GameManager/Button.cpp -o Object/Button.o
 
 clean:
 	rm Object/*

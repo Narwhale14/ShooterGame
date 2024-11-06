@@ -42,10 +42,7 @@ void Player::pointToCursor(const sf::Vector2f mousePos) {
 }
 
 bool Player::useHandheld(const sf::Vector2f mousePos) {
-    //if(!handheld->getFiringStatus()) {
-        handheld->fire(mousePos,sprite->getPosition());
-    //}
-    //std::cout << handheld->getFiringStatus()<<"\n";
+    handheld->fire(mousePos,sprite->getPosition());
     return handheld->getFiringStatus();
 }
 
@@ -72,6 +69,4 @@ void Player::render(sf::RenderTarget& target) {
 
     if(sprite)
         target.draw(*sprite);
-
-    //handheld->setFiringStatus(false);
 }

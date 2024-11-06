@@ -10,7 +10,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "../Entity/Enemy.h"
+#include "Button.h"
 
 class State {
     public:
@@ -36,6 +36,7 @@ class State {
         sf::Vector2f mousePosView; // Keeps track of mouse within view relative to character
 
         std::map<std::string, sf::Texture> textures;
+        std::map<std::string, sf::Font> fonts;
 
         virtual void initializeKeybinds() = 0;
     private:
