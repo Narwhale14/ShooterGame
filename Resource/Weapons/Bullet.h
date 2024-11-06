@@ -26,6 +26,7 @@ class Bullet{
         float adjY; //direction for the bullet to travel on Y
         float adjX; //direction for the bullet to travel on X
         float adjRng; //used to calculate when max range has been reached
+        Hitbox* hitbox;
         sf::Texture* texture;
         sf::Sprite* sprite;
         sf::Vector2f origMouse;
