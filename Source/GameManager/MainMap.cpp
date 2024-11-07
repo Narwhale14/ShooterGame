@@ -43,6 +43,14 @@ void MainMap::checkForQuit() {
 void MainMap::updateInput(const float& dt) {
     checkForQuit();
 
+    // Updates weapon input
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
+        keyPressed=true;
+        player->useHandheld(mousePosView);
+    } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
+            keyPressed=player->stopHandheld(mousePosView);
+    }
+
     // Updates player input
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
         player->move(dt, -1.f, 0.f);
@@ -52,13 +60,6 @@ void MainMap::updateInput(const float& dt) {
         player->move(dt, 0.f, -1.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
         player->move(dt, 0.f, 1.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
-        keyPressed=true;
-        player->useHandheld(mousePosView);
-    }
-    if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
-            keyPressed=player->stopHandheld(mousePosView);
-    }
 }
 
 /**
