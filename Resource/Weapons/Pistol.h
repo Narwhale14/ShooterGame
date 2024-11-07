@@ -18,7 +18,9 @@ class Pistol : public Weapon {
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void renderBull(sf::RenderTarget& target);
-        //void render(sf::RenderTarget& target);
+        void render(sf::RenderTarget& target);
+        void update(sf::Vector2f playerTrack);
+        void rotateWeapon(const sf::Vector2f mousePos);
         //std::vector<Bullet*> capacity;
     private:
         Bullet *BulletShot;

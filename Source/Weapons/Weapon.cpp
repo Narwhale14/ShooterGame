@@ -67,6 +67,14 @@ void Weapon::createSprite(sf::Texture* texture) {
     sprite->setScale(0.1f, 0.1f);
 }
 
+void Weapon::update(sf::Vector2f playerTrack){
+
+}
+
+void Weapon::rotateWeapon(const sf::Vector2f mousePos){
+
+}
+
 /**
  * @brief Destroy the Entity:: Entity object
  *        Deletes dynamically allocated sprite and texture

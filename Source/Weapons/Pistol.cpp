@@ -15,8 +15,10 @@
  */
 Pistol::Pistol(float r, sf::Texture* bTexture, sf::Texture* wTexture){
     range=r;
-    fireRate=50; //would not recommend going higher then 40
+    fireRate=8; //would not recommend going higher then 40
     createSprite(wTexture);
+    sprite->setScale({.05,.05});
+    sprite->setRotation(90);
     //Bullet *temp = new Bullet(r,texture);
     BulletShot=new Bullet(r,bTexture);
     // if(fireRate>0){
@@ -63,7 +65,7 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  */
 void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-    for(int i=0;i<fireRate;i++){
+   for(int i=0;i<fireRate;i++){
         firing=BulletShot->stopBull(mouseLoc,playerLoc, firing);
     }
 }
@@ -79,13 +81,22 @@ void Pistol::renderBull(sf::RenderTarget& target)
     BulletShot->render(target);
 }
 
-// void Pistol::render(sf::RenderTarget& target)
-// {
-//     //capacity[0]->render(target);
-//     if(sprite)
-//         target.draw(*sprite);
-// }
+void Pistol::render(sf::RenderTarget& target)
+{
+    //capacity[0]->render(target);
+    if(sprite)
+        target.draw(*sprite);
+}
 
+void Pistol::update(sf::Vector2f playerTrack) {
+    sprite->setPosition(playerTrack.x+40,playerTrack.y-10);
+}
 
+void Pistol::rotateWeapon(const sf::Vector2f mousePos){
+    float dist_x = mousePos.x - sprite->getPosition().x;
+    float dist_y = mousePos.y - sprite->getPosition().y;
 
+    angle = (atan2(dist_y, dist_x)) * 180 / 3.14;
+    sprite->setRotation(angle);
+}
 
