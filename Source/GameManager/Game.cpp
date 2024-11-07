@@ -54,6 +54,8 @@ void Game::update() {
             states.top()->endState();
             delete states.top();
             states.pop();
+        } else if(states.top()->getFlush()) {
+            window->close();
         }
     } else {
         // Application's end
@@ -95,7 +97,7 @@ void Game::initializeWindow() {
     std::ifstream inputFile("Config/window.ini");
     
     std::string title = "None";
-    sf::VideoMode window_bounds(800, 600);
+    sf::VideoMode window_bounds(1280, 720);
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
 

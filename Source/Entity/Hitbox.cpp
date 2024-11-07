@@ -37,8 +37,8 @@ sf::FloatRect Hitbox::getGlobalBounds() {
     return box->getGlobalBounds();
 }
 
-void Hitbox::setScale(sf::Vector2f scale) {
-    box->setScale(scale);
+void Hitbox::setSize(sf::Vector2f size) {
+    box->setSize(size);
 }
 
 void Hitbox::update() {

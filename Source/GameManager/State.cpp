@@ -17,6 +17,7 @@ State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys
     this->supportedKeys = supportedKeys;
 
     quit = false;
+    flush = false;
 }
 
 State::~State() {
@@ -31,6 +32,16 @@ State::~State() {
  */
 const bool& State::getQuit() const {
     return quit;
+}
+
+/**
+ * @brief Returns whether the user wants to exit the program
+ * 
+ * @return true 
+ * @return false 
+ */
+const bool& State::getFlush() const {
+    return flush;
 }
 
 /**
