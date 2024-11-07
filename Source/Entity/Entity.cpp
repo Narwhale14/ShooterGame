@@ -86,7 +86,7 @@ void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_
  * 
  */
 void Entity::update() {
-    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
+    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getHitboxBounds().height));
     hitbox->update();
 }
 

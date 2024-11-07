@@ -60,14 +60,14 @@ void Player::render(sf::RenderTarget& target) {
     if(handheld->getFiringStatus())
         handheld->renderBull(target);
 
+    if(sprite)
+        target.draw(*sprite);
+        
     if(health)
         health->render(target);
 
     if(hitbox)
         hitbox->render(target);
-
-    if(sprite)
-        target.draw(*sprite);
     
     //handheld->render(target);
 }

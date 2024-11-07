@@ -19,26 +19,30 @@ Hitbox::Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float
 
     box->setOutlineThickness(1.f);
     box->setOutlineColor(color);
+
+    bounds = box->getGlobalBounds();
 }
 
 Hitbox::~Hitbox() {
     delete box;
+    delete sprite;
 }
 
-bool Hitbox::checkCollision(const sf::FloatRect* rect) {
-    return box->getGlobalBounds().intersects(*rect);
+bool Hitbox::checkCollision(const sf::FloatRect& rect) {
+    return box->getGlobalBounds().intersects(rect);
 }
 
 sf::Vector2f Hitbox::getPosition() {
     return box->getPosition();
 }
 
-sf::FloatRect Hitbox::getGlobalBounds() {
-    return box->getGlobalBounds();
+sf::FloatRect& Hitbox::getHitboxBounds() {
+    return bounds;
 }
 
 void Hitbox::setSize(sf::Vector2f size) {
     box->setSize(size);
+    bounds = box->getGlobalBounds();
 }
 
 void Hitbox::update() {
