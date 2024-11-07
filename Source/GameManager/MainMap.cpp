@@ -23,8 +23,6 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
 MainMap::~MainMap() {
     delete player;
-
-    std::cout << "Main map poof\n";
 }
 
 /**
