@@ -15,17 +15,22 @@
  */
 MainMenu::MainMenu(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeKeybinds();
-    initializeTextures();
     initializeFonts();
 
-    playButton = new Button(textures["BUTTON"], fonts["COLLEGE"], "PLAY", sf::Vector2f(100.f, 100.f));
+    playButton = new Button(fonts["SONO_R"], "PLAY", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     playButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2));
+
+    exitButton = new Button(fonts["SONO_R"], "EXIT", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    exitButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2 + playButton->getSize().y * 1.5f));
 }
 
+/**
+ * @brief Destroy the Main Menu:: Main Menu object
+ * 
+ */
 MainMenu::~MainMenu() {
     delete playButton;
-
-    std::cout << "Main menu poof\n";
+    delete exitButton;
 }
 
 /**
@@ -33,9 +38,10 @@ MainMenu::~MainMenu() {
  * 
  */
 void MainMenu::checkForQuit() {
-    if(playButton->getState() == 2) {
+    if(playButton->getState() == 2)
         quit = true;
-    }
+    if(exitButton->getState() == 2)
+        flush = true;
 }
 
 /**
@@ -56,8 +62,8 @@ void MainMenu::update(const float& dt) {
     updateMousePositions();
     updateInput(dt);
 
-    while(window->pollEvent(event))
-        playButton->update(event, *window);
+    playButton->update(mousePosView);
+    exitButton->update(mousePosView);
 }
 
 /**
@@ -71,6 +77,7 @@ void MainMenu::render(sf::RenderTarget* target) {
         target = window;
 
     playButton->render(*target);
+    exitButton->render(*target);
 }
 
 /**
@@ -96,20 +103,9 @@ void MainMenu::initializeKeybinds() {
  * @brief Loads all textures into map
  * 
  */
-void MainMenu::initializeTextures() {
-    sf::Texture temp; // Use this whenever loading a texture
-
-    if(temp.loadFromFile("Textures/button.png"))
-        textures["BUTTON"] = temp;
-}
-
-/**
- * @brief Loads all textures into map
- * 
- */
 void MainMenu::initializeFonts() {
     sf::Font temp;
 
-    if(temp.loadFromFile("Fonts/college.ttf"))
-        fonts["COLLGE"] = temp;
+    if(temp.loadFromFile("Fonts/Sono-Regular.ttf"))
+        fonts["SONO_R"] = temp;
 }

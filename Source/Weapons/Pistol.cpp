@@ -15,7 +15,7 @@
  */
 Pistol::Pistol(float r, sf::Texture* bTexture, sf::Texture* wTexture){
     range=r;
-    fireRate=8; //would not recommend going higher then 40
+    fireRate=10; //would not recommend going higher then 40
     createSprite(wTexture);
     sprite->setScale({.05,.05});
     sprite->setRotation(90);

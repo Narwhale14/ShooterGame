@@ -22,11 +22,10 @@ class MainMenu : public State {
 
         void render(sf::RenderTarget* target = nullptr);
     private:
-        sf::Event event;
         Button* playButton;
+        Button* exitButton;
 
         void initializeKeybinds();
-        void initializeTextures();
         void initializeFonts();
 };
 
