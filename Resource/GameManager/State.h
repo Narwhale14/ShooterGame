@@ -18,6 +18,7 @@ class State {
         virtual ~State();
 
         const bool& getQuit() const;
+        const bool& getFlush() const;
 
         virtual void checkForQuit() = 0;
         void endState();
@@ -31,7 +32,9 @@ class State {
         sf::RenderWindow* window;
         std::map<std::string, int>* supportedKeys; // A point to avoid copying list of keys
         std::map<std::string, int> keybinds; // Each state has its own keybinds ofc
+
         bool quit;
+        bool flush;
 
         sf::Vector2f mousePosView; // Keeps track of mouse within view relative to character
 

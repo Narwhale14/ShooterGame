@@ -15,7 +15,7 @@
  */
 Pistol::Pistol(float r, sf::Texture* bTexture, sf::Texture* wTexture){
     range=r;
-    fireRate=50; //would not recommend going higher then 40
+    fireRate=10; //would not recommend going higher then 40
     createSprite(wTexture);
     //Bullet *temp = new Bullet(r,texture);
     BulletShot=new Bullet(r,bTexture);
