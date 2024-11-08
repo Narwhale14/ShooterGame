@@ -30,7 +30,7 @@ State::~State() {
  * @return true 
  * @return false 
  */
-const bool& State::getQuit() const {
+const bool State::getQuit() const {
     return quit;
 }
 
@@ -40,7 +40,7 @@ const bool& State::getQuit() const {
  * @return true 
  * @return false 
  */
-const bool& State::getFlush() const {
+const bool State::getFlush() const {
     return flush;
 }
 

@@ -17,8 +17,8 @@ class State {
         State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~State();
 
-        const bool& getQuit() const;
-        const bool& getFlush() const;
+        const bool getQuit() const;
+        const bool getFlush() const;
 
         virtual void checkForQuit() = 0;
         void endState();
