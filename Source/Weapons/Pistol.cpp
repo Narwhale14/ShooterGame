@@ -89,7 +89,7 @@ void Pistol::render(sf::RenderTarget& target)
 }
 
 void Pistol::update(sf::Vector2f playerTrack) {
-    sprite->setPosition(playerTrack.x+40,playerTrack.y-10);
+    sprite->setPosition(playerTrack.x+50,playerTrack.y);
 }
 
 void Pistol::rotateWeapon(const sf::Vector2f mousePos){
