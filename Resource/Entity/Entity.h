@@ -25,7 +25,6 @@ class Entity {
         void move(const float& dt, const float dir_x, const float dir_y);
 
         void update();
-        bool updateCollisionDetection(sf::FloatRect incoming);
         virtual void render(sf::RenderTarget& target) = 0;
     protected:
         sf::Texture* texture;
