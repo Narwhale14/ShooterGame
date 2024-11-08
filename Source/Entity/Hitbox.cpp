@@ -19,8 +19,6 @@ Hitbox::Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float
 
     box->setOutlineThickness(1.f);
     box->setOutlineColor(color);
-
-    bounds = box->getGlobalBounds();
 }
 
 Hitbox::~Hitbox() {
@@ -36,13 +34,12 @@ sf::Vector2f Hitbox::getPosition() {
     return box->getPosition();
 }
 
-sf::FloatRect& Hitbox::getHitboxBounds() {
-    return bounds;
+sf::FloatRect Hitbox::getHitboxBounds() {
+    return box->getGlobalBounds();
 }
 
 void Hitbox::setSize(sf::Vector2f size) {
     box->setSize(size);
-    bounds = box->getGlobalBounds();
 }
 
 void Hitbox::update() {

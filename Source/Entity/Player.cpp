@@ -68,6 +68,4 @@ void Player::render(sf::RenderTarget& target) {
 
     if(hitbox)
         hitbox->render(target);
-    
-    //handheld->render(target);
 }

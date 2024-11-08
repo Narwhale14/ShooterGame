@@ -29,7 +29,7 @@ class Hitbox {
 
         bool checkCollision(const sf::FloatRect& rect);
         sf::Vector2f getPosition();
-        sf::FloatRect& getHitboxBounds();
+        sf::FloatRect getHitboxBounds();
         void setSize(sf::Vector2f size);
 
         void update();
@@ -37,8 +37,6 @@ class Hitbox {
     private:
         sf::RectangleShape* box;
         sf::Sprite* sprite;
-
-        sf::FloatRect bounds;
 
         float offsetX;
         float offsetY;

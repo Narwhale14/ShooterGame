@@ -17,14 +17,14 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(&textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    enemy = new Enemy(&textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
+    //enemy = new Enemy(&textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
     
     keyPressed=false;
 }
 
 MainMap::~MainMap() {
     delete player;
-    delete enemy;
+    //delete enemy;
 }
 
 /**
@@ -76,7 +76,7 @@ void MainMap::update(const float& dt) {
     player->update();
     player->pointToCursor(mousePosView);
 
-    enemy->update();
+    //enemy->update();
 }
 
 /**
@@ -90,7 +90,7 @@ void MainMap::render(sf::RenderTarget* target) {
         target = window;
 
     player->render(*target);
-    enemy->render(*target);
+    //enemy->render(*target);
 }
 
 /**

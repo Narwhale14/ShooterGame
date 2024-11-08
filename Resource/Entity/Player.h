@@ -15,8 +15,6 @@ class Player : public Entity {
         Player(std::map<std::string, sf::Texture>* textures, int x, int y, float s);
         ~Player();
 
-        sf::FloatRect& getProjectileHitboxBounds();
-
         virtual void pointToCursor(const sf::Vector2f mousePos);
         virtual bool useHandheld(const sf::Vector2f mousePos);
         virtual bool stopHandheld(const sf::Vector2f mousePos);
