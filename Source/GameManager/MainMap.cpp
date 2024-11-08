@@ -72,7 +72,9 @@ void MainMap::update(const float& dt) {
     updateInput(dt);
 
     player->update();
+    player->moveHandheld();
     player->pointToCursor(mousePosView);
+    player->rotateHandheld(mousePosView);
 }
 
 /**

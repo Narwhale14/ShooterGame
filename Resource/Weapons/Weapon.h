@@ -24,12 +24,15 @@ class Weapon{
         virtual void render(sf::RenderTarget& target);
         virtual void renderBull(sf::RenderTarget& target);
         void createSprite(sf::Texture* texture);
+        virtual void update(sf::Vector2f playerTrack);
+        virtual void rotateWeapon(const sf::Vector2f mousePos);
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
         float range;
         int fireRate;
         bool firing;
+        float angle;
 };
 
 #endif
