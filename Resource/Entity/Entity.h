@@ -18,8 +18,6 @@ class Entity {
         void setScale(float s);
         void setPosition(sf::Vector2f pos);
 
-        sf::FloatRect& getHitboxBounds() const;
-
         void createSprite(sf::Texture* texture);
         void createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
