@@ -18,3 +18,7 @@ Enemy::~Enemy() {
 void Enemy::render(sf::RenderTarget* target) {
 
 }
+
+void Enemy::update() {
+
+}

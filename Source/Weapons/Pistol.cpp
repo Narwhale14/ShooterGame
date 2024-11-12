@@ -89,14 +89,5 @@ void Pistol::render(sf::RenderTarget& target)
 }
 
 void Pistol::update(sf::Vector2f playerTrack) {
-    sprite->setPosition(playerTrack.x+50,playerTrack.y);
+    sprite->setPosition(playerTrack.x,playerTrack.y);
 }
-
-void Pistol::rotateWeapon(const sf::Vector2f mousePos){
-    float dist_x = mousePos.x - sprite->getPosition().x;
-    float dist_y = mousePos.y - sprite->getPosition().y;
-
-    angle = (atan2(dist_y, dist_x)) * 180 / 3.14;
-    sprite->setRotation(angle);
-}
-

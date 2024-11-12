@@ -72,7 +72,11 @@ void Weapon::update(sf::Vector2f playerTrack){
 }
 
 void Weapon::rotateWeapon(const sf::Vector2f mousePos){
+    float dist_x = mousePos.x - sprite->getPosition().x;
+    float dist_y = mousePos.y - sprite->getPosition().y;
 
+    angle = (atan2(dist_y, dist_x)) * 180 / 3.14;
+    sprite->setRotation(angle);
 }
 
 /**

@@ -7,8 +7,11 @@
  * @param y initial ypos
  * @param texture texture
  */
-Player::Player(std::map<std::string, sf::Texture>* textures, int x, int y, float s) {
-    createSprite(&(*textures)["PLAYER_NORMAL"]);
+Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s) {
+    idle = &textures["PLAYER_NORMAL"];
+    aimed = &textures["PLAYER_AIMED"];
+
+    createSprite(idle);
     
     setScale(s);
     setPosition(sf::Vector2f(x, y));
@@ -17,7 +20,8 @@ Player::Player(std::map<std::string, sf::Texture>* textures, int x, int y, float
     createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
 
     //handheld = new Bullet(200.f, &(*textures)["BULLET"]);
-    handheld = new Pistol(300.f, &(*textures)["BULLET"],&(*textures)["GLOCK"]);
+    handheld = new Pistol(300.f, &textures["BULLET"], &textures["GLOCK"]);
+    handheldType = pistol;
 }
 
 /**
@@ -33,22 +37,29 @@ Player::~Player() {
  * 
  * @param mousePos coords of the cursor relative to the window
  */
-void Player::pointToCursor(const sf::Vector2f mousePos) {
+void Player::updateRotation(const sf::Vector2f mousePos) {
     float dist_x = mousePos.x - sprite->getPosition().x;
     float dist_y = mousePos.y - sprite->getPosition().y;
 
-    angle = (atan2(dist_y, dist_x)) * 180 / 3.14;
+    angle = ((atan2(dist_y, dist_x)) * 180 / 3.14);
+
+    weaponPos.x = sprite->getPosition().x + (hitbox->getGlobalBounds().width / 1.5f) * cos(angle * 3.14 / 180);
+    weaponPos.y = sprite->getPosition().y + (hitbox->getGlobalBounds().height / 1.5f) * sin(angle * 3.14 / 180);
+    
     sprite->setRotation(angle - 90);
+
+    handheld->update(weaponPos);
+    handheld->rotateWeapon(mousePos);
 }
 
 bool Player::useHandheld(const sf::Vector2f mousePos) {
-    handheld->fire(mousePos,sprite->getPosition());
+    handheld->fire(mousePos, weaponPos);
     return handheld->getFiringStatus();
 }
 
 bool Player::stopHandheld(const sf::Vector2f mousePos)
 {
-    handheld->stopFire(mousePos,sprite->getPosition());
+    handheld->stopFire(mousePos, weaponPos);
     return handheld->getFiringStatus();
 }
 
@@ -66,18 +77,27 @@ void Player::render(sf::RenderTarget& target) {
 
     if(hitbox)
         hitbox->render(target);
+    
+    if(sprite)
+        handheld->render(target);
 
     if(sprite)
         target.draw(*sprite);
-
-    if(sprite)
-        handheld->render(target);
 }
 
-void Player::moveHandheld(){
-    handheld->update(sprite->getPosition());
-}
+void Player::update() {
+    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
+    hitbox->update();
 
-void Player::rotateHandheld(const sf::Vector2f mousePos){
-    handheld->rotateWeapon(mousePos);
+    switch(handheldType) {
+        case empty:
+            changeSprite(idle);
+            break;
+        case pistol:
+            changeSprite(aimed);
+            break;
+        default:
+            changeSprite(idle);
+            break;
+    }
 }
