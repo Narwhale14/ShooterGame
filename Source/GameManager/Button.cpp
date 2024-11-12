@@ -33,10 +33,28 @@ Button::Button(sf::Font& font, std::string s, sf::Vector2f size, sf::Color idle,
     text.setPosition(button.getPosition().x / 2, button.getPosition().y / 2);
 
     text.setFillColor(sf::Color::Black);
+
+    sprite = nullptr;
+}
+
+Button::Button(sf::Vector2f size, sf::Color hover, sf::Color active, sf::Texture* texture) {
+    hoverColor = hover;
+    activeColor = active;
+
+    sprite = new sf::Sprite(*texture);
+
+    std::cout << texture->getSize().x << " " << texture->getSize().y << std::endl;
+
+    sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
+    sprite->setScale(size.x / texture->getSize().x, size.y / texture->getSize().y);
+
+    button.setSize(size);
+    button.setOrigin(button.getSize().x / 2, button.getSize().y / 2);
+    button.setFillColor(sf::Color::Transparent);
 }
 
 Button::~Button() {
-    
+    delete sprite;
 }
 
 /**
@@ -46,6 +64,9 @@ Button::~Button() {
  */
 void Button::setPosition(sf::Vector2f position) {
     button.setPosition(position.x, position.y);
+
+    if(sprite)
+        sprite->setPosition(position.x, position.y);
 
     unsigned int fontSize = button.getGlobalBounds().height / 2;
     text.setCharacterSize(fontSize);
@@ -78,6 +99,7 @@ sf::Vector2f Button::getSize() const {
  */
 void Button::update(const sf::Vector2f& mousePosition) {
     state = idle; // Default
+
     button.setFillColor(idleColor);
 
     if(button.getGlobalBounds().contains(mousePosition)) {
@@ -98,6 +120,10 @@ void Button::update(const sf::Vector2f& mousePosition) {
  * @param states 
  */
 void Button::render(sf::RenderTarget& target) {
-    target.draw(button);
+    if(sprite)
+        target.draw(*sprite);
+    else
+        target.draw(button);
+
     target.draw(text);
 }

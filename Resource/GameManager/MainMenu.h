@@ -24,9 +24,11 @@ class MainMenu : public State {
     private:
         Button* playButton;
         Button* exitButton;
+        Button* settingsButton;
 
         void initializeKeybinds();
         void initializeFonts();
+        void initializeTextures();
 };
 
 #endif

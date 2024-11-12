@@ -48,3 +48,6 @@ Object/Button.o: Source/GameManager/Button.cpp Resource/GameManager/Button.h
 
 clean:
 	rm Object/*
+
+raw:
+	g++ -g -Wall Source/Entity/*.cpp Source/GameManager/*.cpp Source/Weapons/*.cpp Source/main.cpp -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system

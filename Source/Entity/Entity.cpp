@@ -10,8 +10,9 @@ Entity::Entity() {
     sprite = nullptr;
     hitbox = nullptr;
     
-    movementSpeed = 100.f;
+    movementSpeed = 150.f;
     angle = 0.f;
+    scale = 0.f;
 }
 
 /**
