@@ -17,7 +17,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    map = new Map(10, 100.f, sf::Color(86, 125, 70, 100));
+    map = new Map(30, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     keyPressed = false;
 }
 
@@ -71,8 +71,6 @@ void MainMap::updateInput(const float& dt) {
         moveView(dt, 0.f, 1.f, player->getMovementSpeed());
         player->move(dt, 0.f, 1.f);
     }
-
-    std::cout << view.getCenter().x - view.getSize().x / 2.f << " " << view.getCenter().y - view.getSize().y / 2.f << std::endl;
 }
 
 /**

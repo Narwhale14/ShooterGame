@@ -41,6 +41,7 @@ class State {
         bool flush;
 
         sf::Vector2f mousePosView;
+        sf::Vector2f viewOffset;
 
         std::map<std::string, sf::Texture> textures;
         std::map<std::string, sf::Font> fonts;

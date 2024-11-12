@@ -7,7 +7,7 @@
 
 #include "../../Resource/GameManager/Map.h"
 
-Map::Map(int mapS, float gridS, sf::Color color) {
+Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     if(gridS >= 0.f)
         gridSize = gridS;
     else
@@ -19,12 +19,20 @@ Map::Map(int mapS, float gridS, sf::Color color) {
         mapSize = 0;
 
     mapColor = color;
+    mapOutlineColor = outlineColor;
+    totalMapSize = gridSize * mapSize;
+
+    std::cout << "Map size x: " << totalMapSize << " y: " << totalMapSize << std::endl;
 
     initializeTileMap();
 }
 
 Map::~Map() {
+    
+}
 
+float Map::getTotalSize() const {
+    return totalMapSize;
 }
 
 void Map::update(const float& dt) {
@@ -48,8 +56,8 @@ void Map::initializeTileMap() {
         for(int y = 0; y < mapSize; y++) {
             tileMap[x][y].setSize(sf::Vector2f(gridSize, gridSize));
             tileMap[x][y].setFillColor(mapColor);
-            tileMap[x][y].setOutlineThickness(10.f);
-            tileMap[x][y].setOutlineColor(sf::Color::Black);
+            tileMap[x][y].setOutlineThickness(5.f);
+            tileMap[x][y].setOutlineColor(mapOutlineColor);
             tileMap[x][y].setPosition(x * gridSize, y * gridSize);
         }
     }
