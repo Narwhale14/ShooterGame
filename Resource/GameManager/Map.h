@@ -24,9 +24,14 @@
 
 class Map {
     public:
+        Map();
+        ~Map();
 
+        void update(const float& dt);
+        void render(sf::RenderTarget& target);
     private:
         std::vector<std::vector<sf::RectangleShape>> tileMap;
+        sf::RectangleShape gridUnit;
         
         float gridSizeF;
         unsigned gridSizeU;

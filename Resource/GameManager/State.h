@@ -41,7 +41,7 @@ class State {
         bool quit;
         bool flush;
 
-        sf::Vector2f mousePosView; // Keeps track of mouse within view relative to character
+        sf::Vector2f mousePosView;
 
         std::map<std::string, sf::Texture> textures;
         std::map<std::string, sf::Font> fonts;

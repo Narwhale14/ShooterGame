@@ -24,6 +24,8 @@ class MainMap : public State {
         Player* player;
         bool keyPressed;
 
+        Map* map;
+
         void initializeKeybinds();
         void initializeTextures();
 };
