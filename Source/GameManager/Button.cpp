@@ -40,17 +40,16 @@ Button::Button(sf::Font& font, std::string s, sf::Vector2f size, sf::Color idle,
 Button::Button(sf::Vector2f size, sf::Color hover, sf::Color active, sf::Texture* texture) {
     hoverColor = hover;
     activeColor = active;
+    idleColor = sf::Color::Transparent;
 
     sprite = new sf::Sprite(*texture);
-
-    std::cout << texture->getSize().x << " " << texture->getSize().y << std::endl;
 
     sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
     sprite->setScale(size.x / texture->getSize().x, size.y / texture->getSize().y);
 
-    button.setSize(size);
+    button.setSize(size / 1.25f);
     button.setOrigin(button.getSize().x / 2, button.getSize().y / 2);
-    button.setFillColor(sf::Color::Transparent);
+    button.setFillColor(idleColor);
 }
 
 Button::~Button() {

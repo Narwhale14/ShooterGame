@@ -17,8 +17,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    
-    keyPressed=false;
+    keyPressed = false;
 }
 
 MainMap::~MainMap() {
@@ -50,16 +49,17 @@ void MainMap::updateInput(const float& dt) {
     } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
             keyPressed=player->stopHandheld(mousePosView);
     }
-
-    // Updates player input
+    
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
-        player->move(dt, -1.f, 0.f);
+        moveView(dt, -1.f, 0.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT"))))
-        player->move(dt, 1.f, 0.f);
+        moveView(dt, 1.f, 0.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP"))))
-        player->move(dt, 0.f, -1.f);
+        moveView(dt, 0.f, -1.f);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
-        player->move(dt, 0.f, 1.f);
+        moveView(dt, 0.f, 1.f);
+
+    std::cout << view.getCenter().x - view.getSize().x / 2.f << " " << view.getCenter().y - view.getSize().y / 2.f << std::endl;
 }
 
 /**
@@ -86,6 +86,8 @@ void MainMap::render(sf::RenderTarget* target) {
         target = window;
 
     player->render(*target);
+
+    target->setView(view);
 }
 
 /**
