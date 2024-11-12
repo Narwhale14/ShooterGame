@@ -12,18 +12,25 @@
 
 class Player : public Entity {
     public:
-        Player(std::map<std::string, sf::Texture>* textures, int x, int y, float s);
+        Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
         ~Player();
 
-        virtual void pointToCursor(const sf::Vector2f mousePos);
         virtual bool useHandheld(const sf::Vector2f mousePos);
         virtual bool stopHandheld(const sf::Vector2f mousePos);
+
         virtual void render(sf::RenderTarget& target);
-        void moveHandheld();
-        void rotateHandheld(const sf::Vector2f mousePos);
+        virtual void updateRotation(const sf::Vector2f mousePos);
+        virtual void update();
     private:
-        std::string handheldType;
         Weapon* handheld;
+
+        sf::Texture* idle;
+        sf::Texture* aimed;
+
+        sf::Vector2f weaponPos;
+
+        short unsigned handheldType;
+        enum weaponTypes {empty = 0, pistol};
 };
 
 #endif

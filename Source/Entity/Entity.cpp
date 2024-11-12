@@ -58,6 +58,11 @@ void Entity::createSprite(sf::Texture* texture) {
     setScale(scale);
 }
 
+void Entity::changeSprite(sf::Texture* texture) {
+    this->texture = texture;
+    sprite->setTexture(*(this->texture));
+}
+
 /**
  * @brief Creates hitbox
  * 
@@ -79,15 +84,6 @@ void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float w
  */
 void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_y) {
     health = new HealthBar(size_x, size_y, pos_x, pos_y);
-}
-
-/**
- * @brief Updates components in entity
- * 
- */
-void Entity::update() {
-    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
-    hitbox->update();
 }
 
 /**

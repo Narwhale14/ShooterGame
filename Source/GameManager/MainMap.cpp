@@ -16,7 +16,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeKeybinds();
     initializeTextures();
 
-    player = new Player(&textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
+    player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
     
     keyPressed=false;
 }
@@ -72,9 +72,7 @@ void MainMap::update(const float& dt) {
     updateInput(dt);
 
     player->update();
-    player->moveHandheld();
-    player->pointToCursor(mousePosView);
-    player->rotateHandheld(mousePosView);
+    player->updateRotation(mousePosView);
 }
 
 /**
