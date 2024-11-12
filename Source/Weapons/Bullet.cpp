@@ -59,8 +59,6 @@ bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
         adjRng++;
     }else{
         adjRng=0;
-        adjX=0;
-        adjY=0;
         fireStatus=false;
     }
     return fireStatus;

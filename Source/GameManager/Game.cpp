@@ -17,7 +17,7 @@ Game::Game() {
     initializeKeys();
     
     states.push(new MainMap(window, &supportedKeys));
-    states.push(new MainMenu(window, &supportedKeys));
+    //states.push(new MainMenu(window, &supportedKeys));
 }
 
 /**
