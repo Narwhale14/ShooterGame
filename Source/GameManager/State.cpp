@@ -18,7 +18,6 @@ State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys
 
     view.setSize(window->getSize().x, window->getSize().y);
     view.setCenter(window->getSize().x / 2.f, window->getSize().y / 2.f);
-    viewSpeed = 100.f;
 
     quit = false;
     flush = false;
@@ -28,8 +27,8 @@ State::~State() {
 
 }
 
-void State::moveView(const float& dt, const float dir_x, const float dir_y) {
-    view.move(dir_x * dt * viewSpeed, dir_y * dt * viewSpeed);
+void State::moveView(const float& dt, const float dir_x, const float dir_y, const float movementSpeed) {
+    view.move(dir_x * dt * movementSpeed, dir_y * dt * movementSpeed);
 }
 
 /**

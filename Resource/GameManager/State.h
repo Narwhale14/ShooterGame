@@ -17,7 +17,7 @@ class State {
         State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~State();
 
-        void moveView(const float& deltaTime, const float dir_x, const float dir_y);
+        void moveView(const float& deltaTime, const float dir_x, const float dir_y, const float movementSpeed);
 
         const bool& getQuit() const;
         const bool& getFlush() const;
@@ -33,7 +33,6 @@ class State {
     protected:
         sf::RenderWindow* window;
         sf::View view;
-        float viewSpeed;
 
         std::map<std::string, int>* supportedKeys; // A point to avoid copying list of keys
         std::map<std::string, int> keybinds; // Each state has its own keybinds ofc

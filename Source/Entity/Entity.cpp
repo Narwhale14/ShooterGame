@@ -45,6 +45,10 @@ void Entity::setPosition(sf::Vector2f pos) {
     sprite->setPosition(pos);
 }
 
+float Entity::getMovementSpeed() {
+    return movementSpeed;
+}
+
 /**
  * @brief Initializes sprite and sets its origin to the center
  * 

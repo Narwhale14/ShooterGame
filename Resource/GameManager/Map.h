@@ -24,17 +24,19 @@
 
 class Map {
     public:
-        Map();
+        Map(int mapS, float gridS, sf::Color color);
         ~Map();
 
         void update(const float& dt);
         void render(sf::RenderTarget& target);
     private:
         std::vector<std::vector<sf::RectangleShape>> tileMap;
-        sf::RectangleShape gridUnit;
+        sf::Color mapColor;
         
-        float gridSizeF;
-        unsigned gridSizeU;
+        float gridSize;
+        int mapSize;
+
+        void initializeTileMap();
 };
 
 #endif

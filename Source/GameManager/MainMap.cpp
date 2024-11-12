@@ -17,7 +17,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    map = new Map();
+    map = new Map(10, 100.f, sf::Color(86, 125, 70, 100));
     keyPressed = false;
 }
 
@@ -52,14 +52,25 @@ void MainMap::updateInput(const float& dt) {
             keyPressed=player->stopHandheld(mousePosView);
     }
     
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
-        moveView(dt, -1.f, 0.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT"))))
-        moveView(dt, 1.f, 0.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP"))))
-        moveView(dt, 0.f, -1.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
-        moveView(dt, 0.f, 1.f);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT")))) {
+        moveView(dt, -1.f, 0.f, player->getMovementSpeed());
+        player->move(dt, -1.f, 0.f);
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT")))) {
+        moveView(dt, 1.f, 0.f, player->getMovementSpeed());
+        player->move(dt, 1.f, 0.f);
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP")))) {
+        moveView(dt, 0.f, -1.f, player->getMovementSpeed());
+        player->move(dt, 0.f, -1.f);
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN")))) {
+        moveView(dt, 0.f, 1.f, player->getMovementSpeed());
+        player->move(dt, 0.f, 1.f);
+    }
 
     std::cout << view.getCenter().x - view.getSize().x / 2.f << " " << view.getCenter().y - view.getSize().y / 2.f << std::endl;
 }
@@ -72,6 +83,7 @@ void MainMap::updateInput(const float& dt) {
 void MainMap::update(const float& dt) {
     updateMousePositions();
     updateInput(dt);
+    map->update(dt);
 
     player->update();
     player->updateRotation(mousePosView);
@@ -87,6 +99,7 @@ void MainMap::render(sf::RenderTarget* target) {
     if(!target)
         target = window;
 
+    map->render(*target);
     player->render(*target);
 
     target->setView(view);
