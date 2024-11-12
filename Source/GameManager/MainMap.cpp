@@ -17,12 +17,13 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    
-    keyPressed=false;
+    map = new Map(30, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    keyPressed = false;
 }
 
 MainMap::~MainMap() {
     delete player;
+    delete map;
 }
 
 /**
@@ -50,16 +51,26 @@ void MainMap::updateInput(const float& dt) {
     } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
             keyPressed=player->stopHandheld(mousePosView);
     }
-
-    // Updates player input
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
+    
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT")))) {
+        moveView(dt, -1.f, 0.f, player->getMovementSpeed());
         player->move(dt, -1.f, 0.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT"))))
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT")))) {
+        moveView(dt, 1.f, 0.f, player->getMovementSpeed());
         player->move(dt, 1.f, 0.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP"))))
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP")))) {
+        moveView(dt, 0.f, -1.f, player->getMovementSpeed());
         player->move(dt, 0.f, -1.f);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN")))) {
+        moveView(dt, 0.f, 1.f, player->getMovementSpeed());
         player->move(dt, 0.f, 1.f);
+    }
 }
 
 /**
@@ -70,6 +81,7 @@ void MainMap::updateInput(const float& dt) {
 void MainMap::update(const float& dt) {
     updateMousePositions();
     updateInput(dt);
+    map->update(dt);
 
     player->update();
     player->updateRotation(mousePosView);
@@ -85,7 +97,10 @@ void MainMap::render(sf::RenderTarget* target) {
     if(!target)
         target = window;
 
+    map->render(*target);
     player->render(*target);
+
+    target->setView(view);
 }
 
 /**

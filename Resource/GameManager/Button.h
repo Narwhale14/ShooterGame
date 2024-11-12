@@ -6,6 +6,7 @@
 class Button {
     public:
         Button(sf::Font& font, std::string s, sf::Vector2f size, sf::Color idle, sf::Color hover, sf::Color active);
+        Button(sf::Vector2f size, sf::Color hover, sf::Color active, sf::Texture* texture);
         ~Button();
 
         void setPosition(sf::Vector2f position);
@@ -18,6 +19,8 @@ class Button {
 
     private:
         sf::RectangleShape button;
+        sf::Sprite* sprite;
+
         sf::Color idleColor;
         sf::Color hoverColor;
         sf::Color activeColor;

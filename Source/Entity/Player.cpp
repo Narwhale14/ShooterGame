@@ -43,8 +43,8 @@ void Player::updateRotation(const sf::Vector2f mousePos) {
 
     angle = ((atan2(dist_y, dist_x)) * 180 / 3.14);
 
-    weaponPos.x = sprite->getPosition().x + (hitbox->getGlobalBounds().width / 1.5f) * cos(angle * 3.14 / 180);
-    weaponPos.y = sprite->getPosition().y + (hitbox->getGlobalBounds().height / 1.5f) * sin(angle * 3.14 / 180);
+    weaponPos.x = sprite->getPosition().x + (hitbox->getGlobalBounds().width / 1.1f) * cos(angle * 3.14 / 180);
+    weaponPos.y = sprite->getPosition().y + (hitbox->getGlobalBounds().height / 1.1f) * sin(angle * 3.14 / 180);
     
     sprite->setRotation(angle - 90);
 
@@ -77,8 +77,8 @@ void Player::render(sf::RenderTarget& target) {
 
     if(hitbox)
         hitbox->render(target);
-    
-    if(sprite)
+
+    if(handheld)
         handheld->render(target);
 
     if(sprite)

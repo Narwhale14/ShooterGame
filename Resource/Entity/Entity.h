@@ -15,6 +15,9 @@ class Entity {
         Entity();
         virtual ~Entity();
 
+        float getMovementSpeed();
+        sf::Vector2f getPosition();
+
         void setScale(float s);
         void setPosition(sf::Vector2f pos);
 

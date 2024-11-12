@@ -96,14 +96,16 @@ void Game::run() {
 void Game::initializeWindow() {
     std::ifstream inputFile("Config/window.ini");
     
+    // Variables
+    windowBounds.width = 1920;
+    windowBounds.height = 1080;
     std::string title = "None";
-    sf::VideoMode window_bounds(1280, 720);
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
 
     if(inputFile.is_open()) {
         std::getline(inputFile, title);
-        inputFile >> window_bounds.width >> window_bounds.height;
+        inputFile >> windowBounds.width >> windowBounds.height;
         inputFile >> framerate_limit;
         inputFile >> vertical_sync_enabled;
     } else {
@@ -112,14 +114,14 @@ void Game::initializeWindow() {
 
     inputFile.close();
 
-    window = new sf::RenderWindow(window_bounds, title);
+    window = new sf::RenderWindow(windowBounds, title);
     window->setFramerateLimit(framerate_limit);
     window->setVerticalSyncEnabled(vertical_sync_enabled);
 }
 
 /**
  * @brief Initializes all supported keybinds
- *        For visualization, go to < sf::Keyboard >'s definition by right clicking it
+ *        For visualization, go to <sf::Keyboard>'s definition by right clicking it
  */
 void Game::initializeKeys() {
     std::ifstream inputFile("Config/supported_keys.ini");
