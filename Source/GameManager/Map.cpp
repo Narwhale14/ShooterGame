@@ -22,8 +22,6 @@ Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     mapOutlineColor = outlineColor;
     totalMapSize = gridSize * mapSize;
 
-    std::cout << "Map size x: " << totalMapSize << " y: " << totalMapSize << std::endl;
-
     initializeTileMap();
 }
 
