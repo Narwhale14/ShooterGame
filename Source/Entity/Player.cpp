@@ -85,6 +85,10 @@ void Player::render(sf::RenderTarget& target) {
         target.draw(*sprite);
 }
 
+/**
+ * @brief Updates player and it's sprite
+ * 
+ */
 void Player::update() {
     health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
     hitbox->update();

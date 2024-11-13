@@ -28,9 +28,7 @@ class MainMap : public State {
         bool keyPressed;
 
         Map* map;
-
         sf::View view;
-        sf::Vector2f viewOffset;
 
         void initializeKeybinds();
         void initializeTextures();

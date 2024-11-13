@@ -10,10 +10,12 @@
 /**
  * @brief Construct a new Button:: Button object
  * 
- * @param s text
- * @param position vector position
- * @param size 
- * @param color 
+ * @param font button text font
+ * @param s text string
+ * @param size size of button
+ * @param idle idle color
+ * @param hover hover color
+ * @param active active color
  */
 Button::Button(sf::Font& font, std::string s, sf::Vector2f size, sf::Color idle, sf::Color hover, sf::Color active) {
     idleColor = idle;
@@ -37,6 +39,14 @@ Button::Button(sf::Font& font, std::string s, sf::Vector2f size, sf::Color idle,
     sprite = nullptr;
 }
 
+/**
+ * @brief Construct a new Button:: Button object
+ * 
+ * @param size size of button
+ * @param hover hover color
+ * @param active active color
+ * @param texture texture of button
+ */
 Button::Button(sf::Vector2f size, sf::Color hover, sf::Color active, sf::Texture* texture) {
     hoverColor = hover;
     activeColor = active;
@@ -52,6 +62,10 @@ Button::Button(sf::Vector2f size, sf::Color hover, sf::Color active, sf::Texture
     button.setFillColor(idleColor);
 }
 
+/**
+ * @brief Destroy the Button:: Button object
+ * 
+ */
 Button::~Button() {
     delete sprite;
 }

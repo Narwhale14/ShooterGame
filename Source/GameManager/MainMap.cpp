@@ -19,15 +19,16 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
     map = new Map(30, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
 
-    viewOffset.x = view.getCenter().x - view.getSize().x / 2;
-    viewOffset.y = view.getCenter().y - view.getSize().y / 2;
-
     view.setSize(window->getSize().x, window->getSize().y);
     view.setCenter(window->getSize().x / 2.f, window->getSize().y / 2.f);
 
     keyPressed = false;
 }
 
+/**
+ * @brief Destroy the Main Map:: Main Map object
+ * 
+ */
 MainMap::~MainMap() {
     delete player;
     delete map;
@@ -80,11 +81,15 @@ void MainMap::updateInput(const float& dt) {
     }
 }
 
+/**
+ * @brief Moves camera and detects if camera's border is crossing map's borders
+ * 
+ * @param dt deltaTime
+ * @param dir_x direction moving x
+ * @param dir_y direction moving y
+ * @param movementSpeed speed of player
+ */
 void MainMap::moveView(const float& dt, const float dir_x, const float dir_y, const float movementSpeed) {
-    viewOffset.x = view.getCenter().x - view.getSize().x / 2;
-    viewOffset.y = view.getCenter().y - view.getSize().y / 2;
-
-    // Is view border crossing map border
     bool crossingX = false;
     bool crossingY = false;
 
@@ -104,6 +109,13 @@ void MainMap::moveView(const float& dt, const float dir_x, const float dir_y, co
         view.move(0, dir_y * dt * movementSpeed);
 }
 
+/**
+ * @brief Moves the player and detects whether player's hitbox crosses map borders
+ * 
+ * @param dt deltaTime
+ * @param dir_x direction moving x
+ * @param dir_y direction moving y
+ */
 void MainMap::movePlayer(const float& dt, const float dir_x, const float dir_y) {
     if(player->getPosition().x < 0 + player->getHitboxBounds().width / 2) // Left wall
         player->setPosition(sf::Vector2f(player->getHitboxBounds().width / 2, player->getPosition().y));
