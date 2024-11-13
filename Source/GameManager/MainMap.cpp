@@ -17,10 +17,18 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    map = new Map(30, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(20, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+
+    view.setSize(window->getSize().x, window->getSize().y);
+    view.setCenter(window->getSize().x / 2.f, window->getSize().y / 2.f);
+
     keyPressed = false;
 }
 
+/**
+ * @brief Destroy the Main Map:: Main Map object
+ * 
+ */
 MainMap::~MainMap() {
     delete player;
     delete map;
@@ -54,23 +62,72 @@ void MainMap::updateInput(const float& dt) {
     
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT")))) {
         moveView(dt, -1.f, 0.f, player->getMovementSpeed());
-        player->move(dt, -1.f, 0.f);
+        movePlayer(dt, -1.f, 0.f);
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT")))) {
         moveView(dt, 1.f, 0.f, player->getMovementSpeed());
-        player->move(dt, 1.f, 0.f);
+        movePlayer(dt, 1.f, 0.f);
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP")))) {
         moveView(dt, 0.f, -1.f, player->getMovementSpeed());
-        player->move(dt, 0.f, -1.f);
+        movePlayer(dt, 0.f, -1.f);
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN")))) {
         moveView(dt, 0.f, 1.f, player->getMovementSpeed());
-        player->move(dt, 0.f, 1.f);
+        movePlayer(dt, 0.f, 1.f);
     }
+}
+
+/**
+ * @brief Moves camera and detects if camera's border is crossing map's borders
+ * 
+ * @param dt deltaTime
+ * @param dir_x direction moving x
+ * @param dir_y direction moving y
+ * @param movementSpeed speed of player
+ */
+void MainMap::moveView(const float& dt, const float dir_x, const float dir_y, const float movementSpeed) {
+    bool crossingX = false;
+    bool crossingY = false;
+
+    if(player->getPosition().x < view.getSize().x / 2)
+        crossingX = true;
+    if(player->getPosition().y < view.getSize().y / 2)
+        crossingY = true;
+
+    if(player->getPosition().x > map->getTotalSize() - view.getSize().x / 2)
+        crossingX = true;
+    if(player->getPosition().y > map->getTotalSize() - view.getSize().y / 2)
+        crossingY = true;
+
+    if(!crossingX)
+        view.move(dir_x * dt * movementSpeed, 0);
+    if(!crossingY)
+        view.move(0, dir_y * dt * movementSpeed);
+}
+
+/**
+ * @brief Moves the player and detects whether player's hitbox crosses map borders
+ * 
+ * @param dt deltaTime
+ * @param dir_x direction moving x
+ * @param dir_y direction moving y
+ */
+void MainMap::movePlayer(const float& dt, const float dir_x, const float dir_y) {
+    if(player->getPosition().x < 0 + player->getHitboxBounds().width / 2) // Left wall
+        player->setPosition(sf::Vector2f(player->getHitboxBounds().width / 2, player->getPosition().y));
+    if(player->getPosition().y < 0 + player->getHitboxBounds().height / 2) // Top wall
+        player->setPosition(sf::Vector2f(player->getPosition().x, player->getHitboxBounds().height / 2));
+
+    if(player->getPosition().x > map->getTotalSize() - player->getHitboxBounds().width / 2) // Right wall
+        player->setPosition(sf::Vector2f(map->getTotalSize() - player->getHitboxBounds().width / 2, player->getPosition().y));
+    if(player->getPosition().y > map->getTotalSize() - player->getHitboxBounds().height / 2) // Bottom wall
+        player->setPosition(sf::Vector2f(player->getPosition().x, map->getTotalSize() - player->getHitboxBounds().height / 2));
+
+    player->move(dt, dir_x, dir_y);
 }
 
 /**

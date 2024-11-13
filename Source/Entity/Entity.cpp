@@ -10,7 +10,7 @@ Entity::Entity() {
     sprite = nullptr;
     hitbox = nullptr;
     
-    movementSpeed = 150.f;
+    movementSpeed = 300.f;
     angle = 0.f;
     scale = 0.f;
 }
@@ -45,12 +45,31 @@ void Entity::setPosition(sf::Vector2f pos) {
     sprite->setPosition(pos);
 }
 
+/**
+ * @brief Returns the entity's movement speed
+ * 
+ * @return float 
+ */
 float Entity::getMovementSpeed() {
     return movementSpeed;
 }
 
+/**
+ * @brief Returns the entity's position
+ * 
+ * @return sf::Vector2f 
+ */
 sf::Vector2f Entity::getPosition() {
     return sprite->getPosition();
+}
+
+/**
+ * @brief Returns the entity's hitbox bounds
+ * 
+ * @return sf::FloatRect 
+ */
+sf::FloatRect Entity::getHitboxBounds() {
+    return hitbox->getGlobalBounds();
 }
 
 /**
@@ -67,6 +86,11 @@ void Entity::createSprite(sf::Texture* texture) {
     setScale(scale);
 }
 
+/**
+ * @brief Changes the sprite
+ * 
+ * @param texture 
+ */
 void Entity::changeSprite(sf::Texture* texture) {
     this->texture = texture;
     sprite->setTexture(*(this->texture));
