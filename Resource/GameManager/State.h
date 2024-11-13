@@ -17,8 +17,6 @@ class State {
         State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~State();
 
-        void moveView(const float& deltaTime, const float dir_x, const float dir_y, const float movementSpeed);
-
         const bool& getQuit() const;
         const bool& getFlush() const;
 
@@ -32,7 +30,6 @@ class State {
         virtual void render(sf::RenderTarget* target = NULL) = 0;
     protected:
         sf::RenderWindow* window;
-        sf::View view;
 
         std::map<std::string, int>* supportedKeys; // A point to avoid copying list of keys
         std::map<std::string, int> keybinds; // Each state has its own keybinds ofc
@@ -41,7 +38,6 @@ class State {
         bool flush;
 
         sf::Vector2f mousePosView;
-        sf::Vector2f viewOffset;
 
         std::map<std::string, sf::Texture> textures;
         std::map<std::string, sf::Font> fonts;
