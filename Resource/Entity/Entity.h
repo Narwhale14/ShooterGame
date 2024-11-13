@@ -17,6 +17,7 @@ class Entity {
 
         float getMovementSpeed();
         sf::Vector2f getPosition();
+        sf::FloatRect getHitboxBounds();
 
         void setScale(float s);
         void setPosition(sf::Vector2f pos);

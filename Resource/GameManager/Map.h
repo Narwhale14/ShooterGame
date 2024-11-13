@@ -5,6 +5,9 @@
  * @date 2024-11-12
  */
 
+#ifndef MAP_H
+#define MAP_H
+
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -18,9 +21,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-
-#ifndef MAP_H
-#define MAP_H
 
 class Map {
     public:

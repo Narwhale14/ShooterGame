@@ -22,7 +22,6 @@ class HealthBar {
         void render(sf::RenderTarget& target);
     private:
         int health;
-        bool dead;
 
         sf::RectangleShape* barBack;
         sf::RectangleShape* barMain;

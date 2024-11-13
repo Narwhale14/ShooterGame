@@ -7,6 +7,14 @@
 
 #include "../../Resource/Entity/HealthBar.h"
 
+/**
+ * @brief Construct a new Health Bar:: Health Bar object
+ * 
+ * @param size_x x size of healthbar
+ * @param size_y y size of healthbar
+ * @param pos_x x position of healthbar
+ * @param pos_y y position of healthbar
+ */
 HealthBar::HealthBar(float size_x, float size_y, float pos_x, float pos_y) {
     barBack = new sf::RectangleShape(sf::Vector2f(size_x, size_y / 5));
     barMain = new sf::RectangleShape(sf::Vector2f(size_x, size_y / 5));
@@ -22,34 +30,58 @@ HealthBar::HealthBar(float size_x, float size_y, float pos_x, float pos_y) {
     barBack->setFillColor(sf::Color(64, 64, 64));
     barMain->setFillColor(color);
 
-    dead = false;
     health = 100;
 }
 
+/**
+ * @brief Destroy the Health Bar:: Health Bar object
+ * 
+ */
 HealthBar::~HealthBar() {
     delete barBack;
     delete barMain;
 }
 
+/**
+ * @brief Sets healthbar position
+ * 
+ * @param pos_x 
+ * @param pos_y 
+ */
 void HealthBar::setPosition(float pos_x, float pos_y) {
     barBack->setPosition(pos_x, pos_y);
     barMain->setPosition(pos_x, pos_y);
 }
 
+/**
+ * @brief Negaes health from health bar
+ * 
+ * @param damage 
+ */
 void HealthBar::negateHealth(int damage) {
-    if(health - damage >= 0) {
+    if(health - damage >= 0)
         health -= damage;
-    } else if(health < damage) {
+    else if(health < damage)
         health = 0;
-    }
 
     barMain->setSize(sf::Vector2f(barMain->getSize().x * (health / 100.f), barMain->getSize().y));
 }
 
+/**
+ * @brief Returns if health is 0
+ * 
+ * @return true 
+ * @return false 
+ */
 bool HealthBar::getDead() const {
-    return dead;
+    return health < 0;
 }
 
+/**
+ * @brief Renders visual healthbar
+ * 
+ * @param target 
+ */
 void HealthBar::render(sf::RenderTarget& target) {
     target.draw(*barBack);
     target.draw(*barMain);
