@@ -7,6 +7,14 @@
 
 #include "../../Resource/GameManager/Map.h"
 
+/**
+ * @brief Construct a new Map:: Map object
+ * 
+ * @param mapS size
+ * @param gridS size of each tile
+ * @param color color of map
+ * @param outlineColor color of outline
+ */
 Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     if(gridS >= 0.f)
         gridSize = gridS;
@@ -25,18 +33,37 @@ Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     initializeTileMap();
 }
 
+/**
+ * @brief Destroy the Map:: Map object
+ * 
+ */
 Map::~Map() {
     
 }
 
+/**
+ * @brief returns map size
+ * 
+ * @return float 
+ */
 float Map::getTotalSize() const {
     return totalMapSize;
 }
 
+/**
+ * @brief Updates map
+ * 
+ * @param dt 
+ */
 void Map::update(const float& dt) {
 
 }
 
+/**
+ * @brief draws map to window
+ * 
+ * @param target 
+ */
 void Map::render(sf::RenderTarget& target) {
     for(int x = 0; x < mapSize; x++) {
         for(int y = 0; y < mapSize; y++) {
@@ -45,6 +72,10 @@ void Map::render(sf::RenderTarget& target) {
     }
 }
 
+/**
+ * @brief creates map
+ * 
+ */
 void Map::initializeTileMap() {
     tileMap.resize(mapSize, std::vector<sf::RectangleShape>());
 
