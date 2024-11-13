@@ -13,16 +13,16 @@
  * @param r range of the pistol
  * @param texture bullets texture
  */
-Shotgun::Shotgun(float r, sf::Texture* bTexture, sf::Texture* wTexture){
-    range=r;
-    fireRate=10; //would not recommend going higher then 40
+Shotgun::Shotgun(sf::Texture* bTexture, sf::Texture* wTexture){
+    range=700;
+    fireRate=(range/100);
     createSprite(wTexture);
     sprite->setScale({.05,.05});
     sprite->setRotation(90);
     //Bullet *temp = new Bullet(r,texture);
-    BulletShot=new Bullet(r,bTexture);
-    BulletShot1=new Bullet(r,bTexture);
-    BulletShot2=new Bullet(r,bTexture);
+    BulletShot=new Bullet(range,bTexture);
+    BulletShot1=new Bullet(range,bTexture);
+    BulletShot2=new Bullet(range,bTexture);
     // if(fireRate>0){
     //     for(int i=0;i<fireRate;i++){
     //         capacity.push_back(temp);

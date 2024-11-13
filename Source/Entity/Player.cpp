@@ -20,7 +20,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
 
     //handheld = new Bullet(200.f, &(*textures)["BULLET"]);
-    handheld = new Pistol(200.f, &textures["BULLET"], &textures["GLOCK"]);
+    handheld = new Pistol(&textures["BULLET"], &textures["GLOCK"]);
     handheldType = pistol;
 }
 

@@ -13,7 +13,7 @@
 class Pistol : public Weapon {
     public:
         //Pistol(float r, sf::Texture* texture);
-        Pistol(float r, sf::Texture* bTexture, sf::Texture* wTexture);
+        Pistol(sf::Texture* bTexture, sf::Texture* wTexture);
         ~Pistol();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);

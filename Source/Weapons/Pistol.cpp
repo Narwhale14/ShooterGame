@@ -13,18 +13,14 @@
  * @param r range of the pistol
  * @param texture bullets texture
  */
-Pistol::Pistol(float r, sf::Texture* bTexture, sf::Texture* wTexture){
-    if(r>0 && r<1400){
-        range=r;
-    }else{
-        r=100;
-    }
-    fireRate=(r/100); //would not recommend going higher then 40
+Pistol::Pistol( sf::Texture* bTexture, sf::Texture* wTexture){
+    range=700;
+    fireRate=(range/100);
     createSprite(wTexture);
     sprite->setScale({.05,.05});
     sprite->setRotation(90);
     //Bullet *temp = new Bullet(r,texture);
-    BulletShot=new Bullet(r,bTexture);
+    BulletShot=new Bullet(range,bTexture);
     // if(fireRate>0){
     //     for(int i=0;i<fireRate;i++){
     //         capacity.push_back(temp);
@@ -53,12 +49,12 @@ Pistol::~Pistol() {
  */
 void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-    //for(int i=0;i<fireRate;i++){
+    for(int i=0;i<fireRate;i++){
         //firing = capacity[i]->fireBull(mouseLoc,playerLoc, firing);
         firing=BulletShot->fireBull(mouseLoc,playerLoc, firing);
         // if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
         //     i=fireRate; 
-    //}
+    }
 }
 
 /**
@@ -69,9 +65,9 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  */
 void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-   //for(int i=0;i<fireRate;i++){
+   for(int i=0;i<fireRate;i++){
         firing=BulletShot->stopBull(mouseLoc,playerLoc, firing);
-    //}
+    }
 }
 
 /**
