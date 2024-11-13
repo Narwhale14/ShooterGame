@@ -17,7 +17,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
 
     player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    map = new Map(30, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(20, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
 
     view.setSize(window->getSize().x, window->getSize().y);
     view.setCenter(window->getSize().x / 2.f, window->getSize().y / 2.f);
