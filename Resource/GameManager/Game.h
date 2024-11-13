@@ -23,15 +23,12 @@ class Game {
 
     private:
         sf::RenderWindow *window;
+        sf::VideoMode windowBounds;
         sf::Event sfEvent;
 
         sf::Clock dtClock;
         float dt;
 
-        /* 
-        States stack - If a state is popped off the stack, then you go down a state
-        Think of a stack of cards in uno. The top card is the active one. 
-        */
         std::stack<State*> states;
 
         // Supported keys for the game

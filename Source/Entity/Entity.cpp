@@ -10,8 +10,9 @@ Entity::Entity() {
     sprite = nullptr;
     hitbox = nullptr;
     
-    movementSpeed = 100.f;
+    movementSpeed = 150.f;
     angle = 0.f;
+    scale = 0.f;
 }
 
 /**
@@ -42,6 +43,14 @@ void Entity::setScale(float s) {
  */
 void Entity::setPosition(sf::Vector2f pos) {
     sprite->setPosition(pos);
+}
+
+float Entity::getMovementSpeed() {
+    return movementSpeed;
+}
+
+sf::Vector2f Entity::getPosition() {
+    return sprite->getPosition();
 }
 
 /**

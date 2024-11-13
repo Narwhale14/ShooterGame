@@ -16,12 +16,28 @@ State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys
     this->window = window;
     this->supportedKeys = supportedKeys;
 
+    view.setSize(window->getSize().x, window->getSize().y);
+    view.setCenter(window->getSize().x / 2.f, window->getSize().y / 2.f);
+
+    viewOffset.x = view.getCenter().x - view.getSize().x / 2;
+    viewOffset.y = view.getCenter().y - view.getSize().y / 2;
+
     quit = false;
     flush = false;
 }
 
 State::~State() {
 
+}
+
+void State::moveView(const float& dt, const float dir_x, const float dir_y, const float movementSpeed) {
+    viewOffset.x = view.getCenter().x - view.getSize().x / 2;
+    viewOffset.y = view.getCenter().y - view.getSize().y / 2;
+
+    std::cout << viewOffset.x << " " << viewOffset.y << std::endl;
+
+    // if(viewOffset.x >= 0 && viewOffset.y >= 0)
+        view.move(dir_x * dt * movementSpeed, dir_y * dt * movementSpeed);
 }
 
 /**

@@ -16,12 +16,19 @@
 MainMenu::MainMenu(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeKeybinds();
     initializeFonts();
+    initializeTextures();
 
+    // play button
     playButton = new Button(fonts["SONO_R"], "PLAY", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     playButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2));
 
+    // exit button
     exitButton = new Button(fonts["SONO_R"], "EXIT", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     exitButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2 + playButton->getSize().y * 1.5f));
+
+    // settings button
+    settingsButton = new Button(sf::Vector2f(window->getSize().x / 15, window->getSize().x / 15), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SETTINGS_GEAR"]);
+    settingsButton->setPosition(sf::Vector2f(window->getSize().x / 1.55f, window->getSize().y / 2));
 }
 
 /**
@@ -31,6 +38,7 @@ MainMenu::MainMenu(sf::RenderWindow* window, std::map<std::string, int>* support
 MainMenu::~MainMenu() {
     delete playButton;
     delete exitButton;
+    delete settingsButton;
 }
 
 /**
@@ -64,6 +72,7 @@ void MainMenu::update(const float& dt) {
 
     playButton->update(mousePosView);
     exitButton->update(mousePosView);
+    settingsButton->update(mousePosView);
 }
 
 /**
@@ -78,6 +87,7 @@ void MainMenu::render(sf::RenderTarget* target) {
 
     playButton->render(*target);
     exitButton->render(*target);
+    settingsButton->render(*target);
 }
 
 /**
@@ -97,6 +107,17 @@ void MainMenu::initializeKeybinds() {
     }
 
     inputFile.close();
+}
+
+/**
+ * @brief Loads all textures into map
+ * 
+ */
+void MainMenu::initializeTextures() {
+    sf::Texture temp;
+
+    if(temp.loadFromFile("Textures/settings.png"))
+        textures["SETTINGS_GEAR"] = temp;
 }
 
 /**
