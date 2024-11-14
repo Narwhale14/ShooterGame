@@ -216,4 +216,7 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/glock.png"))
         textures["GLOCK"] = temp;
+
+    if(temp.loadFromFile("Textures/shotgun.png"))
+        textures["SHOTGUN"] = temp;
 }
