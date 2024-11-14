@@ -92,13 +92,15 @@ void MainMap::updateInput(const float& dt) {
  * @return false 
  */
 void MainMap::updateCollisions() {
-    // If player touches enemy
-    if(player->checkCollision(enemy->getHitboxBounds()) && registerTimePassed())
-        player->negateHealth(10);
-    
-    // If enemy touches player
-    if(enemy->checkCollision(player->getHitboxBounds()) && registerTimePassed())
-        enemy->negateHealth(10);
+    if(registerTimePassed()) {
+        // If enemy touches player
+        if(enemy->checkCollision(player->getHitboxBounds()))
+            enemy->negateHealth(10);
+
+        // If player touches enemy
+        if(player->checkCollision(enemy->getHitboxBounds()))
+            player->negateHealth(10);
+    }
 }
 
 /**
