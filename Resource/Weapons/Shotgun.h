@@ -9,21 +9,23 @@
 #define SHOTGUN_H
 
 #include "Pistol.h"
+#include <queue>
 
 class Shotgun : public Weapon {
     public:
         Shotgun(sf::Texture* bTexture, sf::Texture* wTexture);
         ~Shotgun();
-        void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
-        void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
+        void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c);
+        void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c);
         void renderBull(sf::RenderTarget& target);
         void render(sf::RenderTarget& target);
         void update(sf::Vector2f playerTrack);
-        //std::vector<Bullet*> capacity;
     private:
-        Bullet *BulletShot;
-        Bullet *BulletShot1;
-        Bullet *BulletShot2;
+        std::queue<Bullet*> BulletShot;
+        sf::Time T;
+        Bullet *temp;
+        // Bullet *BulletShot1;
+        // Bullet *BulletShot2;
 };
 
 #endif

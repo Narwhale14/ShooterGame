@@ -49,9 +49,9 @@ Pistol::~Pistol() {
  */
 void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-    for(int i=0;i<fireRate;i++){
+    for(unsigned int i=0;i<fireRate;i++){
         //firing = capacity[i]->fireBull(mouseLoc,playerLoc, firing);
-        firing=BulletShot->fireBull(mouseLoc,playerLoc, firing);
+        BulletShot->fireBull(mouseLoc,playerLoc);
         // if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
         //     i=fireRate; 
     }
@@ -65,8 +65,8 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  */
 void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-   for(int i=0;i<fireRate;i++){
-        firing=BulletShot->stopBull(mouseLoc,playerLoc, firing);
+   for(unsigned int i=0;i<fireRate;i++){
+        BulletShot->stopBull(mouseLoc,playerLoc);
     }
 }
 

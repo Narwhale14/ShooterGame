@@ -14,7 +14,6 @@
 Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
-    firing=false;
     dmg=1;
 }
 
@@ -25,7 +24,7 @@ Weapon::Weapon() {
  * @return false 
  */
 bool Weapon::getFiringStatus() {
-    return firing;
+    return false;
 }
 
 /**
@@ -34,7 +33,7 @@ bool Weapon::getFiringStatus() {
  * @param status 
  */
 void Weapon::setFiringStatus(bool status) {
-    firing = status;
+    //firing = status;
 }
 
 /**

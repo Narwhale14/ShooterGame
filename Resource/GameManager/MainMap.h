@@ -29,6 +29,7 @@ class MainMap : public State {
 
         Map* map;
         sf::View view;
+        sf::Clock cl;
 
         void initializeKeybinds();
         void initializeTextures();

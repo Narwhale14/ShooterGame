@@ -17,10 +17,11 @@ class Bullet{
     public:
         Bullet(float r, sf::Texture* texture);
         ~Bullet();
-        bool fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus);
-        bool stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus);
+        void fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
+        void stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void render(sf::RenderTarget& target);
         void createSprite(sf::Texture* texture);
+        sf::Vector2f getPostion();
     private:
         float range;
         float adjY; //direction for the bullet to travel on Y
@@ -31,6 +32,7 @@ class Bullet{
         sf::Sprite* sprite;
         sf::Vector2f origMouse;
         sf::Vector2f origPlayer;
+        bool firing;
 };
 
 #endif

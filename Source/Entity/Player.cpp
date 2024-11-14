@@ -51,15 +51,13 @@ void Player::updateRotation(const sf::Vector2f mousePos) {
     handheld->rotateWeapon(mousePos);
 }
 
-bool Player::useHandheld(const sf::Vector2f mousePos) {
-    handheld->fire(mousePos, weaponPos);
-    return handheld->getFiringStatus();
+void Player::useHandheld(const sf::Vector2f mousePos,sf::Clock c) {
+    handheld->fire(mousePos, weaponPos,c);
 }
 
-bool Player::stopHandheld(const sf::Vector2f mousePos)
+void Player::stopHandheld(const sf::Vector2f mousePos,sf::Clock c)
 {
-    handheld->stopFire(mousePos, weaponPos);
-    return handheld->getFiringStatus();
+    handheld->stopFire(mousePos, weaponPos,c);
 }
 
 /**
@@ -68,7 +66,7 @@ bool Player::stopHandheld(const sf::Vector2f mousePos)
  * @param target 
  */
 void Player::render(sf::RenderTarget& target) {
-    if(handheld->getFiringStatus())
+    //if(handheld->getFiringStatus())
         handheld->renderBull(target);
 
     if(health)
