@@ -21,6 +21,9 @@ class Bullet{
         void stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void render(sf::RenderTarget& target);
         void createSprite(sf::Texture* texture);
+        bool getFiringStat(){
+            return firing;
+        }
         sf::Vector2f getPostion();
     private:
         float range;

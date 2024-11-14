@@ -13,20 +13,23 @@
  * @param r range of the pistol
  * @param texture bullets texture
  */
-Shotgun::Shotgun(sf::Texture* bTexture, sf::Texture* wTexture){
+Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
     range=700;
-    fireRate=3; //(range/100); //would not recommend going higher then 40
+     //(range/100); //would not recommend going higher then 40
+    amount=10;
+    fireRate=5;
     //BulletShot.resize(fireRate);
-    createSprite(wTexture);
+    createSprite(&textures["GLOCK"]);
     sprite->setScale({.05,.05});
     sprite->setRotation(90);
-    Bullet *temp = new Bullet(range,bTexture);
+    bulletT=&textures["BULLET"];
     //BulletShot=new Bullet(range,bTexture);
     // BulletShot1=new Bullet(range,bTexture);
     // BulletShot2=new Bullet(range,bTexture);
     if(fireRate>0){
-        //for(unsigned int i=0;i<fireRate;i++){
-            BulletShot.push(temp);
+        //for(unsigned int i=0;i<amount;i++){
+            temp = new Bullet(range,&textures["BULLET"]);
+            BulletShot.push_back(temp);
         //}
     }
 }
@@ -35,9 +38,12 @@ Shotgun::Shotgun(sf::Texture* bTexture, sf::Texture* wTexture){
  * 
  */
 Shotgun::~Shotgun() {
-    // for(int i=0;i<fireRate;i++){
-    //     delete BulletShot[i];
-    // }
+    for(unsigned int i=0;i<BulletShot.size();i++){
+        delete BulletShot[i];
+        BulletShot[i]=nullptr;
+    }
+    delete temp;
+    temp = nullptr;
     // BulletShot.clear();
 
     //delete BulletShot;
@@ -54,18 +60,24 @@ Shotgun::~Shotgun() {
 void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c)
 {    
         //if(T.asSeconds()>1){
-            for(unsigned int i=0;i<BulletShot.size();i++){
-                
-                Bullet *move;
-                BulletShot.front()->fireBull(mouseLoc,playerLoc);
-                move=BulletShot.front();
-                BulletShot.pop();
-                BulletShot.push(move);
-                std::cout << "Bullet: "<< i << " " << BulletShot.front()->getPostion().x << ","<<BulletShot.front()->getPostion().y<<std::endl;
+        //for(unsigned int x=0;x<fireRate;x++){
+            for(unsigned int i=0;i<BulletShot.size();i++){ 
+                //if(BulletShot[i]->getFiringStat()){
+                BulletShot[i]->fireBull(mouseLoc,playerLoc);
+                //}
+                std::cout << "Bullet: "<< i << " " << BulletShot[i]->getPostion().x << ","<<BulletShot[i]->getPostion().y<<std::endl;
             }
+        //}
             T=c.getElapsedTime();
-            if(BulletShot.size()<fireRate&&T.asSeconds()>1){
-                BulletShot.push(temp);
+            // if(T.asSeconds()>2 && amount>1){
+            //     amount--;
+            //     c.restart();
+            // }else if(!BulletShot[BulletShot.size()-1]->getFiringStat()){
+            //     amount=BulletShot.size();
+            // }
+            if(BulletShot.size()<amount && T.asSeconds()>2 && BulletShot[BulletShot.size()-1]->getFiringStat()){
+                Bullet *newTemp = new Bullet(range,bulletT);
+                BulletShot.push_back(newTemp);
                 c.restart();
             }
         //}
@@ -82,21 +94,19 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c)
  */
 void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c)
 {
-    
-            for(unsigned int i=0;i<BulletShot.size();i++){
-                
-                Bullet *move;
-                BulletShot.front()->stopBull(mouseLoc,playerLoc);
-                move=BulletShot.front();
-                BulletShot.pop();
-                BulletShot.push(move);
-                std::cout << "Bullet: "<< i << " " << BulletShot.front()->getPostion().x << ","<<BulletShot.front()->getPostion().y<<std::endl;
-            }
-            T=c.getElapsedTime();
-            if(BulletShot.size()<fireRate&&T.asSeconds()>1){
-                BulletShot.push(temp);
-                c.restart();
-            }
+        // for(unsigned int x=0;x<fireRate;x++){
+        //     for(unsigned int i=0;i<BulletShot.size()-(amount-1);i++){ 
+        //         //if(BulletShot[i]->getFiringStat()){
+        //         BulletShot[i]->stopBull(mouseLoc,playerLoc);
+        //         //}
+        //         std::cout << "Bullet: "<< i << " " << BulletShot[i]->getPostion().x << ","<<BulletShot[i]->getPostion().y<<std::endl;
+        //     }
+        // }
+        // T=c.getElapsedTime();
+        // if(T.asSeconds()>2 && amount>1){
+        //     amount--;
+        //     c.restart();
+        // }
         //}
         // BulletShot1->stopBull({mouseLoc.x+100,mouseLoc.y+100},playerLoc, firing);
         // firing=BulletShot2->stopBull({mouseLoc.x-100,mouseLoc.y-100},playerLoc, firing);
@@ -111,7 +121,9 @@ void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c
 void Shotgun::renderBull(sf::RenderTarget& target)
 {
     for(unsigned int i=0;i<BulletShot.size();i++)
-        BulletShot.front()->render(target);
+    if(BulletShot[i]->getFiringStat()){
+        BulletShot[i]->render(target);
+    }
     // BulletShot1->render(target);
     // BulletShot2->render(target);
 }

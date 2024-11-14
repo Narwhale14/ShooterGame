@@ -13,7 +13,7 @@
 
 class Shotgun : public Weapon {
     public:
-        Shotgun(sf::Texture* bTexture, sf::Texture* wTexture);
+        Shotgun(std::map<std::string, sf::Texture>& textures);
         ~Shotgun();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c);
@@ -21,9 +21,11 @@ class Shotgun : public Weapon {
         void render(sf::RenderTarget& target);
         void update(sf::Vector2f playerTrack);
     private:
-        std::queue<Bullet*> BulletShot;
+        std::vector<Bullet*> BulletShot;
         sf::Time T;
         Bullet *temp;
+        sf::Texture *bulletT;
+        unsigned int amount;
         // Bullet *BulletShot1;
         // Bullet *BulletShot2;
 };
