@@ -13,7 +13,7 @@
 class Player : public Entity {
     public:
         Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
-        ~Player();
+        virtual ~Player();
 
         virtual bool useHandheld(const sf::Vector2f mousePos);
         virtual bool stopHandheld(const sf::Vector2f mousePos);

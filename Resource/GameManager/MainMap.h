@@ -15,8 +15,7 @@ class MainMap : public State {
         MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMap();
 
-        void moveView(const float& deltaTime, const float dir_x, const float dir_y, const float movementSpeed);
-        void movePlayer(const float& dt, const float dir_x, const float dir_y);
+        void move(const float& dt, const float dir_x, const float dir_y, const float movementSpeed);
 
         virtual void checkForQuit();
 
@@ -28,6 +27,7 @@ class MainMap : public State {
         bool keyPressed;
 
         Map* map;
+        std::vector<Object*> mapObjects;
 
         sf::Clock internalClock;
         int registerTimeMS;

@@ -22,17 +22,6 @@ Entity::Entity() {
 Entity::~Entity() {
     delete sprite;
     delete health;
-    delete hitbox;
-}
-
-/**
- * @brief Sets the scale
- * 
- * @param scale 
- */
-void Entity::setScale(float s) {
-    sprite->setScale(s, s);
-    scale = s;
 }
 
 /**
@@ -83,20 +72,6 @@ bool Entity::isAlive() {
 }
 
 /**
- * @brief Initializes sprite and sets its origin to the center
- * 
- * @param texture a pointer pointing to a texture
- */
-void Entity::createSprite(sf::Texture* texture) {
-    this->texture = texture;
-    sprite = new sf::Sprite(*this->texture);
-
-    // Sets origin to middle of shape
-    sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
-    setScale(scale);
-}
-
-/**
  * @brief Changes the sprite
  * 
  * @param texture 
@@ -104,30 +79,6 @@ void Entity::createSprite(sf::Texture* texture) {
 void Entity::changeSprite(sf::Texture* texture) {
     this->texture = texture;
     sprite->setTexture(*(this->texture));
-}
-
-/**
- * @brief Creates hitbox
- * 
- * @param s sprite for hitbox
- * @param offset_x x offset (pos)
- * @param offset_y y offset (pos)
- * @param width width of hitbox
- * @param height height of hitbox
- */
-void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color) {
-    hitbox = new Hitbox(s, offset_x, offset_y, width, height, color);
-}
-
-/**
- * @brief Checks to see if hitbox collides with another FloatRect
- * 
- * @param rect 
- * @return true 
- * @return false 
- */
-bool Entity::checkCollision(const sf::FloatRect rect) {
-    return hitbox->getGlobalBounds().intersects(rect);
 }
 
 /**

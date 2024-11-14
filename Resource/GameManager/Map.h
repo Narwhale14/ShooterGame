@@ -29,8 +29,7 @@ class Map {
 
         float getTotalSize() const;
         sf::Vector2f getCameraSize() const;
-        
-        void moveCamera(float dir_x, float dir_y);
+        void setViewCenter(float xpos, float ypos);
         
         void render(sf::RenderTarget& target);
     private:

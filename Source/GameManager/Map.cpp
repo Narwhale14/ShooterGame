@@ -63,13 +63,12 @@ sf::Vector2f Map::getCameraSize() const {
 }
 
 /**
- * @brief Moves view
+ * @brief Sets camera position
  * 
- * @param dir_x 
- * @param dir_y 
+ * @param pos 
  */
-void Map::moveCamera(float dir_x, float dir_y) {
-    view.move(dir_x, dir_y);
+void Map::setViewCenter(float xpos, float ypos) {
+    view.setCenter(xpos, ypos);
 }
 
 /**

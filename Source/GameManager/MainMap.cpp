@@ -61,25 +61,17 @@ void MainMap::updateInput(const float& dt) {
                 keyPressed=player->stopHandheld(mousePosView);
         }
         
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT")))) {
-            moveView(dt, -1.f, 0.f, player->getMovementSpeed());
-            movePlayer(dt, -1.f, 0.f);
-        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
+            move(dt, -1.f, 0.f, player->getMovementSpeed());
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT")))) {
-            moveView(dt, 1.f, 0.f, player->getMovementSpeed());
-            movePlayer(dt, 1.f, 0.f);
-        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT"))))
+            move(dt, 1.f, 0.f, player->getMovementSpeed());
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP")))) {
-            moveView(dt, 0.f, -1.f, player->getMovementSpeed());
-            movePlayer(dt, 0.f, -1.f);
-        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP"))))
+            move(dt, 0.f, -1.f, player->getMovementSpeed());
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN")))) {
-            moveView(dt, 0.f, 1.f, player->getMovementSpeed());
-            movePlayer(dt, 0.f, 1.f);
-        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
+            move(dt, 0.f, 1.f, player->getMovementSpeed());
 
         player->updateRotation(mousePosView);
     }
@@ -92,15 +84,15 @@ void MainMap::updateInput(const float& dt) {
  * @return false 
  */
 void MainMap::updateCollisions() {
-    if(registerTimePassed()) {
-        // If enemy touches player
-        if(enemy->checkCollision(player->getHitboxBounds()))
-            enemy->negateHealth(10);
+    // if(registerTimePassed()) {
+    //     // If enemy touches player
+    //     if(enemy->checkCollision(player->getHitboxBounds()))
+    //         enemy->negateHealth(10);
 
-        // If player touches enemy
-        if(player->checkCollision(enemy->getHitboxBounds()))
-            player->negateHealth(10);
-    }
+    //     // If player touches enemy
+    //     if(player->checkCollision(enemy->getHitboxBounds()))
+    //         player->negateHealth(10);
+    // }
 }
 
 /**
@@ -126,45 +118,19 @@ bool MainMap::registerTimePassed() {
  * @param dir_y direction moving y
  * @param movementSpeed speed of player
  */
-void MainMap::moveView(const float& dt, const float dir_x, const float dir_y, const float movementSpeed) {
-    bool crossingX = false;
-    bool crossingY = false;
-
-    if(player->getPosition().x < map->getCameraSize().x / 2)
-        crossingX = true;
-    if(player->getPosition().y < map->getCameraSize().y / 2)
-        crossingY = true;
-
-    if(player->getPosition().x > map->getTotalSize() - map->getCameraSize().x / 2)
-        crossingX = true;
-    if(player->getPosition().y > map->getTotalSize() - map->getCameraSize().y / 2)
-        crossingY = true;
-
-    if(!crossingX)
-        map->moveCamera(dir_x * dt * movementSpeed, 0);
-    if(!crossingY)
-        map->moveCamera(0, dir_y * dt * movementSpeed);
-}
-
-/**
- * @brief Moves the player and detects whether player's hitbox crosses map borders
- * 
- * @param dt deltaTime
- * @param dir_x direction moving x
- * @param dir_y direction moving y
- */
-void MainMap::movePlayer(const float& dt, const float dir_x, const float dir_y) {
+void MainMap::move(const float& dt, const float dir_x, const float dir_y, const float movementSpeed) {
+    // If player is touching wall
     if(player->getPosition().x < 0 + player->getHitboxBounds().width / 2) // Left wall
         player->setPosition(sf::Vector2f(player->getHitboxBounds().width / 2, player->getPosition().y));
     if(player->getPosition().y < 0 + player->getHitboxBounds().height / 2) // Top wall
         player->setPosition(sf::Vector2f(player->getPosition().x, player->getHitboxBounds().height / 2));
-
     if(player->getPosition().x > map->getTotalSize() - player->getHitboxBounds().width / 2) // Right wall
         player->setPosition(sf::Vector2f(map->getTotalSize() - player->getHitboxBounds().width / 2, player->getPosition().y));
     if(player->getPosition().y > map->getTotalSize() - player->getHitboxBounds().height / 2) // Bottom wall
         player->setPosition(sf::Vector2f(player->getPosition().x, map->getTotalSize() - player->getHitboxBounds().height / 2));
 
     player->move(dt, dir_x, dir_y);
+    map->setViewCenter(player->getPosition().x, player->getPosition().y);
 }
 
 /**

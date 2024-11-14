@@ -8,7 +8,7 @@
 #ifndef HEALTHBAR_H
 #define HEALTHBAR_H
 
-#include "Hitbox.h"
+#include "../GameManager/Object.h"
 
 class HealthBar {
     public:
