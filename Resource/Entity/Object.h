@@ -15,6 +15,8 @@ class Object {
         virtual ~Object();
         
         sf::FloatRect getHitboxBounds();
+        unsigned getType() const;
+        void setType(unsigned type);
         
         void createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
         bool checkCollision(const sf::FloatRect rect);
@@ -27,7 +29,9 @@ class Object {
 
         Hitbox* hitbox;
 
-        // Protected in order to be a make-shift abstract class
+        enum type {invalid = 0, player, block, enemy, bullet};
+        unsigned type;
+
         Object();
 };
 

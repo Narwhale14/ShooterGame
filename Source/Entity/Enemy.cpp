@@ -8,6 +8,7 @@
 #include "../../Resource/Entity/Enemy.h"
 
 Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y, float s) {
+    setType(enemy);
     createSprite(&textures["PLAYER_NORMAL"], s);
     setPosition(sf::Vector2f(x, y));
 

@@ -12,7 +12,7 @@
  * 
  */
 Object::Object() {
-
+    type = invalid;
 }
 
 /**
@@ -30,6 +30,24 @@ Object::~Object() {
  */
 sf::FloatRect Object::getHitboxBounds() {
     return hitbox->getGlobalBounds();
+}
+
+/**
+ * @brief Returns type of object
+ * 
+ * @return unsigned 
+ */
+unsigned Object::getType() const {
+    return type;
+}
+
+/**
+ * @brief Sets type of object
+ * 
+ * @param type 
+ */
+void Object::setType(unsigned type) {
+    this->type = type;
 }
 
 /**

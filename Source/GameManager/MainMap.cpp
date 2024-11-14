@@ -91,13 +91,17 @@ void MainMap::updateInput(const float& dt) {
  * @return false 
  */
 void MainMap::updateCollisions() {
-    if(registerTimePassed()) {
-        for(size_t i = 0; i < mapObjects.size(); i++) {
-            for(size_t j = 0; j < mapObjects.size(); i++) {
-                
-            }
-        }
-    }
+    // if(registerTimePassed()) {
+    //     for(size_t i = 0; i < mapObjects.size(); i++) {
+    //         for(size_t j = 0; j < mapObjects.size(); j++) {
+    //             if(j == i)
+    //                 break;
+
+    //             if(mapObjects[i]->checkCollision(mapObjects[j]->getHitboxBounds()))
+    //                 std::cout << i << " interacted with " << j << std::endl;
+    //         }
+    //     }
+    // }
 }
 
 /**

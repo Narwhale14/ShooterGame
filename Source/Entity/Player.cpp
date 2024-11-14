@@ -10,6 +10,7 @@
 Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s) {
     idle = &textures["PLAYER_NORMAL"];
     aimed = &textures["PLAYER_AIMED"];
+    setType(player);
 
     createSprite(idle, s);
     setPosition(sf::Vector2f(x, y));

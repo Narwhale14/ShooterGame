@@ -14,6 +14,7 @@
  * @param texture texture of shot
  */
 Bullet::Bullet(float r, sf::Texture* texture){
+    setType(bullet);
     createSprite(texture, 0.1f);
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
     hitbox->setSize(sf::Vector2f(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2));
