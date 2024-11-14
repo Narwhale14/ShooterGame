@@ -12,12 +12,12 @@
 
 class Enemy : public Entity {
     public:
-        Enemy();
+        Enemy(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
         virtual ~Enemy();
 
         //virtual void initializeHitbox();
 
-        virtual void render(sf::RenderTarget* target);
+        virtual void render(sf::RenderTarget& target);
         virtual void update();
     private:
 };

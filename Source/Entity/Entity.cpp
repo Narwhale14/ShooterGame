@@ -110,6 +110,17 @@ void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float w
 }
 
 /**
+ * @brief Checks to see if hitbox collides with another FloatRect
+ * 
+ * @param rect 
+ * @return true 
+ * @return false 
+ */
+bool Entity::checkCollision(const sf::FloatRect rect) {
+    return hitbox->getGlobalBounds().intersects(rect);
+}
+
+/**
  * @brief Creates healthbar
  * 
  * @param size_x 
@@ -117,6 +128,15 @@ void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float w
  */
 void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_y) {
     health = new HealthBar(size_x, size_y, pos_x, pos_y);
+}
+
+/**
+ * @brief Negates health of entity
+ * 
+ * @param damage 
+ */
+void Entity::negateHealth(int damage) {
+    health->setHealth(health->getHealth() - damage);
 }
 
 /**

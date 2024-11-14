@@ -24,17 +24,21 @@
 
 class Map {
     public:
-        Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor);
+        Map(sf::RenderTarget* window, int mapS, float gridS, sf::Color color, sf::Color outlineColor);
         ~Map();
 
         float getTotalSize() const;
-
-        void update(const float& dt);
+        sf::Vector2f getCameraSize() const;
+        
+        void moveCamera(float dir_x, float dir_y);
+        
         void render(sf::RenderTarget& target);
     private:
         std::vector<std::vector<sf::RectangleShape>> tileMap;
         sf::Color mapColor;
         sf::Color mapOutlineColor;
+
+        sf::View view;
         
         float gridSize;
         int mapSize;

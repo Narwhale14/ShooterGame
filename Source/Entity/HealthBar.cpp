@@ -54,27 +54,26 @@ void HealthBar::setPosition(float pos_x, float pos_y) {
 }
 
 /**
- * @brief Negaes health from health bar
+ * @brief Sets health
  * 
- * @param damage 
+ * @param new_health 
  */
-void HealthBar::negateHealth(int damage) {
-    if(health - damage >= 0)
-        health -= damage;
-    else if(health < damage)
+void HealthBar::setHealth(int new_health) {
+    if(new_health < 0)
         health = 0;
+    else
+        health = new_health;
 
     barMain->setSize(sf::Vector2f(barMain->getSize().x * (health / 100.f), barMain->getSize().y));
 }
 
 /**
- * @brief Returns if health is 0
+ * @brief Returns health
  * 
- * @return true 
- * @return false 
+ * @return int 
  */
-bool HealthBar::getDead() const {
-    return health < 0;
+int HealthBar::getHealth() const {
+    return health;
 }
 
 /**

@@ -15,7 +15,7 @@
  * @param color color of map
  * @param outlineColor color of outline
  */
-Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
+Map::Map(sf::RenderTarget* window, int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     if(gridS >= 0.f)
         gridSize = gridS;
     else
@@ -29,6 +29,9 @@ Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     mapColor = color;
     mapOutlineColor = outlineColor;
     totalMapSize = gridSize * mapSize;
+
+    view.setSize(window->getSize().x, window->getSize().y);
+    view.setCenter(totalMapSize / 2, totalMapSize / 2);
 
     initializeTileMap();
 }
@@ -51,12 +54,22 @@ float Map::getTotalSize() const {
 }
 
 /**
- * @brief Updates map
+ * @brief Returns the view size
  * 
- * @param dt 
+ * @return sf::Vector2f 
  */
-void Map::update(const float& dt) {
+sf::Vector2f Map::getCameraSize() const {
+    return view.getSize();
+}
 
+/**
+ * @brief Moves view
+ * 
+ * @param dir_x 
+ * @param dir_y 
+ */
+void Map::moveCamera(float dir_x, float dir_y) {
+    view.move(dir_x, dir_y);
 }
 
 /**
@@ -65,6 +78,7 @@ void Map::update(const float& dt) {
  * @param target 
  */
 void Map::render(sf::RenderTarget& target) {
+    target.setView(view);
     for(int x = 0; x < mapSize; x++) {
         for(int y = 0; y < mapSize; y++) {
             target.draw(tileMap[x][y]);

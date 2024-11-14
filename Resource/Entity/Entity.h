@@ -19,6 +19,9 @@ class Entity {
         sf::Vector2f getPosition();
         sf::FloatRect getHitboxBounds();
 
+        bool checkCollision(const sf::FloatRect rect);
+        void negateHealth(int damage);
+
         void setScale(float s);
         void setPosition(sf::Vector2f pos);
 

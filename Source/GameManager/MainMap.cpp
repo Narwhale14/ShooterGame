@@ -16,11 +16,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeKeybinds();
     initializeTextures();
 
-    player = new Player(textures, window->getSize().x / 2, window->getSize().y / 2, 0.075f);
-    map = new Map(20, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-
-    view.setSize(window->getSize().x, window->getSize().y);
-    view.setCenter(window->getSize().x / 2.f, window->getSize().y / 2.f);
+    map = new Map(window, 20, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    player = new Player(textures, map->getTotalSize() / 2, map->getTotalSize() / 2, 0.075f);
+    enemy = new Enemy(textures, map->getTotalSize() / 2 - 100, map->getTotalSize() / 2 - 100, 0.075f);
 
     keyPressed = false;
 }
@@ -31,6 +29,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
  */
 MainMap::~MainMap() {
     delete player;
+    delete enemy;
     delete map;
 }
 
@@ -82,6 +81,17 @@ void MainMap::updateInput(const float& dt) {
 }
 
 /**
+ * @brief Updates collisions
+ * 
+ */
+void MainMap::updateCollisions() {
+    if(player->checkCollision(enemy->getHitboxBounds()))
+        player->negateHealth(1);
+    if(enemy->checkCollision(player->getHitboxBounds()))
+        enemy->negateHealth(1);
+}
+
+/**
  * @brief Moves camera and detects if camera's border is crossing map's borders
  * 
  * @param dt deltaTime
@@ -93,20 +103,20 @@ void MainMap::moveView(const float& dt, const float dir_x, const float dir_y, co
     bool crossingX = false;
     bool crossingY = false;
 
-    if(player->getPosition().x < view.getSize().x / 2)
+    if(player->getPosition().x < map->getCameraSize().x / 2)
         crossingX = true;
-    if(player->getPosition().y < view.getSize().y / 2)
+    if(player->getPosition().y < map->getCameraSize().y / 2)
         crossingY = true;
 
-    if(player->getPosition().x > map->getTotalSize() - view.getSize().x / 2)
+    if(player->getPosition().x > map->getTotalSize() - map->getCameraSize().x / 2)
         crossingX = true;
-    if(player->getPosition().y > map->getTotalSize() - view.getSize().y / 2)
+    if(player->getPosition().y > map->getTotalSize() - map->getCameraSize().y / 2)
         crossingY = true;
 
     if(!crossingX)
-        view.move(dir_x * dt * movementSpeed, 0);
+        map->moveCamera(dir_x * dt * movementSpeed, 0);
     if(!crossingY)
-        view.move(0, dir_y * dt * movementSpeed);
+        map->moveCamera(0, dir_y * dt * movementSpeed);
 }
 
 /**
@@ -137,11 +147,13 @@ void MainMap::movePlayer(const float& dt, const float dir_x, const float dir_y) 
  */
 void MainMap::update(const float& dt) {
     updateMousePositions();
+    updateCollisions();
     updateInput(dt);
-    map->update(dt);
 
     player->update();
     player->updateRotation(mousePosView);
+
+    enemy->update();
 }
 
 /**
@@ -155,9 +167,8 @@ void MainMap::render(sf::RenderTarget* target) {
         target = window;
 
     map->render(*target);
+    enemy->render(*target);
     player->render(*target);
-
-    target->setView(view);
 }
 
 /**

@@ -20,18 +20,20 @@ class MainMap : public State {
 
         virtual void checkForQuit();
 
-        void updateInput(const float& dt);
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
     private:
         Player* player;
+        Enemy* enemy;
         bool keyPressed;
 
         Map* map;
-        sf::View view;
+        sf::Clock internalClock;
 
         void initializeKeybinds();
         void initializeTextures();
+        void updateCollisions();
+        void updateInput(const float& dt);
 };
 
 #endif
