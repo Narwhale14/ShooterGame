@@ -69,8 +69,8 @@ void Player::render(sf::RenderTarget& target) {
     if(handheld->getFiringStatus())
         handheld->renderBull(target);
 
-    if(health)
-        health->render(target);
+    if(healthBar)
+        healthBar->render(target);
 
     if(hitbox)
         hitbox->render(target);
@@ -87,7 +87,7 @@ void Player::render(sf::RenderTarget& target) {
  * 
  */
 void Player::update() {
-    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
+    healthBar->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
     hitbox->update();
 
     switch(handheldType) {

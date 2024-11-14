@@ -17,7 +17,7 @@ class Entity : public Object {
 
         float getMovementSpeed();
         sf::Vector2f getPosition();
-        sf::FloatRect getHitboxBounds();
+        sf::Sprite& getSprite() const;
         bool isAlive();
 
         void negateHealth(int damage);
@@ -32,7 +32,7 @@ class Entity : public Object {
         virtual void update() = 0;
         virtual void render(sf::RenderTarget& target) = 0;
     protected:
-        HealthBar* health;
+        HealthBar* healthBar;
 
         float movementSpeed;
         float angle;

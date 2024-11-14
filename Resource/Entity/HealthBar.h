@@ -8,7 +8,7 @@
 #ifndef HEALTHBAR_H
 #define HEALTHBAR_H
 
-#include "../GameManager/Object.h"
+#include "Object.h"
 
 class HealthBar {
     public:
@@ -23,6 +23,7 @@ class HealthBar {
         void render(sf::RenderTarget& target);
     private:
         int health;
+        int maxHealth;
 
         sf::RectangleShape* barBack;
         sf::RectangleShape* barMain;

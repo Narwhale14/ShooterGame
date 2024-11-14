@@ -9,6 +9,7 @@ Entity::Entity() {
     texture = nullptr;
     sprite = nullptr;
     hitbox = nullptr;
+    healthBar = nullptr;
     
     movementSpeed = 300.f;
     angle = 0.f;
@@ -21,7 +22,7 @@ Entity::Entity() {
  */
 Entity::~Entity() {
     delete sprite;
-    delete health;
+    delete healthBar;
 }
 
 /**
@@ -52,13 +53,8 @@ sf::Vector2f Entity::getPosition() {
     return sprite->getPosition();
 }
 
-/**
- * @brief Returns the entity's hitbox bounds
- * 
- * @return sf::FloatRect 
- */
-sf::FloatRect Entity::getHitboxBounds() {
-    return hitbox->getGlobalBounds();
+sf::Sprite& Entity::getSprite() const {
+    return *sprite;
 }
 
 /**
@@ -68,7 +64,7 @@ sf::FloatRect Entity::getHitboxBounds() {
  * @return false 
  */
 bool Entity::isAlive() {
-    return health->getHealth() > 0;
+    return healthBar->getHealth() > 0;
 }
 
 /**
@@ -88,7 +84,7 @@ void Entity::changeSprite(sf::Texture* texture) {
  * @param size_y 
  */
 void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_y) {
-    health = new HealthBar(size_x, size_y, pos_x, pos_y);
+    healthBar = new HealthBar(size_x, size_y, pos_x, pos_y);
 }
 
 /**
@@ -97,7 +93,7 @@ void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_
  * @param damage 
  */
 void Entity::negateHealth(int damage) {
-    health->setHealth(health->getHealth() - damage);
+    healthBar->setHealth(healthBar->getHealth() - damage);
 }
 
 /**

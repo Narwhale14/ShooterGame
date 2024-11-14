@@ -54,6 +54,15 @@ float Map::getTotalSize() const {
 }
 
 /**
+ * @brief Returns the map center
+ * 
+ * @return sf::Vector2f 
+ */
+sf::Vector2f Map::getMapCenter() const {
+    return sf::Vector2f(totalMapSize / 2, totalMapSize / 2);
+}
+
+/**
  * @brief Returns the view size
  * 
  * @return sf::Vector2f 
@@ -72,6 +81,18 @@ void Map::setViewCenter(float xpos, float ypos) {
 }
 
 /**
+ * @brief Determines if an obj is on the map
+ * 
+ * @param obj 
+ * @return true 
+ * @return false 
+ */
+bool Map::contains(sf::Vector2f objPos) const {
+    return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - gridSize) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - gridSize)
+        && (objPos.x < view.getCenter().x + (view.getSize().x / 2)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) );
+}
+
+/**
  * @brief draws map to window
  * 
  * @param target 
@@ -80,7 +101,8 @@ void Map::render(sf::RenderTarget& target) {
     target.setView(view);
     for(int x = 0; x < mapSize; x++) {
         for(int y = 0; y < mapSize; y++) {
-            target.draw(tileMap[x][y]);
+            if(this->contains(tileMap[x][y].getPosition()))
+                target.draw(tileMap[x][y]);
         }
     }
 }

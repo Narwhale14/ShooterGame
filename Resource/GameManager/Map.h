@@ -28,8 +28,11 @@ class Map {
         ~Map();
 
         float getTotalSize() const;
+        sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
         void setViewCenter(float xpos, float ypos);
+        
+        bool contains(sf::Vector2f objPos) const;
         
         void render(sf::RenderTarget& target);
     private:

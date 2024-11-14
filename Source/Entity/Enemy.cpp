@@ -20,8 +20,8 @@ Enemy::~Enemy() {
 }
 
 void Enemy::render(sf::RenderTarget& target) {
-    if(health)
-        health->render(target);
+    if(healthBar)
+        healthBar->render(target);
 
     if(hitbox)
         hitbox->render(target);
@@ -31,6 +31,6 @@ void Enemy::render(sf::RenderTarget& target) {
 }
 
 void Enemy::update() {
-    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
+    healthBar->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
     hitbox->update();
 }

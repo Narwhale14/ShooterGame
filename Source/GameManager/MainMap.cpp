@@ -15,14 +15,14 @@
 MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeKeybinds();
     initializeTextures();
-    registerTimeMS = 100;
+    registerTimeMS = 1000;
 
-    map = new Map(window, 20, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 100, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     
-    player = new Player(textures, map->getTotalSize() / 2, map->getTotalSize() / 2, 0.075f);
+    player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     mapObjects.push_back(player);
 
-    enemy = new Enemy(textures, map->getTotalSize() / 2 - 100, map->getTotalSize() / 2 - 100, 0.075f);
+    enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
     mapObjects.push_back(enemy);
 
     keyPressed = false;
@@ -91,15 +91,13 @@ void MainMap::updateInput(const float& dt) {
  * @return false 
  */
 void MainMap::updateCollisions() {
-    // if(registerTimePassed()) {
-    //     // If enemy touches player
-    //     if(enemy->checkCollision(player->getHitboxBounds()))
-    //         enemy->negateHealth(10);
-
-    //     // If player touches enemy
-    //     if(player->checkCollision(enemy->getHitboxBounds()))
-    //         player->negateHealth(10);
-    // }
+    if(registerTimePassed()) {
+        for(size_t i = 0; i < mapObjects.size(); i++) {
+            for(size_t j = 0; j < mapObjects.size(); i++) {
+                
+            }
+        }
+    }
 }
 
 /**
@@ -165,8 +163,12 @@ void MainMap::render(sf::RenderTarget* target) {
         target = window;
 
     map->render(*target);
-    enemy->render(*target);
-    player->render(*target);
+
+    if(map->contains(enemy->getPosition()))
+        enemy->render(*target);
+
+    if(map->contains(player->getPosition()))
+        player->render(*target);
 }
 
 /**

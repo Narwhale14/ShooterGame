@@ -68,7 +68,7 @@ void Game::update() {
  * 
  */
 void Game::render() {
-    window->clear();
+    window->clear(sf::Color(50, 50, 50));
 
     // Renders the state first in queue (top of stack)
     if(!states.empty()) {

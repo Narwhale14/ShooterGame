@@ -5,7 +5,7 @@
  * @date 2024-11-14
  */
 
-#include "../../Resource/GameManager/Object.h"
+#include "../../Resource/Entity/Object.h"
 
 /**
  * @brief Construct a new Object:: Object object
@@ -21,6 +21,15 @@ Object::Object() {
  */
 Object::~Object() {
     delete hitbox;
+}
+
+/**
+ * @brief Returns the hitbox bounds
+ * 
+ * @return sf::FloatRect 
+ */
+sf::FloatRect Object::getHitboxBounds() {
+    return hitbox->getGlobalBounds();
 }
 
 /**

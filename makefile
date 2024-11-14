@@ -52,8 +52,8 @@ Object/Button.o: Source/GameManager/Button.cpp Resource/GameManager/Button.h
 Object/Map.o: Source/GameManager/Map.cpp Resource/GameManager/Map.h
 	g++ -Wall -c Source/GameManager/Map.cpp -o Object/Map.o
 
-Object/Object.o: Source/GameManager/Object.cpp Resource/GameManager/Object.h
-	g++ -Wall -c Source/GameManager/Object.cpp -o Object/Object.o
+Object/Object.o: Source/Entity/Object.cpp Resource/Entity/Object.h
+	g++ -Wall -c Source/Entity/Object.cpp -o Object/Object.o
 
 clean:
 	rm Object/*

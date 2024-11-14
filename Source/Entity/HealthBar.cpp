@@ -30,7 +30,8 @@ HealthBar::HealthBar(float size_x, float size_y, float pos_x, float pos_y) {
     barBack->setFillColor(sf::Color(64, 64, 64));
     barMain->setFillColor(color);
 
-    health = 100;
+    maxHealth = 100;
+    health = maxHealth;
 }
 
 /**
@@ -64,7 +65,7 @@ void HealthBar::setHealth(int new_health) {
     else
         health = new_health;
 
-    barMain->setSize(sf::Vector2f(barMain->getSize().x * (health / 100.f), barMain->getSize().y));
+    barMain->setSize(sf::Vector2f(barMain->getSize().x * (health / static_cast<float>(maxHealth)), barMain->getSize().y));
 }
 
 /**
