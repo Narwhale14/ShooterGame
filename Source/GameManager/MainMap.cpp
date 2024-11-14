@@ -98,7 +98,8 @@ void MainMap::updateCollisions() {
     //                 break;
 
     //             if(mapObjects[i]->checkCollision(mapObjects[j]->getHitboxBounds()))
-    //                 std::cout << i << " interacted with " << j << std::endl;
+    //                 if(mapObjects[j]->getType() == 1)
+    //                     player->negateHealth(10);
     //         }
     //     }
     // }
