@@ -1,7 +1,7 @@
 #ifndef MORTAR_H
 #define MORTAR_H
 
-#include "Pistol.h"
+#include "Shotgun.h"
 
 class Mortar : public Weapon {
     public:

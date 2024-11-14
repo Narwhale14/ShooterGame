@@ -5,25 +5,25 @@
  * @version 0.1
  * @date 2024-11-05
  */
-#ifndef PISTOL_H
-#define PISTOL_H
+#ifndef SHOTGUN_H
+#define SHOTGUN_H
 
-#include "Bullet.h"
+#include "Pistol.h"
 
-class Pistol : public Weapon {
+class Shotgun : public Weapon {
     public:
-        //Pistol(float r, sf::Texture* texture);
-        Pistol(sf::Texture* bTexture, sf::Texture* wTexture);
-        ~Pistol();
+        Shotgun(sf::Texture* bTexture, sf::Texture* wTexture);
+        ~Shotgun();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void renderBull(sf::RenderTarget& target);
         void render(sf::RenderTarget& target);
         void update(sf::Vector2f playerTrack);
-        void increaseFireRate(float percent);
         //std::vector<Bullet*> capacity;
     private:
         Bullet *BulletShot;
+        Bullet *BulletShot1;
+        Bullet *BulletShot2;
 };
 
 #endif
