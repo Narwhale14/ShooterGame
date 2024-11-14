@@ -8,7 +8,7 @@
 #ifndef HEALTHBAR_H
 #define HEALTHBAR_H
 
-#include "Hitbox.h"
+#include "Object.h"
 
 class HealthBar {
     public:
@@ -16,12 +16,14 @@ class HealthBar {
         ~HealthBar();
 
         void setPosition(float pos_x, float pos_y);
-        void negateHealth(int damage);
-        bool getDead() const;
+        void setHealth(int new_health);
+
+        int getHealth() const;
 
         void render(sf::RenderTarget& target);
     private:
         int health;
+        int maxHealth;
 
         sf::RectangleShape* barBack;
         sf::RectangleShape* barMain;

@@ -40,17 +40,6 @@ Hitbox::~Hitbox() {
 }
 
 /**
- * @brief Checks to see if hitbox collides with another FloatRect
- * 
- * @param rect 
- * @return true 
- * @return false 
- */
-bool Hitbox::checkCollision(const sf::FloatRect* rect) {
-    return box->getGlobalBounds().intersects(*rect);
-}
-
-/**
  * @brief Returns hitbox position
  * 
  * @return sf::Vector2f 

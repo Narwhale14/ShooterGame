@@ -10,10 +10,9 @@
 Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s) {
     idle = &textures["PLAYER_NORMAL"];
     aimed = &textures["PLAYER_AIMED"];
+    setType(player);
 
-    createSprite(idle);
-    
-    setScale(s);
+    createSprite(idle, s);
     setPosition(sf::Vector2f(x, y));
 
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green);
@@ -71,8 +70,8 @@ void Player::render(sf::RenderTarget& target) {
     if(handheld->getFiringStatus())
         handheld->renderBull(target);
 
-    if(health)
-        health->render(target);
+    if(healthBar)
+        healthBar->render(target);
 
     if(hitbox)
         hitbox->render(target);
@@ -89,7 +88,7 @@ void Player::render(sf::RenderTarget& target) {
  * 
  */
 void Player::update() {
-    health->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
+    healthBar->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
     hitbox->update();
 
     switch(handheldType) {
