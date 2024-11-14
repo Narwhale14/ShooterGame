@@ -18,8 +18,12 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     registerTimeMS = 100;
 
     map = new Map(window, 20, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    
     player = new Player(textures, map->getTotalSize() / 2, map->getTotalSize() / 2, 0.075f);
+    mapObjects.push_back(player);
+
     enemy = new Enemy(textures, map->getTotalSize() / 2 - 100, map->getTotalSize() / 2 - 100, 0.075f);
+    mapObjects.push_back(enemy);
 
     keyPressed = false;
 }
@@ -29,8 +33,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
  * 
  */
 MainMap::~MainMap() {
-    delete player;
-    delete enemy;
+    while(!mapObjects.empty()) {
+        delete mapObjects[mapObjects.size() - 1];
+        mapObjects.pop_back();
+    }
+
     delete map;
 }
 
