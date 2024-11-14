@@ -28,12 +28,15 @@ class MainMap : public State {
         bool keyPressed;
 
         Map* map;
+
         sf::Clock internalClock;
+        int registerTimeMS;
 
         void initializeKeybinds();
         void initializeTextures();
         void updateCollisions();
         void updateInput(const float& dt);
+        bool registerTimePassed();
 };
 
 #endif

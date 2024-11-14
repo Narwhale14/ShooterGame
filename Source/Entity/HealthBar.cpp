@@ -83,5 +83,7 @@ int HealthBar::getHealth() const {
  */
 void HealthBar::render(sf::RenderTarget& target) {
     target.draw(*barBack);
-    target.draw(*barMain);
+
+    if(health > 0)
+        target.draw(*barMain);
 }

@@ -73,6 +73,16 @@ sf::FloatRect Entity::getHitboxBounds() {
 }
 
 /**
+ * @brief Checks if entity is dead
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Entity::isAlive() {
+    return health->getHealth() > 0;
+}
+
+/**
  * @brief Initializes sprite and sets its origin to the center
  * 
  * @param texture a pointer pointing to a texture

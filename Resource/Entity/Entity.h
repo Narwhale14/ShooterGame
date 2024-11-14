@@ -18,6 +18,7 @@ class Entity {
         float getMovementSpeed();
         sf::Vector2f getPosition();
         sf::FloatRect getHitboxBounds();
+        bool isAlive();
 
         bool checkCollision(const sf::FloatRect rect);
         void negateHealth(int damage);

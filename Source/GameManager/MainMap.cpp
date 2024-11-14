@@ -15,6 +15,7 @@
 MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeKeybinds();
     initializeTextures();
+    registerTimeMS = 100;
 
     map = new Map(window, 20, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getTotalSize() / 2, map->getTotalSize() / 2, 0.075f);
@@ -52,43 +53,67 @@ void MainMap::updateInput(const float& dt) {
     checkForQuit();
 
     // Updates weapon input
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
-        keyPressed=true;
-        player->useHandheld(mousePosView);
-    } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
-            keyPressed=player->stopHandheld(mousePosView);
-    }
-    
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT")))) {
-        moveView(dt, -1.f, 0.f, player->getMovementSpeed());
-        movePlayer(dt, -1.f, 0.f);
-    }
+    if(player->isAlive()) {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
+            keyPressed=true;
+            player->useHandheld(mousePosView);
+        } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
+                keyPressed=player->stopHandheld(mousePosView);
+        }
+        
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT")))) {
+            moveView(dt, -1.f, 0.f, player->getMovementSpeed());
+            movePlayer(dt, -1.f, 0.f);
+        }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT")))) {
-        moveView(dt, 1.f, 0.f, player->getMovementSpeed());
-        movePlayer(dt, 1.f, 0.f);
-    }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT")))) {
+            moveView(dt, 1.f, 0.f, player->getMovementSpeed());
+            movePlayer(dt, 1.f, 0.f);
+        }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP")))) {
-        moveView(dt, 0.f, -1.f, player->getMovementSpeed());
-        movePlayer(dt, 0.f, -1.f);
-    }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP")))) {
+            moveView(dt, 0.f, -1.f, player->getMovementSpeed());
+            movePlayer(dt, 0.f, -1.f);
+        }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN")))) {
-        moveView(dt, 0.f, 1.f, player->getMovementSpeed());
-        movePlayer(dt, 0.f, 1.f);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN")))) {
+            moveView(dt, 0.f, 1.f, player->getMovementSpeed());
+            movePlayer(dt, 0.f, 1.f);
+        }
+
+        player->updateRotation(mousePosView);
     }
 }
 
 /**
- * @brief Updates collisions
+ * @brief Updates collision
  * 
+ * @return true 
+ * @return false 
  */
 void MainMap::updateCollisions() {
-    if(player->checkCollision(enemy->getHitboxBounds()))
-        player->negateHealth(1);
-    if(enemy->checkCollision(player->getHitboxBounds()))
-        enemy->negateHealth(1);
+    // If player touches enemy
+    if(player->checkCollision(enemy->getHitboxBounds()) && registerTimePassed())
+        player->negateHealth(10);
+    
+    // If enemy touches player
+    if(enemy->checkCollision(player->getHitboxBounds()) && registerTimePassed())
+        enemy->negateHealth(10);
+}
+
+/**
+ * @brief Updates internal clock and resets when it passes a threshold
+ * 
+ * @return true 
+ * @return false 
+ */
+bool MainMap::registerTimePassed() {
+    if(internalClock.getElapsedTime().asMilliseconds() > registerTimeMS) {
+        internalClock.restart();
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -151,8 +176,6 @@ void MainMap::update(const float& dt) {
     updateInput(dt);
 
     player->update();
-    player->updateRotation(mousePosView);
-
     enemy->update();
 }
 
