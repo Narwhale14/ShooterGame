@@ -15,7 +15,7 @@
  */
 Shotgun::Shotgun(sf::Texture* bTexture, sf::Texture* wTexture){
     range=700;
-    fireRate=(range/100);
+    fireRate=(range/100); //would not recommend going higher then 40
     createSprite(wTexture);
     sprite->setScale({.05,.05});
     sprite->setRotation(90);
@@ -52,17 +52,11 @@ Shotgun::~Shotgun() {
  * @param playerLoc location of player
  */
 void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
-{
-    float adjX=playerLoc.x-mouseLoc.x;
-    float adjY=playerLoc.y-mouseLoc.y;
-    float length = sqrt((adjX*adjX)+(adjY*adjY));       
+{      
     for(int i=0;i<fireRate;i++){
-        //firing = capacity[i]->fireBull(mouseLoc,playerLoc, firing);
         BulletShot->fireBull(mouseLoc,playerLoc, firing);
         BulletShot1->fireBull({mouseLoc.x+100,mouseLoc.y+100},playerLoc, firing);
         firing=BulletShot2->fireBull({mouseLoc.x-100,mouseLoc.y-100},playerLoc, firing);
-        // if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
-        //     i=fireRate; 
     }
 }
 

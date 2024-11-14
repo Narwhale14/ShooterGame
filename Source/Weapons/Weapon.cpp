@@ -15,6 +15,7 @@ Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
     firing=false;
+    dmg=1;
 }
 
 /**
@@ -85,4 +86,24 @@ void Weapon::rotateWeapon(const sf::Vector2f mousePos){
  */
 Weapon::~Weapon() {
     delete sprite;
+}
+
+/**
+ * @brief get the damage of the weapon
+ * 
+ * @return int weapons damage
+ */
+int Weapon::getDmg()
+{
+    return dmg;
+}
+
+/**
+ * @brief set the weapons damage
+ * 
+ * @param d new damage value
+ */
+void Weapon::setDmg(int d)
+{
+    dmg=d;
 }

@@ -26,6 +26,8 @@ class Weapon{
         void createSprite(sf::Texture* texture);
         virtual void update(sf::Vector2f playerTrack);
         virtual void rotateWeapon(const sf::Vector2f mousePos);
+        int getDmg();
+        void setDmg(int d);
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
@@ -33,6 +35,7 @@ class Weapon{
         int fireRate;
         bool firing;
         float angle;
+        int dmg;
 };
 
 #endif

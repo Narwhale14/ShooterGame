@@ -42,12 +42,14 @@ bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
         origMouse=mouseLoc;
         origPlayer=playerLoc;
         //std::cout<<"New location\n";
-        float direct=0;
+        float distance=0;
         adjX=origPlayer.x-origMouse.x;
         adjY=origPlayer.y-origMouse.y;
-        direct=sqrt((adjX*adjX)+(adjY*adjY));
-        adjX/=direct;
-        adjY/=direct;
+        distance=sqrt((adjX*adjX)+(adjY*adjY));
+        if(adjX!=0)
+            adjX/=distance;
+        if(adjY!=0)
+            adjY/=distance;
         sprite->setPosition(origPlayer);
     }
 
