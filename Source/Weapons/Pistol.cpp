@@ -59,7 +59,7 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         }
     }
     T=C.getElapsedTime();
-    if(T.asSeconds()>fireRate && BulletShot.size()<amount && BulletShot.back()->getFiringStat()){
+    if(T.asSeconds()>fireRate && BulletShot.size()<amount){
         Bullet *newTemp = new Bullet(range,bulletT);
         BulletShot.push(newTemp);
         C.restart();
