@@ -8,7 +8,19 @@
 #ifndef HITBOX_H
 #define HITBOX_H
 
-#include "../GameManager/Map.h"
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <stack>
+#include <cmath>
+#include <map>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 
 class Hitbox {
     public:

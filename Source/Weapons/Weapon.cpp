@@ -15,6 +15,7 @@ Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
     firing=false;
+    scale = 1;
     dmg=1;
 }
 
@@ -59,13 +60,14 @@ void Weapon::renderBull(sf::RenderTarget& target) {
  * 
  * @param texture a pointer pointing to a texture
  */
-void Weapon::createSprite(sf::Texture* texture) {
+void Weapon::createSprite(sf::Texture* texture, float scale) {
     this->texture = texture;
+    this->scale = scale;
     sprite = new sf::Sprite(*this->texture);
 
     // Sets origin to middle of shape
     sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
-    sprite->setScale(0.1f, 0.1f);
+    sprite->setScale(scale, scale);
 }
 
 void Weapon::update(sf::Vector2f playerTrack){

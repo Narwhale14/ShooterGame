@@ -8,19 +8,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <stack>
-#include <cmath>
-#include <map>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
+#include "../Entity/Entity.h"
 
 class Map {
     public:
@@ -32,7 +20,8 @@ class Map {
         sf::Vector2f getCameraSize() const;
         void setViewCenter(float xpos, float ypos);
         
-        bool contains(sf::Vector2f objPos) const;
+        bool viewContains(sf::Vector2f objPos) const;
+        void containInMap(Entity* entity);
         
         void render(sf::RenderTarget& target);
     private:

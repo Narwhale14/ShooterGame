@@ -10,7 +10,6 @@
 Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s) {
     idle = &textures["PLAYER_NORMAL"];
     aimed = &textures["PLAYER_AIMED"];
-    setType(player);
 
     createSprite(idle, s);
     setPosition(sf::Vector2f(x, y));
@@ -19,7 +18,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
 
     handheld = new Shotgun(&textures["BULLET"], &textures["SHOTGUN"]);
-    handheldType = pistol;
+    handheldType = gun;
 }
 
 /**
@@ -73,14 +72,14 @@ void Player::render(sf::RenderTarget& target) {
     if(healthBar)
         healthBar->render(target);
 
-    if(hitbox)
-        hitbox->render(target);
-
     if(handheld)
         handheld->render(target);
 
     if(sprite)
         target.draw(*sprite);
+
+    if(hitbox)
+        hitbox->render(target);
 }
 
 /**
@@ -95,7 +94,7 @@ void Player::update() {
         case empty:
             changeSprite(idle);
             break;
-        case pistol:
+        case gun:
             changeSprite(aimed);
             break;
         default:

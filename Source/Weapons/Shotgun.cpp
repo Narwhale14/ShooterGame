@@ -16,8 +16,7 @@
 Shotgun::Shotgun(sf::Texture* bTexture, sf::Texture* wTexture){
     range=700;
     fireRate=(range/100); //would not recommend going higher then 40
-    createSprite(wTexture);
-    sprite->setScale({.05,.05});
+    createSprite(wTexture, 0.065f);
     sprite->setRotation(90);
     //Bullet *temp = new Bullet(r,texture);
     BulletShot=new Bullet(range,bTexture);

@@ -16,8 +16,7 @@
 Pistol::Pistol( sf::Texture* bTexture, sf::Texture* wTexture){
     range=700;
     fireRate=(range/100);
-    createSprite(wTexture);
-    sprite->setScale({.05,.05});
+    createSprite(wTexture, 0.05f);
     sprite->setRotation(90);
     //Bullet *temp = new Bullet(r,texture);
     BulletShot=new Bullet(range,bTexture);

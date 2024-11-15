@@ -14,9 +14,8 @@ class Object {
     public:
         virtual ~Object();
         
-        sf::FloatRect getHitboxBounds();
-        unsigned getType() const;
-        void setType(unsigned type);
+        sf::FloatRect getHitboxBounds() const;
+        sf::Color getHitboxColor() const;
         
         void createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
         bool checkCollision(const sf::FloatRect rect);
@@ -25,12 +24,10 @@ class Object {
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
+        sf::Color color;
         float scale;
 
         Hitbox* hitbox;
-
-        enum type {invalid = 0, player, block, enemy, bullet};
-        unsigned type;
 
         Object();
 };
