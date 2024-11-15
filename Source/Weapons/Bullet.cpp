@@ -30,8 +30,6 @@ Bullet::~Bullet() {
     
 }
 
-
-
 /**
  * @brief shoots the projectile from player to mouse
  * 
