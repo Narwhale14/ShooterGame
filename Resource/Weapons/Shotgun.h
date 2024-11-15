@@ -21,8 +21,6 @@ class Shotgun : public Weapon {
         void render(sf::RenderTarget& target);
         void update(sf::Vector2f playerTrack);
     private:
-        std::queue<Bullet*> BulletShot;
-        Bullet *temp;
         // Bullet *BulletShot1;
         // Bullet *BulletShot2;
 };

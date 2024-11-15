@@ -11,7 +11,8 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include "Weapon.h"
+#include "../Entity/HealthBar.h"
+#include <queue>
 
 class Bullet : public Object {
     public:

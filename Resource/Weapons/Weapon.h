@@ -9,7 +9,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "../Entity/HealthBar.h"
+#include "Bullet.h"
 
 class Weapon{
     public:
@@ -40,7 +40,8 @@ class Weapon{
         sf::Clock C;
         sf::Texture *bulletT;
         unsigned int amount;
-
+        std::queue<Bullet*> BulletShot;
+        Bullet *temp;
 };
 
 #endif

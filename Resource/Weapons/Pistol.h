@@ -8,8 +8,7 @@
 #ifndef PISTOL_H
 #define PISTOL_H
 
-#include "Bullet.h"
-#include <queue>
+#include "Weapon.h"
 
 class Pistol : public Weapon {
     public:
@@ -24,8 +23,6 @@ class Pistol : public Weapon {
         void increaseFireRate(float percent);
         //std::vector<Bullet*> capacity;
     private:
-        std::queue<Bullet*> BulletShot;
-        Bullet *temp;
 };
 
 #endif

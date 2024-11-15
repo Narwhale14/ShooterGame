@@ -15,7 +15,6 @@
  */
 Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
     //important bulletSpeed cannot go to much higher than move speed
-
     amount=10;
     createSprite(&textures["GLOCK"]);
     sprite->setScale({.05,.05});
