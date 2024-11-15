@@ -82,8 +82,7 @@ void Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
     if(!firing){
 
-    }
-    else if(range>adjRng){
+    }else if(range>adjRng){
         float direct=0;
         adjX=origPlayer.x-origMouse.x;
         adjY=origPlayer.y-origMouse.y;
@@ -94,8 +93,8 @@ void Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         hitbox->update();
         firing = true;
         adjRng++;
-    }
-    else if(range==adjRng){
+    }else if(range==adjRng){
+        adjRng=0;
         firing=false;
     }
 }

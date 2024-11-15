@@ -19,7 +19,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green);
     createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
 
-    handheld = new Shotgun(textures);
+    handheld = new Pistol(textures);
     handheldType = pistol;
 }
 
@@ -51,13 +51,13 @@ void Player::updateRotation(const sf::Vector2f mousePos) {
     handheld->rotateWeapon(mousePos);
 }
 
-void Player::useHandheld(const sf::Vector2f mousePos,sf::Clock c) {
-    handheld->fire(mousePos, weaponPos,c);
+void Player::useHandheld(const sf::Vector2f mousePos,sf::Clock &c) {
+    handheld->fire(mousePos, weaponPos);
 }
 
-void Player::stopHandheld(const sf::Vector2f mousePos,sf::Clock c)
+void Player::stopHandheld(const sf::Vector2f mousePos,sf::Clock &c)
 {
-    handheld->stopFire(mousePos, weaponPos,c);
+    handheld->stopFire(mousePos, weaponPos);
 }
 
 /**
@@ -67,7 +67,7 @@ void Player::stopHandheld(const sf::Vector2f mousePos,sf::Clock c)
  */
 void Player::render(sf::RenderTarget& target) {
     //if(handheld->getFiringStatus())
-        handheld->renderBull(target);
+    handheld->renderBull(target);
 
     if(health)
         health->render(target);

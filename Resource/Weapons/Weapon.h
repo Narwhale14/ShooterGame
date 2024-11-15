@@ -19,8 +19,8 @@ class Weapon{
         bool getFiringStatus();
         void setFiringStatus(bool status);
 
-        virtual void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c) = 0;
-        virtual void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, sf::Clock c)=0;
+        virtual void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc) = 0;
+        virtual void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)=0;
         virtual void render(sf::RenderTarget& target);
         virtual void renderBull(sf::RenderTarget& target);
         void createSprite(sf::Texture* texture);
@@ -31,10 +31,14 @@ class Weapon{
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
-        float range;
+        float range=1000;
         unsigned int fireRate;
         float angle;
         int dmg;
+        sf::Time T;
+        sf::Clock C;
+        sf::Texture *bulletT;
+        unsigned int amount;
 };
 
 #endif

@@ -9,11 +9,12 @@
 #define PISTOL_H
 
 #include "Bullet.h"
+#include <queue>
 
 class Pistol : public Weapon {
     public:
         //Pistol(float r, sf::Texture* texture);
-        Pistol(sf::Texture* bTexture, sf::Texture* wTexture);
+        Pistol(std::map<std::string, sf::Texture>& textures);
         ~Pistol();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
@@ -23,7 +24,8 @@ class Pistol : public Weapon {
         void increaseFireRate(float percent);
         //std::vector<Bullet*> capacity;
     private:
-        Bullet *BulletShot;
+        std::queue<Bullet*> BulletShot;
+        Bullet *temp;
 };
 
 #endif
