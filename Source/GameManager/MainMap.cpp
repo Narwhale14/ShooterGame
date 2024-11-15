@@ -63,7 +63,7 @@ void MainMap::updateInput(const float& dt) {
     if(player->isAlive()) {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
             player->useHandheld(mousePosView);
-        } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
+        } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))){
             player->stopHandheld(mousePosView);
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))

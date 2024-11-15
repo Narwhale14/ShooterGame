@@ -25,7 +25,6 @@ class MainMap : public State {
         Player* player;
         Enemy* enemy;
         bool keyPressed;
-
         Map* map;
         sf::View view;
         std::vector<Object*> mapObjects;
