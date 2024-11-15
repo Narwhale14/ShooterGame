@@ -9,7 +9,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "../Entity/HealthBar.h"
+#include "Bullet.h"
 
 class Weapon{
     public:
@@ -31,11 +31,17 @@ class Weapon{
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
-        float range;
-        int fireRate;
-        bool firing;
+        float range=1000;
+        unsigned int bulletSpeed;
+        float fireRate;
         float angle;
         int dmg;
+        sf::Time T;
+        sf::Clock C;
+        sf::Texture *bulletT;
+        unsigned int amount;
+        std::queue<Bullet*> BulletShot;
+        Bullet *temp;
 };
 
 #endif

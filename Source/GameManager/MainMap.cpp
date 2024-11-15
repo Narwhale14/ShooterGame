@@ -62,12 +62,10 @@ void MainMap::updateInput(const float& dt) {
     // Updates weapon input
     if(player->isAlive()) {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
-            keyPressed=true;
             player->useHandheld(mousePosView);
-        } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
-                keyPressed=player->stopHandheld(mousePosView);
+        } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))){
+            player->stopHandheld(mousePosView);
         }
-        
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
             move(dt, -1.f, 0.f, player->getMovementSpeed());
 
