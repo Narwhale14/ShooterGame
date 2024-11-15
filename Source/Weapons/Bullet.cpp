@@ -14,7 +14,7 @@
  * @param texture texture of shot
  */
 Bullet::Bullet(float r, sf::Texture* texture){
-    createSprite(texture);
+    createSprite(texture, 0.1f);
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
     hitbox->setSize(sf::Vector2f(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2));
     range=r;
@@ -104,20 +104,6 @@ void Bullet::render(sf::RenderTarget& target) {
         target.draw(*sprite);
         hitbox->render(target);
     }
-}
-
-/**
- * @brief Initializes sprite and sets its origin to the center + scales it down to 10%
- * 
- * @param texture a pointer pointing to a texture
- */
-void Bullet::createSprite(sf::Texture* texture) {
-    this->texture = texture;
-    sprite = new sf::Sprite(*this->texture);
-
-    // Sets origin to middle of shape
-    sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
-    sprite->setScale(0.1f, 0.1f);
 }
 
 sf::Vector2f Bullet::getPostion(){
