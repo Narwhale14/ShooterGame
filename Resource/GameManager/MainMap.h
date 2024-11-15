@@ -15,24 +15,27 @@ class MainMap : public State {
         MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMap();
 
-        void moveView(const float& deltaTime, const float dir_x, const float dir_y, const float movementSpeed);
-        void movePlayer(const float& dt, const float dir_x, const float dir_y);
+        void move(const float& dt, const float dir_x, const float dir_y, const float movementSpeed);
 
         virtual void checkForQuit();
 
-        void updateInput(const float& dt);
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
     private:
         Player* player;
+        Enemy* enemy;
         bool keyPressed;
 
         Map* map;
         sf::View view;
-        sf::Clock cl;
-
+        std::vector<Object*> mapObjects;
+        sf::Clock internalClock;
+        int registerTimeMS;
         void initializeKeybinds();
         void initializeTextures();
+        void updateCollisions();
+        void updateInput(const float& dt);
+        bool registerTimePassed();
 };
 
 #endif

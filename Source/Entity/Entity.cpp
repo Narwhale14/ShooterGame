@@ -9,6 +9,7 @@ Entity::Entity() {
     texture = nullptr;
     sprite = nullptr;
     hitbox = nullptr;
+    healthBar = nullptr;
     
     movementSpeed = 300.f;
     angle = 0.f;
@@ -21,18 +22,7 @@ Entity::Entity() {
  */
 Entity::~Entity() {
     delete sprite;
-    delete health;
-    delete hitbox;
-}
-
-/**
- * @brief Sets the scale
- * 
- * @param scale 
- */
-void Entity::setScale(float s) {
-    sprite->setScale(s, s);
-    scale = s;
+    delete healthBar;
 }
 
 /**
@@ -63,27 +53,18 @@ sf::Vector2f Entity::getPosition() {
     return sprite->getPosition();
 }
 
-/**
- * @brief Returns the entity's hitbox bounds
- * 
- * @return sf::FloatRect 
- */
-sf::FloatRect Entity::getHitboxBounds() {
-    return hitbox->getGlobalBounds();
+sf::Sprite& Entity::getSprite() const {
+    return *sprite;
 }
 
 /**
- * @brief Initializes sprite and sets its origin to the center
+ * @brief Checks if entity is dead
  * 
- * @param texture a pointer pointing to a texture
+ * @return true 
+ * @return false 
  */
-void Entity::createSprite(sf::Texture* texture) {
-    this->texture = texture;
-    sprite = new sf::Sprite(*this->texture);
-
-    // Sets origin to middle of shape
-    sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
-    setScale(scale);
+bool Entity::isAlive() {
+    return healthBar->getHealth() > 0;
 }
 
 /**
@@ -97,26 +78,22 @@ void Entity::changeSprite(sf::Texture* texture) {
 }
 
 /**
- * @brief Creates hitbox
- * 
- * @param s sprite for hitbox
- * @param offset_x x offset (pos)
- * @param offset_y y offset (pos)
- * @param width width of hitbox
- * @param height height of hitbox
- */
-void Entity::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color) {
-    hitbox = new Hitbox(s, offset_x, offset_y, width, height, color);
-}
-
-/**
  * @brief Creates healthbar
  * 
  * @param size_x 
  * @param size_y 
  */
 void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_y) {
-    health = new HealthBar(size_x, size_y, pos_x, pos_y);
+    healthBar = new HealthBar(size_x, size_y, pos_x, pos_y);
+}
+
+/**
+ * @brief Negates health of entity
+ * 
+ * @param damage 
+ */
+void Entity::negateHealth(int damage) {
+    healthBar->setHealth(healthBar->getHealth() - damage);
 }
 
 /**

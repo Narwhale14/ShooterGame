@@ -10,22 +10,21 @@
 
 #include "../Weapons/Mortar.h"
 
-class Entity {
+class Entity : public Object {
     public:
         Entity();
         virtual ~Entity();
 
         float getMovementSpeed();
         sf::Vector2f getPosition();
-        sf::FloatRect getHitboxBounds();
+        sf::Sprite& getSprite() const;
+        bool isAlive();
 
-        void setScale(float s);
+        void negateHealth(int damage);
         void setPosition(sf::Vector2f pos);
 
-        void createSprite(sf::Texture* texture);
         void changeSprite(sf::Texture* texture);
         
-        void createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
 
         void move(const float& dt, const float dir_x, const float dir_y);
@@ -33,12 +32,7 @@ class Entity {
         virtual void update() = 0;
         virtual void render(sf::RenderTarget& target) = 0;
     protected:
-        sf::Texture* texture;
-        sf::Sprite* sprite;
-        float scale;
-
-        HealthBar* health;
-        Hitbox* hitbox;
+        HealthBar* healthBar;
 
         float movementSpeed;
         float angle;

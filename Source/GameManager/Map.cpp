@@ -15,7 +15,7 @@
  * @param color color of map
  * @param outlineColor color of outline
  */
-Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
+Map::Map(sf::RenderTarget* window, int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     if(gridS >= 0.f)
         gridSize = gridS;
     else
@@ -29,6 +29,9 @@ Map::Map(int mapS, float gridS, sf::Color color, sf::Color outlineColor) {
     mapColor = color;
     mapOutlineColor = outlineColor;
     totalMapSize = gridSize * mapSize;
+
+    view.setSize(window->getSize().x, window->getSize().y);
+    view.setCenter(totalMapSize / 2, totalMapSize / 2);
 
     initializeTileMap();
 }
@@ -51,12 +54,42 @@ float Map::getTotalSize() const {
 }
 
 /**
- * @brief Updates map
+ * @brief Returns the map center
  * 
- * @param dt 
+ * @return sf::Vector2f 
  */
-void Map::update(const float& dt) {
+sf::Vector2f Map::getMapCenter() const {
+    return sf::Vector2f(totalMapSize / 2, totalMapSize / 2);
+}
 
+/**
+ * @brief Returns the view size
+ * 
+ * @return sf::Vector2f 
+ */
+sf::Vector2f Map::getCameraSize() const {
+    return view.getSize();
+}
+
+/**
+ * @brief Sets camera position
+ * 
+ * @param pos 
+ */
+void Map::setViewCenter(float xpos, float ypos) {
+    view.setCenter(xpos, ypos);
+}
+
+/**
+ * @brief Determines if an obj is on the map
+ * 
+ * @param obj 
+ * @return true 
+ * @return false 
+ */
+bool Map::contains(sf::Vector2f objPos) const {
+    return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - gridSize) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - gridSize)
+        && (objPos.x < view.getCenter().x + (view.getSize().x / 2)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) );
 }
 
 /**
@@ -65,9 +98,11 @@ void Map::update(const float& dt) {
  * @param target 
  */
 void Map::render(sf::RenderTarget& target) {
+    target.setView(view);
     for(int x = 0; x < mapSize; x++) {
         for(int y = 0; y < mapSize; y++) {
-            target.draw(tileMap[x][y]);
+            if(this->contains(tileMap[x][y].getPosition()))
+                target.draw(tileMap[x][y]);
         }
     }
 }
