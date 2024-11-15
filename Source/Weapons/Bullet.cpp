@@ -14,7 +14,7 @@
  * @param texture texture of shot
  */
 Bullet::Bullet(float r, sf::Texture* texture){
-    createSprite(texture, 0.1f);
+    createSprite(texture);
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
     hitbox->setSize(sf::Vector2f(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2));
     range=r;
@@ -23,11 +23,14 @@ Bullet::Bullet(float r, sf::Texture* texture){
     adjY=0;
     origPlayer={0.f,0.f};
     origMouse={0.f,0.f};
+    firing=false;
 }
 
 Bullet::~Bullet() {
     
 }
+
+
 
 /**
  * @brief shoots the projectile from player to mouse
@@ -35,9 +38,9 @@ Bullet::~Bullet() {
  * @param mouseLoc location of mouse
  * @param playerLoc location of player
  */
-bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus)
+void Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-    if(!fireStatus){
+    if(!firing){
         origMouse=mouseLoc;
         origPlayer=playerLoc;
         //std::cout<<"New location\n";
@@ -50,19 +53,20 @@ bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
         if(adjY!=0)
             adjY/=distance;
         sprite->setPosition(origPlayer);
+        firing = true;
     }
-
-    sprite->setPosition(sprite->getPosition().x-adjX,sprite->getPosition().y-adjY);
-    hitbox->update();
-    fireStatus = true;
-    
-    if(range!=adjRng){
-        adjRng++;
-    }else{
-        adjRng=0;
-        fireStatus=false;
+    if(firing){
+        sprite->setPosition(sprite->getPosition().x-adjX,sprite->getPosition().y-adjY);
+        //std::cout<<"fired\n";
+        hitbox->update();
+        
+        if(range!=adjRng){
+            adjRng++;
+        }else{
+            adjRng=0;
+            firing=false;
+        }
     }
-    return fireStatus;
 }
 
 /**
@@ -74,13 +78,11 @@ bool Bullet::fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
  * @return true 
  * @return false 
  */
-bool Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireStatus)
+void Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-    if(!fireStatus){
-        origMouse=mouseLoc;
-        origPlayer=playerLoc;
-    }
-    if(range>adjRng){
+    if(!firing){
+
+    }else if(range>adjRng){
         float direct=0;
         adjX=origPlayer.x-origMouse.x;
         adjY=origPlayer.y-origMouse.y;
@@ -89,14 +91,12 @@ bool Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc, bool fireSta
         adjY/=direct;
         sprite->setPosition(sprite->getPosition().x-adjX,sprite->getPosition().y-adjY);
         hitbox->update();
-        fireStatus = true;
+        firing = true;
         adjRng++;
+    }else if(range==adjRng){
+        adjRng=0;
+        firing=false;
     }
-    if(range==adjRng){
-        fireStatus=false;
-    }
-
-    return fireStatus;
 }
 
 void Bullet::render(sf::RenderTarget& target) {
@@ -104,4 +104,22 @@ void Bullet::render(sf::RenderTarget& target) {
         target.draw(*sprite);
         hitbox->render(target);
     }
+}
+
+/**
+ * @brief Initializes sprite and sets its origin to the center + scales it down to 10%
+ * 
+ * @param texture a pointer pointing to a texture
+ */
+void Bullet::createSprite(sf::Texture* texture) {
+    this->texture = texture;
+    sprite = new sf::Sprite(*this->texture);
+
+    // Sets origin to middle of shape
+    sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
+    sprite->setScale(0.1f, 0.1f);
+}
+
+sf::Vector2f Bullet::getPostion(){
+    return sprite->getPosition();
 }

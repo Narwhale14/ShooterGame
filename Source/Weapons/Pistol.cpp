@@ -13,20 +13,16 @@
  * @param r range of the pistol
  * @param texture bullets texture
  */
-Pistol::Pistol( sf::Texture* bTexture, sf::Texture* wTexture){
-    range=700;
-    fireRate=(range/100);
-    createSprite(wTexture, 0.05f);
+Pistol::Pistol(std::map<std::string, sf::Texture>& textures){
+    //important firerate cannot go to much higher than move speed
+    amount=30;
+    createSprite(&textures["GLOCK"], 0.05);
     sprite->setRotation(90);
-    //Bullet *temp = new Bullet(r,texture);
-    BulletShot=new Bullet(range,bTexture);
-    // if(fireRate>0){
-    //     for(int i=0;i<fireRate;i++){
-    //         capacity.push_back(temp);
-    //     }
-    // }else{
-    //     fireRate=0;
-    // }
+    bulletT=&textures["BULLET"];
+    if(amount>0){
+        temp = new Bullet(range,bulletT);
+        BulletShot.push(temp);
+    }
 }
 
 /**
@@ -34,10 +30,11 @@ Pistol::Pistol( sf::Texture* bTexture, sf::Texture* wTexture){
  * 
  */
 Pistol::~Pistol() {
-    // for(int i=0;i<fireRate;i++){
-    //     delete capacity[i];
-    // }
-    delete BulletShot;
+    for(unsigned int i=0;i<BulletShot.size();i++){
+        delete BulletShot.front();
+        BulletShot.front()=nullptr;
+        BulletShot.pop();
+    }
 }
 
 /**
@@ -47,12 +44,25 @@ Pistol::~Pistol() {
  * @param playerLoc location of player
  */
 void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
-{
-    for(int i=0;i<fireRate;i++){
-        //firing = capacity[i]->fireBull(mouseLoc,playerLoc, firing);
-        firing=BulletShot->fireBull(mouseLoc,playerLoc, firing);
-        // if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
-        //     i=fireRate; 
+{  
+    for(unsigned int x=0;x<bulletSpeed;x++){
+        for(unsigned int i=0;i<BulletShot.size();i++){ 
+            Bullet *move;
+            BulletShot.front()->fireBull(mouseLoc,playerLoc);
+            move = BulletShot.front();
+            BulletShot.pop();
+            if(move->getFiringStat()){
+                BulletShot.push(move);
+            }else{
+                delete move;
+            }
+        }
+    }
+    T=C.getElapsedTime();
+    if(T.asSeconds()>fireRate && BulletShot.size()<amount && BulletShot.back()->getFiringStat()){
+        Bullet *newTemp = new Bullet(range,bulletT);
+        BulletShot.push(newTemp);
+        C.restart();
     }
 }
 
@@ -64,8 +74,14 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  */
 void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-   for(int i=0;i<fireRate;i++){
-        firing=BulletShot->stopBull(mouseLoc,playerLoc, firing);
+    for(unsigned int x=0;x<bulletSpeed;x++){
+        for(unsigned int i=0;i<BulletShot.size();i++){ 
+            Bullet *move;
+            BulletShot.front()->stopBull(mouseLoc,playerLoc);
+            move = BulletShot.front();
+            BulletShot.pop();
+            BulletShot.push(move);
+        }
     }
 }
 
@@ -76,8 +92,15 @@ void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  */
 void Pistol::renderBull(sf::RenderTarget& target)
 {
-    //capacity[0]->render(target);
-    BulletShot->render(target);
+    for(unsigned int i=0;i<BulletShot.size();i++){
+        if(BulletShot.front()->getFiringStat()){
+            BulletShot.front()->render(target);
+        }
+        Bullet *move;
+        move = BulletShot.front();
+        BulletShot.pop();
+        BulletShot.push(move);
+    }
 }
 
 void Pistol::render(sf::RenderTarget& target)
@@ -93,5 +116,5 @@ void Pistol::update(sf::Vector2f playerTrack) {
 
 void Pistol::increaseFireRate(float percent){
     percent=percent/100;
-    fireRate=fireRate+(fireRate*percent);
+    bulletSpeed=bulletSpeed+(bulletSpeed*percent);
 }

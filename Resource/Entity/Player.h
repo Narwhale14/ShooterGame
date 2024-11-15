@@ -15,8 +15,8 @@ class Player : public Entity {
         Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
         virtual ~Player();
 
-        virtual bool useHandheld(const sf::Vector2f mousePos);
-        virtual bool stopHandheld(const sf::Vector2f mousePos);
+        virtual void useHandheld(const sf::Vector2f mousePos);
+        virtual void stopHandheld(const sf::Vector2f mousePos);
 
         virtual void render(sf::RenderTarget& target);
         virtual void updateRotation(const sf::Vector2f mousePos);
@@ -26,7 +26,6 @@ class Player : public Entity {
 
         sf::Texture* idle;
         sf::Texture* aimed;
-
         sf::Vector2f weaponPos;
 
         short unsigned handheldType;

@@ -23,8 +23,6 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
     mapObjects.push_back(enemy);
-
-    keyPressed = false;
 }
 
 /**
@@ -62,13 +60,12 @@ void MainMap::updateInput(const float& dt) {
         return;
 
     // Updates weapon input
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))){
-        keyPressed=true;
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
         player->useHandheld(mousePosView);
-    } else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))) && keyPressed){
-        keyPressed=player->stopHandheld(mousePosView);
-    }
-    
+    else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))))
+        player->stopHandheld(mousePosView);
+
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
         move(dt, -1.f, 0.f, player->getMovementSpeed());
 

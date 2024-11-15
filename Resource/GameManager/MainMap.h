@@ -24,14 +24,14 @@ class MainMap : public State {
     private:
         Player* player;
         Enemy* enemy;
-        bool keyPressed;
 
         Map* map;
+        sf::View view;
+        
         std::vector<Object*> mapObjects;
-
         sf::Clock internalClock;
-        int registerTimeMS;
 
+        int registerTimeMS;
         void initializeKeybinds();
         void initializeTextures();
         void updateCollisions();
