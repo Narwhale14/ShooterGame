@@ -32,13 +32,15 @@ class Weapon{
         sf::Texture* texture;
         sf::Sprite* sprite;
         float range=1000;
-        unsigned int fireRate;
+        unsigned int bulletSpeed=10;
+        float fireRate=1;
         float angle;
         int dmg;
         sf::Time T;
         sf::Clock C;
         sf::Texture *bulletT;
         unsigned int amount;
+
 };
 
 #endif

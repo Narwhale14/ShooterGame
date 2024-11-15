@@ -14,8 +14,8 @@
  * @param texture bullets texture
  */
 Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
-    //important firerate cannot go to much higher than move speed
-    fireRate=2;
+    //important bulletSpeed cannot go to much higher than move speed
+    bulletSpeed=2;
     amount=10;
     createSprite(&textures["GLOCK"]);
     sprite->setScale({.05,.05});
@@ -54,7 +54,7 @@ Shotgun::~Shotgun() {
  */
 void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {    
-    for(unsigned int x=0;x<fireRate;x++){
+    for(unsigned int x=0;x<bulletSpeed;x++){
         for(unsigned int i=0;i<BulletShot.size();i++){ 
             Bullet *move;
             BulletShot.front()->fireBull(mouseLoc,playerLoc);
@@ -68,7 +68,7 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         }
         }
         T=C.getElapsedTime();
-        if(T.asSeconds()>1 && BulletShot.size()<amount && BulletShot.back()->getFiringStat()){
+        if(T.asSeconds()>fireRate && BulletShot.size()<amount && BulletShot.back()->getFiringStat()){
             Bullet *newTemp = new Bullet(range,bulletT);
             BulletShot.push(newTemp);
             C.restart();
@@ -85,7 +85,7 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  */
 void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-        for(unsigned int x=0;x<fireRate;x++){
+        for(unsigned int x=0;x<bulletSpeed;x++){
             for(unsigned int i=0;i<BulletShot.size();i++){ 
                 Bullet *move;
                 BulletShot.front()->stopBull(mouseLoc,playerLoc);
