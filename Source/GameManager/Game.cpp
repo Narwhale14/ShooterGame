@@ -17,7 +17,7 @@ Game::Game() {
     initializeKeys();
     sf::Clock c;
     states.push(new MainMap(window, &supportedKeys));
-    //states.push(new MainMenu(window, &supportedKeys));
+    states.push(new MainMenu(window, &supportedKeys));
 }
 
 /**
