@@ -10,7 +10,7 @@
 Mortar::Mortar(float r, sf::Texture* texture){
     range=r;
 
-    createSprite(texture);
+    createSprite(texture, 1);
 }
 
 Mortar::~Mortar() {

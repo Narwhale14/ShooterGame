@@ -12,7 +12,7 @@
  * 
  */
 Object::Object() {
-    type = invalid;
+    
 }
 
 /**
@@ -28,26 +28,12 @@ Object::~Object() {
  * 
  * @return sf::FloatRect 
  */
-sf::FloatRect Object::getHitboxBounds() {
+sf::FloatRect Object::getHitboxBounds() const {
     return hitbox->getGlobalBounds();
 }
 
-/**
- * @brief Returns type of object
- * 
- * @return unsigned 
- */
-unsigned Object::getType() const {
-    return type;
-}
-
-/**
- * @brief Sets type of object
- * 
- * @param type 
- */
-void Object::setType(unsigned type) {
-    this->type = type;
+sf::Color Object::getHitboxColor() const {
+    return color;
 }
 
 /**
@@ -60,7 +46,8 @@ void Object::setType(unsigned type) {
  * @param height height of hitbox
  */
 void Object::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color) {
-    hitbox = new Hitbox(s, offset_x, offset_y, width, height, color);
+    this->color = color;
+    hitbox = new Hitbox(s, offset_x, offset_y, width, height, this->color);
 }
 
 /**
@@ -84,7 +71,6 @@ void Object::createSprite(sf::Texture* texture, float scale) {
     this->scale = scale;
     sprite = new sf::Sprite(*this->texture);
 
-    // Sets origin to middle of shape
     sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);
     sprite->setScale(this->scale, this->scale);
 }

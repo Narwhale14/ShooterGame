@@ -17,7 +17,6 @@ class Entity : public Object {
 
         float getMovementSpeed();
         sf::Vector2f getPosition();
-        sf::Sprite& getSprite() const;
         bool isAlive();
 
         void negateHealth(int damage);

@@ -8,7 +8,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Entity.h"
+#include "../GameManager/Map.h"
 
 class Player : public Entity {
     public:
@@ -29,7 +29,7 @@ class Player : public Entity {
         sf::Vector2f weaponPos;
 
         short unsigned handheldType;
-        enum weaponTypes {empty = 0, pistol};
+        enum weaponTypes {empty = 0, gun};
 };
 
 #endif

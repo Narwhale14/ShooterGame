@@ -11,7 +11,7 @@ Entity::Entity() {
     hitbox = nullptr;
     healthBar = nullptr;
     
-    movementSpeed = 300.f;
+    movementSpeed = 250.f;
     angle = 0.f;
     scale = 0.f;
 }
@@ -51,10 +51,6 @@ float Entity::getMovementSpeed() {
  */
 sf::Vector2f Entity::getPosition() {
     return sprite->getPosition();
-}
-
-sf::Sprite& Entity::getSprite() const {
-    return *sprite;
 }
 
 /**

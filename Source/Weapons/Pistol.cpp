@@ -16,8 +16,7 @@
 Pistol::Pistol(std::map<std::string, sf::Texture>& textures){
     //important firerate cannot go to much higher than move speed
     amount=30;
-    createSprite(&textures["GLOCK"]);
-    sprite->setScale({.05,.05});
+    createSprite(&textures["GLOCK"], 0.05);
     sprite->setRotation(90);
     bulletT=&textures["BULLET"];
     if(amount>0){

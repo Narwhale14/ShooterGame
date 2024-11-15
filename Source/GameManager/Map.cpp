@@ -87,9 +87,26 @@ void Map::setViewCenter(float xpos, float ypos) {
  * @return true 
  * @return false 
  */
-bool Map::contains(sf::Vector2f objPos) const {
+bool Map::viewContains(sf::Vector2f objPos) const {
     return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - gridSize) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - gridSize)
         && (objPos.x < view.getCenter().x + (view.getSize().x / 2)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) );
+}
+
+/**
+ * @brief Checks if passed entity is in map and limits it to it's bounds
+ * 
+ * @param entity 
+ */
+void Map::containInMap(Entity* entity) {
+    // If player is touching wall
+    if(entity->getPosition().x < 0 + entity->getHitboxBounds().width / 2) // Left wall
+        entity->setPosition(sf::Vector2f(entity->getHitboxBounds().width / 2, entity->getPosition().y));
+    if(entity->getPosition().y < 0 + entity->getHitboxBounds().height / 2) // Top wall
+        entity->setPosition(sf::Vector2f(entity->getPosition().x, entity->getHitboxBounds().height / 2));
+    if(entity->getPosition().x > this->getTotalSize() - entity->getHitboxBounds().width / 2) // Right wall
+        entity->setPosition(sf::Vector2f(this->getTotalSize() - entity->getHitboxBounds().width / 2, entity->getPosition().y));
+    if(entity->getPosition().y > this->getTotalSize() - entity->getHitboxBounds().height / 2) // Bottom wall
+        entity->setPosition(sf::Vector2f(entity->getPosition().x, this->getTotalSize() - entity->getHitboxBounds().height / 2));
 }
 
 /**
@@ -101,7 +118,7 @@ void Map::render(sf::RenderTarget& target) {
     target.setView(view);
     for(int x = 0; x < mapSize; x++) {
         for(int y = 0; y < mapSize; y++) {
-            if(this->contains(tileMap[x][y].getPosition()))
+            if(this->viewContains(tileMap[x][y].getPosition()))
                 target.draw(tileMap[x][y]);
         }
     }

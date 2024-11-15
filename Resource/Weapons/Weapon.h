@@ -23,7 +23,7 @@ class Weapon{
         virtual void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)=0;
         virtual void render(sf::RenderTarget& target);
         virtual void renderBull(sf::RenderTarget& target);
-        void createSprite(sf::Texture* texture);
+        void createSprite(sf::Texture* texture, float scale);
         virtual void update(sf::Vector2f playerTrack);
         virtual void rotateWeapon(const sf::Vector2f mousePos);
         int getDmg();
@@ -32,6 +32,7 @@ class Weapon{
         sf::Texture* texture;
         sf::Sprite* sprite;
         float range=1000;
+        float scale;
         unsigned int bulletSpeed;
         float fireRate;
         float angle;
