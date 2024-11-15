@@ -14,6 +14,8 @@
 Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
+    fireRate=1;
+    bulletSpeed=1;
     dmg=1;
 }
 
