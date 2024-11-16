@@ -15,10 +15,11 @@
 MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeKeybinds();
     initializeTextures();
+    srand(time(0));
 
-    spawnIntervalMS = 10000;
+    spawnIntervalMS = 2000;
 
-    map = new Map(window, 100, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 10, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
     enemies.push_back(enemy);
     
@@ -100,15 +101,24 @@ void MainMap::update(const float& dt) {
  * @param dt 
  */
 void MainMap::updateMobs(const float& dt) {
+    int maxRange = map->getTotalSize() - (player->getHitboxBounds().width / 2);
+    int minRange = player->getHitboxBounds().width / 2;
+    sf::Vector2u getRandCoords(rand() % maxRange + minRange, rand() % maxRange + minRange);
+
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
         // If enemy doesn't exist, spawn if timer has passed
         if(enemies[i] == nullptr) {
+            if(i == enemies.size() - 1)
+                enemies.pop_back();
+
+            // Spawn enemy if timer passed set interval
             if(checkSpawnTimer())
-                enemies[i] = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
+                enemies[i] = new Enemy(textures, getRandCoords.x, getRandCoords.y, 0.075f);
             else
                 continue;
         }
 
+        // If dead, delete enemy
         if(!enemies[i]->isAlive()) {
             delete enemies[i];
             enemies[i] = nullptr;
@@ -117,6 +127,7 @@ void MainMap::updateMobs(const float& dt) {
         } else {
             enemies[i]->update();
 
+            // Tracks enemy to player and follows them
             enemies[i]->trackToPlayer(player->getPosition());
             if(!enemies[i]->checkCollision(player->getHitboxBounds()))
                 enemies[i]->followPlayer(dt, player->getPosition());
@@ -133,8 +144,11 @@ void MainMap::updateMobs(const float& dt) {
         }
     }
 
-    if(checkSpawnTimer() && enemies.size() > 0)
-        enemies.push_back(new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f));
+    std::cout << enemies.size() << std::endl;
+
+    // Spawns new enemy if timer passes interval
+    if(checkSpawnTimer())
+        enemies.push_back(new Enemy(textures, getRandCoords.x, getRandCoords.y, 0.075f));
 }
 
 /**
@@ -176,12 +190,17 @@ void MainMap::render(sf::RenderTarget* target) {
 
     map->render(*target);
 
-    if(!enemies.empty() && map->viewContains(enemy->getPosition()))
-        renderEnemies(target);
+    if(map->viewContains(enemy->getPosition()))
+        this->renderEnemies(target);
 
     player->render(*target);
 }
 
+/**
+ * @brief Renders active enemies
+ * 
+ * @param target 
+ */
 void MainMap::renderEnemies(sf::RenderTarget* target) {
     for(size_t i = 0; i < enemies.size(); i++) {
         if(enemies[i] != nullptr && enemies[i]->isAlive())
