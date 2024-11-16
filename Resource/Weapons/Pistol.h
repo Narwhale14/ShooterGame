@@ -9,6 +9,7 @@
 #define PISTOL_H
 
 #include "Weapon.h"
+#include "deque"
 
 class Pistol : public Weapon {
     public:
@@ -21,6 +22,7 @@ class Pistol : public Weapon {
         void increaseFireRate(float percent);
         //std::vector<Bullet*> capacity;
     private:
+    std::deque<int> test;
 };
 
 #endif

@@ -8,7 +8,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../GameManager/Map.h"
+#include "../GameManager/Button.h"
 
 class Player : public Entity {
     public:
@@ -32,6 +32,8 @@ class Player : public Entity {
 
         short unsigned handheldType;
         enum weaponTypes {empty = 0, gun};
+
+
 };
 
 #endif
