@@ -17,6 +17,7 @@
 #include <stack>
 #include <cmath>
 #include <map>
+#include <deque>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

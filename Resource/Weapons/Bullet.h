@@ -12,7 +12,6 @@
 #define BULLET_H
 
 #include "../Entity/HealthBar.h"
-#include <queue>
 
 class Bullet : public Object {
     public:
