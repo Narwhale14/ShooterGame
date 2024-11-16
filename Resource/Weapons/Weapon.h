@@ -26,6 +26,7 @@ class Weapon{
         void createSprite(sf::Texture* texture, float scale);
         virtual void update(sf::Vector2f playerTrack);
         virtual void rotateWeapon(const sf::Vector2f mousePos);
+        std::vector<Bullet*>& getBulletList();
         int getDmg();
         void setDmg(int d);
     protected:

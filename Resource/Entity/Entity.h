@@ -32,6 +32,12 @@ class Entity : public Object {
         virtual void render(sf::RenderTarget& target) = 0;
     protected:
         HealthBar* healthBar;
+        sf::Vector2f velocity;
+
+        sf::Clock lastHit;
+        int registeredHitTime;
+
+        bool registeredTimePassed();
 
         float movementSpeed;
         float angle;

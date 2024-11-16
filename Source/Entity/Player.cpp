@@ -21,6 +21,10 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     handheldType = gun;
 }
 
+std::vector<Bullet*>& Player::getActiveBullets() {
+    return handheld->getBulletList();
+}
+
 /**
  * @brief Destroy the Player:: Player object
  * 

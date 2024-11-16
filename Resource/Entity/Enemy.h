@@ -15,7 +15,8 @@ class Enemy : public Entity {
         Enemy(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
         virtual ~Enemy();
 
-        //virtual void initializeHitbox();
+        void trackToPlayer(sf::Vector2f playerPosition);
+        void followPlayer(const float& dt, sf::Vector2f playerPosition);
 
         virtual void render(sf::RenderTarget& target);
         virtual void update();
