@@ -16,9 +16,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeKeybinds();
     initializeTextures();
 
-    spawnIntervalMS = 10000;
+    spawnIntervalMS = 1000;
 
     map = new Map(window, 100, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
+    enemies.push_back(enemy);
     
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
 }
@@ -100,34 +102,27 @@ void MainMap::update(const float& dt) {
 void MainMap::updateMobs(const float& dt) {
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
         if(!enemies[i]->isAlive()) {
-            if(checkSpawnTimer()) {
-                delete enemies[i];
-                enemies[i] = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
-            }
-
+            // delete enemies[i];
+            // enemies[i] = nullptr;
+            
             continue;
+        } else {
+            enemies[i]->update();
+
+            enemies[i]->trackToPlayer(player->getPosition());
+            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
+                enemies[i]->followPlayer(dt, player->getPosition());
+
+            // If enemy is touching player and is alive, damage player
+            if(player->checkCollision(enemies[i]->getHitboxBounds()))
+                player->negateHealth(10);
+
+            // If a bullet is touching enemy, damage enemy
+            for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
+                if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds()))
+                    enemies[i]->negateHealth(30);
+            }
         }
-
-        enemies[i]->update();
-
-        enemies[i]->trackToPlayer(player->getPosition());
-        if(!enemies[i]->checkCollision(player->getHitboxBounds()))
-            enemies[i]->followPlayer(dt, player->getPosition());
-
-        // If enemy is touching player and is alive, damage player
-        if(player->checkCollision(enemies[i]->getHitboxBounds()))
-            player->negateHealth(10);
-
-        // If a bullet is touching enemy, damage enemy
-        for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
-            if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds()))
-                enemies[i]->negateHealth(10);
-        }
-    }
-
-    if(checkSpawnTimer()) {
-        enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
-        enemies.push_back(enemy);
     }
 }
 
@@ -171,9 +166,15 @@ void MainMap::render(sf::RenderTarget* target) {
     map->render(*target);
 
     if(!enemies.empty() && map->viewContains(enemy->getPosition()))
-        enemy->render(*target);
+        renderEnemies(target);
 
     player->render(*target);
+}
+
+void MainMap::renderEnemies(sf::RenderTarget* target) {
+    for(size_t i = 0; i < enemies.size(); i++) {
+        enemies[i]->render(*target);
+    }
 }
 
 /**

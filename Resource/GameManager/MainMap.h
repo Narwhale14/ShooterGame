@@ -38,6 +38,7 @@ class MainMap : public State {
 
         void updateDamageCollisions();
         void updateMobs(const float& dt);
+        void renderEnemies(sf::RenderTarget* target);
 
         bool checkSpawnTimer();
 };
