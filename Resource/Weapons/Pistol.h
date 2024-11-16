@@ -20,7 +20,7 @@ class Pistol : public Weapon {
         void update(sf::Vector2f playerTrack);
         void increaseFireRate(float percent);
         //std::vector<Bullet*> capacity;
-    private:
+    private: 
 };
 
 #endif
