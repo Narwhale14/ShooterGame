@@ -81,32 +81,15 @@ void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     for(unsigned int x=0;x<bulletSpeed;x++){
         for(unsigned int i=0;i<BulletShot.size();i++){ 
             BulletShot[i]->stopBull(mouseLoc,playerLoc);
+            if(!(BulletShot[0]->getFiringStat())){
+                BulletShot.erase(BulletShot.begin());
+            }
         }
     }
         // BulletShot1->stopBull({mouseLoc.x+100,mouseLoc.y+100},playerLoc, firing);
         // firing=BulletShot2->stopBull({mouseLoc.x-100,mouseLoc.y-100},playerLoc, firing);
 }
 
-/**
- * @brief render the bullets
- * 
- * @param target 
- */
-void Shotgun::renderBull(sf::RenderTarget& target)
-{
-    for(unsigned int i=0;i<BulletShot.size();i++){
-        if(BulletShot[i]->getFiringStat())
-            BulletShot[i]->render(target);
-    }
-    // BulletShot1->render(target);
-    // BulletShot2->render(target);
-}
-
-void Shotgun::render(sf::RenderTarget& target)
-{
-    if(sprite)
-        target.draw(*sprite);
-}
 
 void Shotgun::update(sf::Vector2f playerTrack) {
     sprite->setPosition(playerTrack.x,playerTrack.y);
