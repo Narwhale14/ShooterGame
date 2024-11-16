@@ -35,7 +35,7 @@ class MainMap : public State {
         void initializeTextures();
         void updateDamageCollisions();
         bool registerTimePassed();
-        void updateEnemies(const float& dt);
+        void updateMobs(const float& dt);
 };
 
 #endif

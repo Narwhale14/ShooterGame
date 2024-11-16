@@ -68,7 +68,6 @@ void Player::stopHandheld(const sf::Vector2f mousePos)
  * @param target 
  */
 void Player::render(sf::RenderTarget& target) {
-    //if(handheld->getFiringStatus())
     handheld->renderBull(target);
 
     if(healthBar)

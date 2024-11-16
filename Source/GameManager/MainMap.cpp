@@ -59,7 +59,6 @@ void MainMap::updateInput(const float& dt) {
     else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))))
         player->stopHandheld(mousePosView);
 
-
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
         move(dt, -1.f, 0.f, player->getMovementSpeed());
 
@@ -73,17 +72,6 @@ void MainMap::updateInput(const float& dt) {
         move(dt, 0.f, 1.f, player->getMovementSpeed());
 
     player->updateRotation(mousePosView);
-}
-
-/**
- * @brief Updates collision
- * 
- * @return true 
- * @return false 
- */
-void MainMap::updateDamageCollisions() {
-    if(player->checkCollision(enemy->getHitboxBounds()))
-        player->negateHealth(10);
 }
 
 /**
@@ -109,26 +97,30 @@ void MainMap::move(const float& dt, const float dir_x, const float dir_y, const 
 void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
-    updateDamageCollisions();
+    updateMobs(dt);
 
     if(player->isAlive()) {
         updateInput(dt);
         player->update();
     }
-
-    updateEnemies(dt);
 }
 
-void MainMap::updateEnemies(const float& dt) {
+void MainMap::updateMobs(const float& dt) {
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
-        if(enemies[i]->isAlive()) {
-            enemies[i]->update();
+        if(!enemies[i]->isAlive())
+            continue;
 
-            enemies[i]->trackToPlayer(player->getPosition());
-            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
-                enemies[i]->followPlayer(dt, player->getPosition());
-        }
+        enemies[i]->update();
 
+        enemies[i]->trackToPlayer(player->getPosition());
+        if(!enemies[i]->checkCollision(player->getHitboxBounds()))
+            enemies[i]->followPlayer(dt, player->getPosition());
+
+        // If enemy is touching player and is alive, damage player
+        if(player->checkCollision(enemies[i]->getHitboxBounds()))
+            player->negateHealth(10);
+
+        // If a bullet is touching enemy, damage enemy
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds()))
                 enemies[i]->negateHealth(10);
