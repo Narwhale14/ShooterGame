@@ -30,12 +30,16 @@ class MainMap : public State {
         sf::View view;
         
         std::vector<Enemy*> enemies;
+        sf::Clock spawnTimer;
+        int spawnIntervalMS;
 
         void initializeKeybinds();
         void initializeTextures();
+
         void updateDamageCollisions();
-        bool registerTimePassed();
         void updateMobs(const float& dt);
+
+        bool checkSpawnTimer();
 };
 
 #endif

@@ -16,12 +16,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeKeybinds();
     initializeTextures();
 
+    spawnIntervalMS = 10000;
+
     map = new Map(window, 100, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
-
-    enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
-    enemies.push_back(enemy);
 }
 
 /**
@@ -48,30 +47,18 @@ void MainMap::checkForQuit() {
 }
 
 /**
- * @brief Checks for input required in the state
+ * @brief Checks if enough time passed since last enemy spawn
  * 
- * @param dt deltaTime
+ * @return true 
+ * @return false 
  */
-void MainMap::updateInput(const float& dt) {
-    // Updates weapon input
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
-        player->useHandheld(mousePosView);
-    else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))))
-        player->stopHandheld(mousePosView);
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
-        move(dt, -1.f, 0.f, player->getMovementSpeed());
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT"))))
-        move(dt, 1.f, 0.f, player->getMovementSpeed());
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP"))))
-        move(dt, 0.f, -1.f, player->getMovementSpeed());
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
-        move(dt, 0.f, 1.f, player->getMovementSpeed());
-
-    player->updateRotation(mousePosView);
+bool MainMap::checkSpawnTimer() {
+    if(spawnTimer.getElapsedTime().asMilliseconds() > spawnIntervalMS) {
+        spawnTimer.restart();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -105,10 +92,21 @@ void MainMap::update(const float& dt) {
     }
 }
 
+/**
+ * @brief Updates all enemies on screen
+ * 
+ * @param dt 
+ */
 void MainMap::updateMobs(const float& dt) {
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
-        if(!enemies[i]->isAlive())
+        if(!enemies[i]->isAlive()) {
+            if(checkSpawnTimer()) {
+                delete enemies[i];
+                enemies[i] = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
+            }
+
             continue;
+        }
 
         enemies[i]->update();
 
@@ -126,6 +124,38 @@ void MainMap::updateMobs(const float& dt) {
                 enemies[i]->negateHealth(10);
         }
     }
+
+    if(checkSpawnTimer()) {
+        enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
+        enemies.push_back(enemy);
+    }
+}
+
+/**
+ * @brief Checks for input required in the state
+ * 
+ * @param dt deltaTime
+ */
+void MainMap::updateInput(const float& dt) {
+    // Updates weapon input
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
+        player->useHandheld(mousePosView);
+    else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))))
+        player->stopHandheld(mousePosView);
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
+        move(dt, -1.f, 0.f, player->getMovementSpeed());
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT"))))
+        move(dt, 1.f, 0.f, player->getMovementSpeed());
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP"))))
+        move(dt, 0.f, -1.f, player->getMovementSpeed());
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
+        move(dt, 0.f, 1.f, player->getMovementSpeed());
+
+    player->updateRotation(mousePosView);
 }
 
 /**
@@ -140,7 +170,7 @@ void MainMap::render(sf::RenderTarget* target) {
 
     map->render(*target);
 
-    if(map->viewContains(enemy->getPosition()))
+    if(!enemies.empty() && map->viewContains(enemy->getPosition()))
         enemy->render(*target);
 
     player->render(*target);
