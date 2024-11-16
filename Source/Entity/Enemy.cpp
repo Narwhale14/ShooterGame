@@ -19,6 +19,19 @@ Enemy::~Enemy() {
 
 }
 
+void Enemy::trackToPlayer(sf::Vector2f playerPosition) {
+    float dist_x = playerPosition.x - sprite->getPosition().x;
+    float dist_y = playerPosition.y - sprite->getPosition().y;
+
+    angle = ((atan2(dist_y, dist_x)) * 180 / 3.14);
+    
+    sprite->setRotation(angle - 90);
+}
+
+void Enemy::followPlayer(const float& dt, sf::Vector2f playerPosition) {
+    move(dt, 0.5f * cos(angle * 3.14 / 180), 0.5f * sin(angle * 3.14 / 180));
+}
+
 void Enemy::render(sf::RenderTarget& target) {
     if(healthBar)
         healthBar->render(target);

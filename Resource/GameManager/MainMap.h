@@ -16,6 +16,7 @@ class MainMap : public State {
         virtual ~MainMap();
 
         void move(const float& dt, const float dir_x, const float dir_y, const float movementSpeed);
+        void updateInput(const float& dt);
 
         virtual void checkForQuit();
 
@@ -28,15 +29,13 @@ class MainMap : public State {
         Map* map;
         sf::View view;
         
-        std::vector<Object*> mapObjects;
-        sf::Clock internalClock;
+        std::vector<Enemy*> enemies;
 
-        int registerTimeMS;
         void initializeKeybinds();
         void initializeTextures();
-        void updateCollisions();
-        void updateInput(const float& dt);
+        void updateDamageCollisions();
         bool registerTimePassed();
+        void updateEnemies(const float& dt);
 };
 
 #endif

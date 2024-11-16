@@ -14,6 +14,7 @@ Entity::Entity() {
     movementSpeed = 250.f;
     angle = 0.f;
     scale = 0.f;
+    registeredHitTime = 500;
 }
 
 /**
@@ -89,7 +90,20 @@ void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_
  * @param damage 
  */
 void Entity::negateHealth(int damage) {
-    healthBar->setHealth(healthBar->getHealth() - damage);
+    if(registeredTimePassed()) {
+        healthBar->setHealth(healthBar->getHealth() - damage);
+        lastHit.restart();
+    }
+}
+
+/**
+ * @brief Checks if clock is passed hit timer
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Entity::registeredTimePassed() {
+    return lastHit.getElapsedTime().asMilliseconds() > registeredHitTime;
 }
 
 /**
@@ -100,6 +114,9 @@ void Entity::negateHealth(int damage) {
  * @param dir_y from -1 to 1 in terms velocity on the Y axis
  */
 void Entity::move(const float& dt, const float dir_x, const float dir_y) {
+    velocity.x = dir_x * movementSpeed * dt;
+    velocity.y = dir_y * movementSpeed * dt;
+
     if(sprite)
-        sprite->move(dir_x * movementSpeed * dt, dir_y * movementSpeed * dt);
+        sprite->move(velocity.x, velocity.y);
 }

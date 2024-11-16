@@ -15,14 +15,13 @@
 MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeKeybinds();
     initializeTextures();
-    registerTimeMS = 1000;
 
     map = new Map(window, 100, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
 
     enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
-    mapObjects.push_back(enemy);
+    enemies.push_back(enemy);
 }
 
 /**
@@ -30,9 +29,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
  * 
  */
 MainMap::~MainMap() {
-    while(!mapObjects.empty()) {
-        delete mapObjects[mapObjects.size() - 1];
-        mapObjects.pop_back();
+    while(!enemies.empty()) {
+        delete enemies[enemies.size() - 1];
+        enemies.pop_back();
     }
 
     delete map;
@@ -54,11 +53,6 @@ void MainMap::checkForQuit() {
  * @param dt deltaTime
  */
 void MainMap::updateInput(const float& dt) {
-    checkForQuit();
-
-    if(!player->isAlive())
-        return;
-
     // Updates weapon input
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
         player->useHandheld(mousePosView);
@@ -87,27 +81,9 @@ void MainMap::updateInput(const float& dt) {
  * @return true 
  * @return false 
  */
-void MainMap::updateCollisions() {
-    if(!registerTimePassed())
-        return;
-    
+void MainMap::updateDamageCollisions() {
     if(player->checkCollision(enemy->getHitboxBounds()))
         player->negateHealth(10);
-}
-
-/**
- * @brief Updates internal clock and resets when it passes a threshold
- * 
- * @return true 
- * @return false 
- */
-bool MainMap::registerTimePassed() {
-    if(internalClock.getElapsedTime().asMilliseconds() > registerTimeMS) {
-        internalClock.restart();
-        return true;
-    }
-
-    return false;
 }
 
 /**
@@ -131,12 +107,33 @@ void MainMap::move(const float& dt, const float dir_x, const float dir_y, const 
  * @param dt deltaTime
  */
 void MainMap::update(const float& dt) {
+    checkForQuit();
     updateMousePositions();
-    updateCollisions();
-    updateInput(dt);
+    updateDamageCollisions();
 
-    player->update();
-    enemy->update();
+    if(player->isAlive()) {
+        updateInput(dt);
+        player->update();
+    }
+
+    updateEnemies(dt);
+}
+
+void MainMap::updateEnemies(const float& dt) {
+    for(size_t i = 0; i < enemies.size(); i++) { // All enemies
+        if(enemies[i]->isAlive()) {
+            enemies[i]->update();
+
+            enemies[i]->trackToPlayer(player->getPosition());
+            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
+                enemies[i]->followPlayer(dt, player->getPosition());
+        }
+
+        for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
+            if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds()))
+                enemies[i]->negateHealth(10);
+        }
+    }
 }
 
 /**

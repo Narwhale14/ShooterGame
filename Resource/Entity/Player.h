@@ -15,6 +15,8 @@ class Player : public Entity {
         Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
         virtual ~Player();
 
+        std::vector<Bullet*>& getActiveBullets();
+
         virtual void useHandheld(const sf::Vector2f mousePos);
         virtual void stopHandheld(const sf::Vector2f mousePos);
 
