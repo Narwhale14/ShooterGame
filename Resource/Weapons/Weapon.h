@@ -41,7 +41,7 @@ class Weapon{
         sf::Clock C;
         sf::Texture *bulletT;
         unsigned int amount;
-        std::queue<Bullet*> BulletShot;
+        std::vector<Bullet*> BulletShot;
         Bullet *temp;
 };
 
