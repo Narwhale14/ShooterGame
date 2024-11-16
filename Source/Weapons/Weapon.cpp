@@ -44,14 +44,14 @@ void Weapon::setFiringStatus(bool status) {
  * @param target 
  */
 void Weapon::render(sf::RenderTarget& target) {
-    if(sprite) {
+    if(sprite)
         target.draw(*sprite);
-    }
 }
 
 void Weapon::renderBull(sf::RenderTarget& target) {
-    if(sprite) {
-        target.draw(*sprite);
+    for(unsigned int i=0;i<BulletShot.size();i++){
+        if(BulletShot[i]->getFiringStat())
+            BulletShot[i]->render(target);
     }
 }
 

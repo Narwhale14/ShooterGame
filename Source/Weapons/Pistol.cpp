@@ -52,6 +52,7 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
                 BulletShot.erase(BulletShot.begin());
             }
         }
+        
     }
     T=C.getElapsedTime();
     if(T.asSeconds()>fireRate && BulletShot.size()<amount){
@@ -72,28 +73,13 @@ void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     for(unsigned int x=0;x<bulletSpeed;x++){
         for(unsigned int i=0;i<BulletShot.size();i++){ 
             BulletShot[i]->stopBull(mouseLoc,playerLoc);
+            if(!(BulletShot[0]->getFiringStat())){
+                BulletShot.erase(BulletShot.begin());
+            }
         }
     }
 }
 
-/**
- * @brief render the bullets
- * 
- * @param target 
- */
-void Pistol::renderBull(sf::RenderTarget& target)
-{
-    for(unsigned int i=0;i<BulletShot.size();i++){
-        if(BulletShot[i]->getFiringStat())
-            BulletShot[i]->render(target);
-    }
-}
-
-void Pistol::render(sf::RenderTarget& target)
-{
-    if(sprite)
-        target.draw(*sprite);
-}
 
 void Pistol::update(sf::Vector2f playerTrack) {
     sprite->setPosition(playerTrack.x,playerTrack.y);
