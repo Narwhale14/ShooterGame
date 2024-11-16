@@ -16,7 +16,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeKeybinds();
     initializeTextures();
 
-    spawnIntervalMS = 1000;
+    spawnIntervalMS = 10000;
 
     map = new Map(window, 100, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     enemy = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
@@ -101,9 +101,17 @@ void MainMap::update(const float& dt) {
  */
 void MainMap::updateMobs(const float& dt) {
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
+        // If enemy doesn't exist, spawn if timer has passed
+        if(enemies[i] == nullptr) {
+            if(checkSpawnTimer())
+                enemies[i] = new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f);
+            else
+                continue;
+        }
+
         if(!enemies[i]->isAlive()) {
-            // delete enemies[i];
-            // enemies[i] = nullptr;
+            delete enemies[i];
+            enemies[i] = nullptr;
             
             continue;
         } else {
@@ -124,6 +132,9 @@ void MainMap::updateMobs(const float& dt) {
             }
         }
     }
+
+    if(checkSpawnTimer() && enemies.size() > 0)
+        enemies.push_back(new Enemy(textures, map->getMapCenter().x, map->getMapCenter().y - 100, 0.075f));
 }
 
 /**
@@ -173,7 +184,8 @@ void MainMap::render(sf::RenderTarget* target) {
 
 void MainMap::renderEnemies(sf::RenderTarget* target) {
     for(size_t i = 0; i < enemies.size(); i++) {
-        enemies[i]->render(*target);
+        if(enemies[i] != nullptr && enemies[i]->isAlive())
+            enemies[i]->render(*target);
     }
 }
 
