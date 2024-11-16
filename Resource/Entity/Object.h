@@ -16,6 +16,7 @@ class Object {
         
         sf::FloatRect getHitboxBounds() const;
         sf::Color getHitboxColor() const;
+        void showHitbox(bool visible);
         
         void createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
         bool checkCollision(const sf::FloatRect rect);

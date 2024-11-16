@@ -101,6 +101,7 @@ void MainMap::update(const float& dt) {
 void MainMap::updateMobs(const float& dt, bool spawn) {
     int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
     int minRange = player->getHitboxBounds().width;
+
     sf::Vector2u getRandCoords(rand() % maxRange + minRange, rand() % maxRange + minRange);
 
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
