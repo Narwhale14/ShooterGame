@@ -8,7 +8,7 @@
 
 int main() {
     Game game;
-    sf::Clock clock;
+    
     game.run();
 
     return 0;

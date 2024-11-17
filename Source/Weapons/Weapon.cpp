@@ -15,7 +15,7 @@ Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
     fireRate=1; //the closer to 0 the less time between each shot
-    bulletSpeed=1; //when fire rate 1 dont go above 8
+    bulletSpeed=6; //when fire rate 1 dont go above 8
     dmg=1;
 }
 

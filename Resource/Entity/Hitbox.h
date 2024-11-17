@@ -32,6 +32,7 @@ class Hitbox {
         sf::FloatRect getGlobalBounds();
 
         void setSize(sf::Vector2f size);
+        void setVisibility(bool visible);
 
         void update();
         void render(sf::RenderTarget& target);
@@ -41,6 +42,7 @@ class Hitbox {
 
         float offsetX;
         float offsetY;
+        bool visible;
 };
 
 #endif

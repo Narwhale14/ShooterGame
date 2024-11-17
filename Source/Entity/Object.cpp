@@ -32,8 +32,23 @@ sf::FloatRect Object::getHitboxBounds() const {
     return hitbox->getGlobalBounds();
 }
 
+/**
+ * @brief Returns the color of thie hitbox (type)
+ * 
+ * @return sf::Color 
+ */
 sf::Color Object::getHitboxColor() const {
     return color;
+}
+
+/**
+ * @brief Turns on or off the hitbox
+ * 
+ * @param visible 
+ */
+void Object::showHitbox(bool visible) {
+    if(hitbox != nullptr)
+        hitbox->setVisibility(visible);
 }
 
 /**
