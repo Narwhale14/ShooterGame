@@ -29,6 +29,8 @@ Hitbox::Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float
 
     box->setOutlineThickness(1.f);
     box->setOutlineColor(color);
+
+    visible = false;
 }
 
 /**
@@ -67,6 +69,15 @@ void Hitbox::setSize(sf::Vector2f size) {
 }
 
 /**
+ * @brief Sets visibility of hitbox
+ * 
+ * @param visible 
+ */
+void Hitbox::setVisibility(bool visible) {
+    this->visible = visible;
+}
+
+/**
  * @brief Updates by setting hitbox around player as it moves
  * 
  */
@@ -80,5 +91,6 @@ void Hitbox::update() {
  * @param target 
  */
 void Hitbox::render(sf::RenderTarget& target) {
-    target.draw(*box);
+    if(visible)
+        target.draw(*box);
 }
