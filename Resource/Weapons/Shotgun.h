@@ -9,7 +9,6 @@
 #define SHOTGUN_H
 
 #include "Pistol.h"
-#include <queue>
 
 class Shotgun : public Weapon {
     public:

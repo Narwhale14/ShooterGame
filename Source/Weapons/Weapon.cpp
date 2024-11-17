@@ -15,11 +15,11 @@ Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
     fireRate=1; //the closer to 0 the less time between each shot
-    bulletSpeed=7; //when fire rate 1 dont go above 8
+    bulletSpeed=1; //when fire rate 1 dont go above 8
     dmg=1;
 }
 
-std::vector<Bullet*>& Weapon::getBulletList() {
+std::deque<Bullet*>& Weapon::getBulletList() {
     return BulletShot;
 }
 

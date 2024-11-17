@@ -55,8 +55,8 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     for(unsigned int x=0;x<bulletSpeed;x++){
         for(unsigned int i=0;i<BulletShot.size();i++){ 
             BulletShot[i]->fireBull(mouseLoc,playerLoc);
-            if(!(BulletShot[0]->getFiringStat())){
-                BulletShot.erase(BulletShot.begin());
+            if(!(BulletShot.front()->getFiringStat())){
+                BulletShot.pop_front();
             }
         }
     }
@@ -81,8 +81,8 @@ void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     for(unsigned int x=0;x<bulletSpeed;x++){
         for(unsigned int i=0;i<BulletShot.size();i++){ 
             BulletShot[i]->stopBull(mouseLoc,playerLoc);
-            if(!(BulletShot[0]->getFiringStat())){
-                BulletShot.erase(BulletShot.begin());
+            if(!(BulletShot.front()->getFiringStat())){
+                BulletShot.pop_front();
             }
         }
     }

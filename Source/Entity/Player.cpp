@@ -21,7 +21,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     handheldType = gun;
 }
 
-std::vector<Bullet*>& Player::getActiveBullets() {
+std::deque<Bullet*>& Player::getActiveBullets() {
     return handheld->getBulletList();
 }
 
