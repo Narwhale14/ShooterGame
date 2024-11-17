@@ -37,8 +37,6 @@ class Entity : public Object {
         sf::Clock lastHit;
         int registeredHitTime;
 
-        sf::FloatRect nextPosBox;
-
         bool registeredTimePassed();
 
         float movementSpeed;
