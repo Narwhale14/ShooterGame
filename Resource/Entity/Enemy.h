@@ -12,7 +12,7 @@
 
 class Enemy : public Entity {
     public:
-        Enemy(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
+        Enemy(std::map<std::string, sf::Texture>& textures, int x, int y);
         virtual ~Enemy();
 
         void trackToPlayer(sf::Vector2f playerPosition);
@@ -21,6 +21,9 @@ class Enemy : public Entity {
         virtual void render(sf::RenderTarget& target);
         virtual void update();
     private:
+        enum type {wolf = 0, bull};
+
+        short unsigned generateEnemyType();
 };
 
 #endif

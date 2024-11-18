@@ -11,9 +11,9 @@ Entity::Entity() {
     hitbox = nullptr;
     healthBar = nullptr;
     
-    movementSpeed = 250.f;
     angle = 0.f;
     scale = 0.f;
+
     registeredHitTime = 500;
 }
 
@@ -97,7 +97,7 @@ void Entity::negateHealth(int damage) {
 }
 
 /**
- * @brief Checks if clock is passed hit timer
+ * @brief Checks if hit clock is passed hit timer
  * 
  * @return true 
  * @return false 

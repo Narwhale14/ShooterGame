@@ -12,6 +12,7 @@
 
 class Object {
     public:
+        Object();
         virtual ~Object();
         
         sf::FloatRect getHitboxBounds() const;
@@ -19,9 +20,11 @@ class Object {
         void showHitbox(bool visible);
         
         void createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
-        bool checkCollision(const sf::FloatRect rect);
+        virtual bool checkCollision(const sf::FloatRect rect);
 
-        void createSprite(sf::Texture* texture, float scale);
+        virtual void createSprite(sf::Texture* texture, float scale);
+
+        virtual void render(sf::RenderTarget& target) = 0;
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;
@@ -29,8 +32,6 @@ class Object {
         float scale;
 
         Hitbox* hitbox;
-
-        Object();
 };
 
 #endif

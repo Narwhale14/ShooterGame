@@ -17,10 +17,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
     srand(time(0));
 
-    spawnIntervalMS = 1000;
+    spawnIntervalMS = 5000;
+    enemyCap = 10;
 
     map = new Map(window, 10, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
 }
 
@@ -110,9 +110,9 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
             if(i == enemies.size() - 1)
                 enemies.pop_back();
 
-            // Spawn enemy if timer passed set interval
+            // Spawn enemy if timer passed set interval (REPLACES DEAD ENEMIES)
             if(checkSpawnTimer() && spawn)
-                enemies[i] = new Enemy(textures, getRandCoords.x, getRandCoords.y, 0.075f);
+                enemies[i] = new Enemy(textures, getRandCoords.x, getRandCoords.y);
             else
                 continue;
         }
@@ -138,14 +138,14 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
             // If a bullet is touching enemy, damage enemy
             for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
                 if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds()))
-                    enemies[i]->negateHealth(100);
+                    enemies[i]->negateHealth(25);
             }
         }
     }
 
-    // Spawns new enemy if timer passes interval
-    if(checkSpawnTimer() && spawn)
-        enemies.push_back(new Enemy(textures, getRandCoords.x, getRandCoords.y, 0.075f));
+    // Spawns new enemy if timer passes interval (ADDS TO VECTOR)
+    if(checkSpawnTimer() && spawn && enemies.size() < enemyCap)
+        enemies.push_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
 }
 
 /**
@@ -246,4 +246,10 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/shotgun.png"))
         textures["SHOTGUN"] = temp;
+
+    if(temp.loadFromFile("Textures/wolf.png"))
+        textures["ENEMY_WOLF"] = temp;
+
+    if(temp.loadFromFile("Textures/bull.png"))
+        textures["ENEMY_BULL"] = temp;
 }

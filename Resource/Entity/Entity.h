@@ -16,11 +16,11 @@ class Entity : public Object {
         virtual ~Entity();
 
         float getMovementSpeed();
-        sf::Vector2f getPosition();
+        virtual sf::Vector2f getPosition();
         bool isAlive();
 
-        void negateHealth(int damage);
-        void setPosition(sf::Vector2f pos);
+        virtual void negateHealth(int damage);
+        virtual void setPosition(sf::Vector2f pos);
 
         void changeSprite(sf::Texture* texture);
         
@@ -39,7 +39,7 @@ class Entity : public Object {
 
         bool registeredTimePassed();
 
-        float movementSpeed;
+        int movementSpeed;
         float angle;
 };
 

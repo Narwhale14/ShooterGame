@@ -16,14 +16,14 @@
 class Bullet : public Object {
     public:
         Bullet(float r, sf::Texture* texture);
-        ~Bullet();
+        virtual ~Bullet();
         void fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
-        void render(sf::RenderTarget& target);
+        virtual void render(sf::RenderTarget& target);
         bool getFiringStat(){
             return firing;
         }
-        sf::Vector2f getPostion();
+        virtual sf::Vector2f getPostion();
     private:
         float range;
         float adjY; //direction for the bullet to travel on Y

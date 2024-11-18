@@ -32,6 +32,7 @@ class MainMap : public State {
         std::vector<Enemy*> enemies;
         sf::Clock spawnTimer;
         int spawnIntervalMS;
+        size_t enemyCap;
 
         void initializeKeybinds();
         void initializeTextures();
