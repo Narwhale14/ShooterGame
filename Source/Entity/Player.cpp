@@ -19,6 +19,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
 
     handheld = new Pistol(textures);
     handheldType = gun;
+    score=0;
 }
 
 std::deque<Bullet*>& Player::getActiveBullets() {
@@ -102,4 +103,30 @@ void Player::update() {
             changeSprite(idle);
             break;
     }
+}
+
+void Player::increaseScore()
+{
+    score++;
+}
+
+
+int Player::getScore()
+{
+    return score;
+}
+
+void Player::increaseDmg()
+{
+    handheld->increaseDmg();
+}
+
+void Player::increasefireRate()
+{
+    handheld->increaseFireRate();
+}
+
+void Player::increaseBullSpeed()
+{
+    handheld->increaseBullSpeed();
 }
