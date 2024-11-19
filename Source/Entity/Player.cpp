@@ -23,10 +23,14 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     handheldType = gun;
 
     movementSpeed = 250;
-    score=0;
 }
 
-std::deque<Bullet*>& Player::getActiveBullets() {
+/**
+ * @brief Returns list of bullets
+ * 
+ * @return std::deque<Bullet*>& 
+ */
+std::deque<Bullet*>& Player::getActiveBullets() const {
     return handheld->getBulletList();
 }
 
@@ -128,16 +132,18 @@ void Player::updateLevelBar(const sf::Vector2f& viewPos) {
     levelBar->setPosition(viewPos.x, viewPos.y + (hitbox->getGlobalBounds().height * 5.5f));
 }
 
-void Player::increaseScore() {
-    score++;
-
-    levelBar->addXp(10);
-}
-
-
-int Player::getScore()
-{
-    return score;
+/**
+ * @brief Adds xp to player and returns whether player leveled up or not
+ * 
+ * @param xp 
+ * @return true 
+ * @return false 
+ */
+bool Player::increaseScore(int xp) const {
+    if(levelBar->addXp(xp))
+        return true;
+    
+    return false;
 }
 
 void Player::increaseDmg()

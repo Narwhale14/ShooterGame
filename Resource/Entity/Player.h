@@ -15,10 +15,10 @@ class Player : public Entity {
         Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
         virtual ~Player();
 
-        std::deque<Bullet*>& getActiveBullets();
+        std::deque<Bullet*>& getActiveBullets() const;
 
-        void increaseScore();
-        int getScore();
+        bool increaseScore(int xp) const;
+
         void increaseDmg();
         void increasefireRate();
         void increaseBullSpeed();
@@ -43,9 +43,6 @@ class Player : public Entity {
         enum weaponTypes {empty = 0, gun};
 
         LevelBar* levelBar;
-        int score; //enemies defeated
-
-
 };
 
 #endif

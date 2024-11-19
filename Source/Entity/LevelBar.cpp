@@ -33,7 +33,9 @@ LevelBar::LevelBar(float size_x, float size_y, float pos_x, float pos_y) {
 
     level = 0;
     xp = 0;
-    requiredXpToLevelUp = 100;
+
+    requiredXpToLevelUp = 15;
+    levelRatio = 1.5f;
 }
 
 /**
@@ -55,25 +57,26 @@ int LevelBar::getXp() const {
 }
 
 /**
- * @brief Returns level
- * 
- * @return int 
- */
-int LevelBar::getLevel() const {
-    return level;
-}
-
-/**
- * @brief Adds xp to xp
+ * @brief Adds xp and returns whether player levels up
  * 
  * @param incoming 
+ * @return true 
+ * @return false 
  */
-void LevelBar::addXp(int incoming) {
+bool LevelBar::addXp(int incoming) {
     xp += incoming;
 
-    std::cout << xp << std::endl;
+    if(xp > requiredXpToLevelUp) {
+        xp -= requiredXpToLevelUp;
+        requiredXpToLevelUp *= levelRatio;
+        level++;
+
+        barMain->setSize(sf::Vector2f(maxMainBarSize * (xp / static_cast<float>(requiredXpToLevelUp)), barMain->getSize().y));
+        return true;
+    }
 
     barMain->setSize(sf::Vector2f(maxMainBarSize * (xp / static_cast<float>(requiredXpToLevelUp)), barMain->getSize().y));
+    return false;
 }
 
 /**
