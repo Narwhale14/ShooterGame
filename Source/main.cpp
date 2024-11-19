@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @author Niall Murray
+ * @author Niall Murray & William Wotherspoon
  * @brief Main file
  * @date 2024-10-23
  */

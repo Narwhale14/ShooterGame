@@ -38,7 +38,11 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
-    sightDistance = 8;
+    sightDistance = 7;
+    state = idle;
+
+    thresholdHeath = healthBar->getHealth() / 3;
+    fearSpeedMultiplier = 1.3f;
 }
 
 /**
@@ -77,6 +81,24 @@ short unsigned Enemy::getType() const {
 }
 
 /**
+ * @brief Returns the enemy's mood
+ * 
+ * @return short unsigned 
+ */
+short unsigned Enemy::getState() const {
+    return state;
+}
+
+/**
+ * @brief Sets the state
+ * 
+ * @param state 
+ */
+void Enemy::setState(short unsigned state) {
+    this->state = state;
+}
+
+/**
  * @brief Generates a type of enemy based on probability
  * 
  * @return short unsigned 
@@ -101,7 +123,10 @@ void Enemy::track(sf::Vector2f pos) {
 
     angle = ((atan2(dist_y, dist_x)) * 180 / 3.14);
     
-    sprite->setRotation(angle - 90);
+    if(state == enraged)
+        sprite->setRotation(angle - 90);
+    else if(state == scared)
+        sprite->setRotation(angle - 270);
 }
 
 /**
@@ -111,7 +136,10 @@ void Enemy::track(sf::Vector2f pos) {
  * @param pos 
  */
 void Enemy::follow(const float& dt, sf::Vector2f pos) {
-    move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
+    if(state == enraged)
+        move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
+    else if(state == scared)
+        move(dt, -cos(angle * 3.14 / 180) * fearSpeedMultiplier, -sin(angle * 3.14 / 180) * fearSpeedMultiplier);
 }
 
 /**
@@ -137,4 +165,7 @@ void Enemy::render(sf::RenderTarget& target) {
 void Enemy::update() {
     healthBar->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
     hitbox->update();
+
+    if(healthBar->getHealth() < thresholdHeath)
+        state = scared;
 }

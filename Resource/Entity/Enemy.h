@@ -18,6 +18,9 @@ class Enemy : public Entity {
         int getXPValue() const;
         int getSightDistance() const;
         short unsigned getType() const;
+        short unsigned getState() const;
+
+        void setState(short unsigned state);
 
         void track(sf::Vector2f playerPosition);
         void follow(const float& dt, sf::Vector2f playerPosition);
@@ -28,8 +31,14 @@ class Enemy : public Entity {
         enum type {wolf = 0, bull};
         short unsigned type;
 
+        enum state {idle = 0, enraged, scared};
+        short unsigned state;
+
         int xpValue;
         int sightDistance;
+
+        float fearSpeedMultiplier;
+        int thresholdHeath;
 
         short unsigned generateEnemyType();
 };

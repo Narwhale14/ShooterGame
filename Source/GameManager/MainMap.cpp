@@ -158,8 +158,11 @@ void MainMap::updateMobs(const float& dt) {
 
         enemies[i]->update();
 
-        // Checks if player is close to enemy, and moves the enemy towards play when it is
-        if(enemies[i]->getDistanceTo(player->getPosition()) < map->getGridSize() * enemies[i]->getSightDistance()) {
+        // Checks if player is close to enemy, and moves the enemy towards play when it is, or when enemy is enraged
+        if(enemies[i]->getDistanceTo(player->getPosition()) < map->getGridSize() * enemies[i]->getSightDistance() || enemies[i]->getState() != 0) {
+            if(enemies[i]->getState() != 2)
+                enemies[i]->setState(1); // Enraged if not scared
+
             enemies[i]->track(player->getPosition());
 
             // If not touching player then move towards
@@ -169,6 +172,8 @@ void MainMap::updateMobs(const float& dt) {
             map->containInMap(enemies[i]);
         }
 
+        std::cout << enemies[i]->getState() << std::endl;
+
         // If enemy is touching player and is alive, damage player
         if(player->checkCollision(enemies[i]->getHitboxBounds()) && !player->getImmunity())
             player->negateHealth(10);
@@ -176,7 +181,8 @@ void MainMap::updateMobs(const float& dt) {
         // If a bullet is touching enemy, damage enemy
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
-                enemies[i]->negateHealth(100);
+                enemies[i]->negateHealth(10);
+                enemies[i]->setState(1); // Enraged
 
                 delete player->getActiveBullets()[i];
                 player->getActiveBullets().erase(player->getActiveBullets().begin() + i);
