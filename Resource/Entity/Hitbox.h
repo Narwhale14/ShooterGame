@@ -24,7 +24,7 @@ class Hitbox {
         void update();
         void render(sf::RenderTarget& target);
     private:
-        sf::RectangleShape* box;
+        sf::RectangleShape box;
         sf::Sprite* sprite;
 
         float offsetX;
