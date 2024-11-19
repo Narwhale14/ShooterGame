@@ -134,8 +134,6 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
     // Spawns new enemy if timer passes interval (ADDS TO VECTOR)
     if(checkSpawnTimer() && spawn && enemies.size() < enemyCap)
         enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
-
-    std::cout << enemies.size() << std::endl;
 }
 
 /**
