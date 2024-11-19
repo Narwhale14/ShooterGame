@@ -19,6 +19,8 @@ class Entity : public Object {
         virtual sf::Vector2f getPosition();
         bool isAlive();
 
+        bool getImmunity();
+
         virtual void negateHealth(int damage);
         virtual void setPosition(sf::Vector2f pos);
 
@@ -34,10 +36,8 @@ class Entity : public Object {
         HealthBar* healthBar;
         sf::Vector2f velocity;
 
-        sf::Clock lastHit;
-        int registeredHitTime;
-
-        bool registeredTimePassed();
+        sf::Clock immunityTimer;
+        int immunityTimeMS;
 
         int movementSpeed;
         float angle;

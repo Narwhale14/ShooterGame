@@ -15,16 +15,22 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     setPosition(sf::Vector2f(x, y));
 
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green);
-    createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
+    createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
+
+    levelBar = new LevelBar(hitbox->getGlobalBounds().width * 7, hitbox->getGlobalBounds().height * 1.5f, sprite->getPosition().x, sprite->getPosition().y + (hitbox->getGlobalBounds().height * 5.5f));
 
     handheld = new Pistol(textures);
     handheldType = gun;
 
     movementSpeed = 250;
-    score=0;
 }
 
-std::deque<Bullet*>& Player::getActiveBullets() {
+/**
+ * @brief Returns list of bullets
+ * 
+ * @return std::deque<Bullet*>& 
+ */
+std::deque<Bullet*>& Player::getActiveBullets() const {
     return handheld->getBulletList();
 }
 
@@ -34,6 +40,7 @@ std::deque<Bullet*>& Player::getActiveBullets() {
  */
 Player::~Player() { 
     delete handheld;
+    delete levelBar;
 }
 
 /**
@@ -41,7 +48,7 @@ Player::~Player() {
  * 
  * @param mousePos coords of the cursor relative to the window
  */
-void Player::updateRotation(const sf::Vector2f mousePos) {
+void Player::updateRotation(const sf::Vector2f& mousePos) {
     float dist_x = mousePos.x - sprite->getPosition().x;
     float dist_y = mousePos.y - sprite->getPosition().y;
 
@@ -56,11 +63,11 @@ void Player::updateRotation(const sf::Vector2f mousePos) {
     handheld->rotateWeapon(mousePos);
 }
 
-void Player::useHandheld(const sf::Vector2f mousePos) {
+void Player::useHandheld(const sf::Vector2f& mousePos) {
     handheld->fire(mousePos, weaponPos);
 }
 
-void Player::stopHandheld(const sf::Vector2f mousePos)
+void Player::stopHandheld(const sf::Vector2f& mousePos)
 {
     handheld->stopFire(mousePos, weaponPos);
 }
@@ -87,6 +94,16 @@ void Player::render(sf::RenderTarget& target) {
 }
 
 /**
+ * @brief Renders level bar
+ * 
+ * @param target 
+ */
+void Player::renderLevelBar(sf::RenderTarget& target) {
+    if(levelBar)
+        levelBar->render(target);
+}
+
+/**
  * @brief Updates player and it's sprite
  * 
  */
@@ -107,15 +124,23 @@ void Player::update() {
     }
 }
 
-void Player::increaseScore()
-{
-    score++;
+/**
+ * @brief Updates player level bar
+ * 
+ */
+void Player::updateLevelBar(const sf::Vector2f& viewPos) {
+    levelBar->setPosition(viewPos.x, viewPos.y + (hitbox->getGlobalBounds().height * 5.5f));
 }
 
-
-int Player::getScore()
-{
-    return score;
+/**
+ * @brief Adds xp to player and returns whether player leveled up or not
+ * 
+ * @param xp 
+ * @return true 
+ * @return false 
+ */
+bool Player::increaseScore(int xp) const {
+    return levelBar->addXp(xp);
 }
 
 void Player::increaseDmg()

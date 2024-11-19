@@ -22,9 +22,6 @@ class MainMap : public State {
 
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
-
-        void checkUpgrade(int score);
-        void runUpgrade();
     private:
         Player* player;
         Enemy* enemy;
@@ -42,17 +39,16 @@ class MainMap : public State {
         void initializeFonts();
 
         void updateDamageCollisions();
-        void updateMobs(const float& dt, bool spawn);
+        void updateMobs(const float& dt);
         void renderEnemies(sf::RenderTarget* target);
+        void updateUpgrade();
 
         bool checkSpawnTimer();
 
         Button* dmgUp;
         Button* fireRateUp;
         Button* bullSpeedUp;
-        bool upgrading=false;
-        bool pause;
-        std::vector<int> upAvailable;
+        bool upgrading;
 };
 
 #endif

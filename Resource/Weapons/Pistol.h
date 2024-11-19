@@ -9,7 +9,6 @@
 #define PISTOL_H
 
 #include "Weapon.h"
-#include "deque"
 
 class Pistol : public Weapon {
     public:

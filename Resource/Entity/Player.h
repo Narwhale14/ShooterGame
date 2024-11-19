@@ -15,20 +15,23 @@ class Player : public Entity {
         Player(std::map<std::string, sf::Texture>& textures, int x, int y, float s);
         virtual ~Player();
 
-        std::deque<Bullet*>& getActiveBullets();
+        std::deque<Bullet*>& getActiveBullets() const;
 
-        virtual void useHandheld(const sf::Vector2f mousePos);
-        virtual void stopHandheld(const sf::Vector2f mousePos);
+        bool increaseScore(int xp) const;
 
-        virtual void render(sf::RenderTarget& target);
-        virtual void updateRotation(const sf::Vector2f mousePos);
-        virtual void update();
-
-        void increaseScore();
-        int getScore();
         void increaseDmg();
         void increasefireRate();
         void increaseBullSpeed();
+
+        virtual void useHandheld(const sf::Vector2f& mousePos);
+        virtual void stopHandheld(const sf::Vector2f& mousePos);
+
+        virtual void updateRotation(const sf::Vector2f& mousePos);
+        void updateLevelBar(const sf::Vector2f& viewPos);
+        virtual void update();
+
+        virtual void render(sf::RenderTarget& target);
+        void renderLevelBar(sf::RenderTarget& target);
     private:
         Weapon* handheld;
 
@@ -39,10 +42,7 @@ class Player : public Entity {
         short unsigned handheldType;
         enum weaponTypes {empty = 0, gun};
 
-        
-        int score; //enemies defeated
-
-
+        LevelBar* levelBar;
 };
 
 #endif

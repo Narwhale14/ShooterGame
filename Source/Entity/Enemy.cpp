@@ -14,10 +14,12 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
         case 0:
             createSprite(&textures["ENEMY_WOLF"], 0.4f);
             movementSpeed = 300;
+            xpValue = 15;
             break;
         case 1:
             createSprite(&textures["ENEMY_BULL"], 0.4f);
             movementSpeed = 200;
+            xpValue = 10;
             break;
         default:
             exit(1);
@@ -26,11 +28,15 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     setPosition(sf::Vector2f(x, y));
 
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
-    createHealthBar(50, 50, sprite->getPosition().x, sprite->getPosition().y);
+    createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 }
 
 Enemy::~Enemy() {
 
+}
+
+int Enemy::getXPValue() const {
+    return xpValue;
 }
 
 short unsigned Enemy::generateEnemyType() {

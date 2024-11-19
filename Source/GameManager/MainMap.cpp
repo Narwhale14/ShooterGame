@@ -18,18 +18,17 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
     srand(time(0));
 
-    spawnIntervalMS = 5000;
+    spawnIntervalMS = 2000;
     enemyCap = 10;
 
     map = new Map(window, 10, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
 
-    dmgUp = new Button(fonts["SONO_R"], "DAMAGE +", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
-    fireRateUp = new Button(fonts["SONO_R"], "FIRE RATE +", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
-    bullSpeedUp = new Button(fonts["SONO_R"], "BULLET SPEED +", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    dmgUp = new Button(fonts["SONO_R"], "DAMAGE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    fireRateUp = new Button(fonts["SONO_R"], "FIRE RATE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    bullSpeedUp = new Button(fonts["SONO_R"], "BULLET SPEED+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     
-    upAvailable={500,400,300,200,150,100,80,60,40,30,20,10,1};
-    pause=false;
+    upgrading = false;
 }
 
 /**
@@ -41,6 +40,7 @@ MainMap::~MainMap() {
         delete enemies[enemies.size() - 1];
         enemies.pop_back();
     }
+
     delete dmgUp;
     delete fireRateUp;
     delete bullSpeedUp;
@@ -95,21 +95,18 @@ void MainMap::move(const float& dt, const float dir_x, const float dir_y, const 
 void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
-    checkUpgrade(player->getScore());
-    if(!pause){
-        updateMobs(dt, player->isAlive());
 
-        if(player->isAlive()) {
-            updateInput(dt);
-            player->update();
-        }
-    }
-    if(upgrading){
+    if(upgrading) {
         dmgUp->update(mousePosView);
         fireRateUp->update(mousePosView);
         bullSpeedUp->update(mousePosView);
+        updateUpgrade();
+    } else if(player->isAlive() && !upgrading) {
+        updateMobs(dt);
+        updateInput(dt);
+        player->update();
+        player->updateLevelBar(map->getViewCenter());
     }
-
 }
 
 /**
@@ -117,7 +114,7 @@ void MainMap::update(const float& dt) {
  * 
  * @param dt 
  */
-void MainMap::updateMobs(const float& dt, bool spawn) {
+void MainMap::updateMobs(const float& dt) {
     int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
     int minRange = player->getHitboxBounds().width;
 
@@ -128,31 +125,42 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
         if(!enemies[i]->isAlive() || enemies[i] == nullptr) {
             delete enemies[i];
             enemies.erase(enemies.begin() + i);
-            player->increaseScore();
+
+            // Checks if player levels up from getting xp from killing enemy
+            if(player->increaseScore(enemies[i]->getXPValue()))
+                upgrading = true;
             
             continue;
-        } else {
-            enemies[i]->update();
+        }
 
-            // Tracks enemy to player and follows them
-            enemies[i]->trackToPlayer(player->getPosition());
-            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
-                enemies[i]->followPlayer(dt, player->getPosition());
+        enemies[i]->update();
 
-            // If enemy is touching player and is alive, damage player
-            if(player->checkCollision(enemies[i]->getHitboxBounds()))
-                player->negateHealth(10);
+        // Tracks enemy to player and follows them
+        enemies[i]->trackToPlayer(player->getPosition());
+        if(!enemies[i]->checkCollision(player->getHitboxBounds()))
+            enemies[i]->followPlayer(dt, player->getPosition());
 
-            // If a bullet is touching enemy, damage enemy
-            for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
-                if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds()))
-                    enemies[i]->negateHealth(25);
+        // If enemy is touching player and is alive, damage player
+        if(player->checkCollision(enemies[i]->getHitboxBounds()) && !player->getImmunity())
+            player->negateHealth(10);
+
+        // If a bullet is touching enemy, damage enemy
+        for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
+            if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
+                enemies[i]->negateHealth(100);
+
+                // Deletes bullet
+                if(player->getActiveBullets()[i] != nullptr) {
+                    delete player->getActiveBullets()[i];
+                    player->getActiveBullets().erase(player->getActiveBullets().begin() + i);
+                }
             }
+            
         }
     }
 
-    // Spawns new enemy if timer passes interval (ADDS TO VECTOR)
-    if(checkSpawnTimer() && spawn && enemies.size() < enemyCap)
+    // Spawns new enemy if timer passes interval
+    if(checkSpawnTimer() && player->isAlive() && enemies.size() < enemyCap)
         enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
 }
 
@@ -184,6 +192,28 @@ void MainMap::updateInput(const float& dt) {
 }
 
 /**
+ * @brief Updates the upgrade menu
+ * 
+ */
+void MainMap::updateUpgrade()
+{
+    dmgUp->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
+    bullSpeedUp->setPosition(player->getPosition());
+    fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2) ,player->getPosition().y));
+
+    if(dmgUp->getState()==2){
+        player->increaseDmg();
+        upgrading=false;
+    }else if(fireRateUp->getState()==2){
+        player->increasefireRate();
+        upgrading=false;
+    }else if(bullSpeedUp->getState()==2){
+        player->increaseBullSpeed();
+        upgrading=false;
+    }
+}
+
+/**
  * @brief Renders the GameState
  * 
  * @param target target window
@@ -197,6 +227,7 @@ void MainMap::render(sf::RenderTarget* target) {
     this->renderEnemies(target);
 
     player->render(*target);
+    player->renderLevelBar(*target);
     
     if(upgrading){
         dmgUp->render(*target);
@@ -266,39 +297,6 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/bull.png"))
         textures["ENEMY_BULL"] = temp;
-}
-
-void MainMap::checkUpgrade(int score)
-{
-
-    if(score==upAvailable[upAvailable.size()-1]&&upgrading==false){
-        dmgUp->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
-        bullSpeedUp->setPosition(player->getPosition());
-        fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2) ,player->getPosition().y));
-        upAvailable.pop_back();
-        runUpgrade();
-        upgrading=true;
-        pause=true;
-    }else if(upgrading==true){
-        runUpgrade();
-    }
-}
-
-void MainMap::runUpgrade()
-{
-    if(dmgUp->getState()==2){
-        player->increaseDmg();
-        upgrading=false;
-        pause=false;
-    }else if(fireRateUp->getState()==2){
-        player->increasefireRate();
-        upgrading=false;
-        pause=false;
-    }else if(bullSpeedUp->getState()==2){
-        player->increaseBullSpeed();
-        upgrading=false;
-        pause=false;
-    }
 }
 
 /**

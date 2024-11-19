@@ -8,20 +8,7 @@
 #ifndef HITBOX_H
 #define HITBOX_H
 
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <stack>
-#include <cmath>
-#include <map>
-#include <deque>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
+#include "LevelBar.h"
 
 class Hitbox {
     public:

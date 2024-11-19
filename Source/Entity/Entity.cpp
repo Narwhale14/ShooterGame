@@ -14,7 +14,7 @@ Entity::Entity() {
     angle = 0.f;
     scale = 0.f;
 
-    registeredHitTime = 500;
+    immunityTimeMS = 500;
 }
 
 /**
@@ -90,10 +90,8 @@ void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_
  * @param damage 
  */
 void Entity::negateHealth(int damage) {
-    if(registeredTimePassed()) {
-        healthBar->setHealth(healthBar->getHealth() - damage);
-        lastHit.restart();
-    }
+    healthBar->setHealth(healthBar->getHealth() - damage);
+    immunityTimer.restart();
 }
 
 /**
@@ -102,8 +100,8 @@ void Entity::negateHealth(int damage) {
  * @return true 
  * @return false 
  */
-bool Entity::registeredTimePassed() {
-    return lastHit.getElapsedTime().asMilliseconds() > registeredHitTime;
+bool Entity::getImmunity() {
+    return immunityTimer.getElapsedTime().asMilliseconds() < immunityTimeMS;
 }
 
 /**

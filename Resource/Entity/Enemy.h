@@ -15,6 +15,8 @@ class Enemy : public Entity {
         Enemy(std::map<std::string, sf::Texture>& textures, int x, int y);
         virtual ~Enemy();
 
+        int getXPValue() const;
+
         void trackToPlayer(sf::Vector2f playerPosition);
         void followPlayer(const float& dt, sf::Vector2f playerPosition);
 
@@ -23,6 +25,7 @@ class Enemy : public Entity {
     private:
         enum type {wolf = 0, bull};
 
+        int xpValue;
         short unsigned generateEnemyType();
 };
 
