@@ -105,22 +105,10 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
     sf::Vector2u getRandCoords(rand() % maxRange + minRange, rand() % maxRange + minRange);
 
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
-        // If enemy doesn't exist, spawn if timer has passed
-        if(enemies[i] == nullptr) {
-            if(i == enemies.size() - 1)
-                enemies.pop_back();
-
-            // Spawn enemy if timer passed set interval (REPLACES DEAD ENEMIES)
-            if(checkSpawnTimer() && spawn)
-                enemies[i] = new Enemy(textures, getRandCoords.x, getRandCoords.y);
-            else
-                continue;
-        }
-
         // If dead, delete enemy
-        if(!enemies[i]->isAlive()) {
+        if(!enemies[i]->isAlive() || enemies[i] == nullptr) {
             delete enemies[i];
-            enemies[i] = nullptr;
+            enemies.erase(enemies.begin() + i);
             
             continue;
         } else {
@@ -145,7 +133,9 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
 
     // Spawns new enemy if timer passes interval (ADDS TO VECTOR)
     if(checkSpawnTimer() && spawn && enemies.size() < enemyCap)
-        enemies.push_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
+        enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
+
+    std::cout << enemies.size() << std::endl;
 }
 
 /**
