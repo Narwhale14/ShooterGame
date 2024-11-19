@@ -9,6 +9,7 @@
 #define PISTOL_H
 
 #include "Weapon.h"
+#include "deque"
 
 class Pistol : public Weapon {
     public:
@@ -18,9 +19,8 @@ class Pistol : public Weapon {
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void update(sf::Vector2f playerTrack);
-        void increaseFireRate(float percent);
         //std::vector<Bullet*> capacity;
-    private: 
+    private:
 };
 
 #endif

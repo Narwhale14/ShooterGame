@@ -113,3 +113,20 @@ void Weapon::setDmg(int d)
 {
     dmg=d;
 }
+
+void Weapon::increaseDmg()
+{
+    dmg++;
+}
+
+void Weapon::increaseBullSpeed()
+{
+    bulletSpeed=bulletSpeed+(bulletSpeed*2);
+}
+
+void Weapon::increaseFireRate()
+{
+    if(fireRate>.1){
+        fireRate-=.1;
+    }
+}

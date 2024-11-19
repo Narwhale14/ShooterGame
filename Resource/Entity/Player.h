@@ -8,7 +8,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../GameManager/Map.h"
+#include "../GameManager/Button.h"
 
 class Player : public Entity {
     public:
@@ -23,6 +23,12 @@ class Player : public Entity {
         virtual void render(sf::RenderTarget& target);
         virtual void updateRotation(const sf::Vector2f mousePos);
         virtual void update();
+
+        void increaseScore();
+        int getScore();
+        void increaseDmg();
+        void increasefireRate();
+        void increaseBullSpeed();
     private:
         Weapon* handheld;
 
@@ -32,6 +38,11 @@ class Player : public Entity {
 
         short unsigned handheldType;
         enum weaponTypes {empty = 0, gun};
+
+        
+        int score; //enemies defeated
+
+
 };
 
 #endif

@@ -10,7 +10,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "Button.h"
+#include "../Entity/Enemy.h"
 
 class State {
     public:

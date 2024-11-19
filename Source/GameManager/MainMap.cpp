@@ -14,6 +14,7 @@
  */
 MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeKeybinds();
+    initializeFonts();
     initializeTextures();
     srand(time(0));
 
@@ -22,6 +23,13 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     map = new Map(window, 10, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
+
+    dmgUp = new Button(fonts["SONO_R"], "DAMAGE +", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    fireRateUp = new Button(fonts["SONO_R"], "FIRE RATE +", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    bullSpeedUp = new Button(fonts["SONO_R"], "BULLET SPEED +", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    
+    upAvailable={500,400,300,200,150,100,80,60,40,30,20,10,1};
+    pause=false;
 }
 
 /**
@@ -33,7 +41,9 @@ MainMap::~MainMap() {
         delete enemies[enemies.size() - 1];
         enemies.pop_back();
     }
-
+    delete dmgUp;
+    delete fireRateUp;
+    delete bullSpeedUp;
     delete map;
 }
 
@@ -85,12 +95,21 @@ void MainMap::move(const float& dt, const float dir_x, const float dir_y, const 
 void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
-    updateMobs(dt, player->isAlive());
+    checkUpgrade(player->getScore());
+    if(!pause){
+        updateMobs(dt, player->isAlive());
 
-    if(player->isAlive()) {
-        updateInput(dt);
-        player->update();
+        if(player->isAlive()) {
+            updateInput(dt);
+            player->update();
+        }
     }
+    if(upgrading){
+        dmgUp->update(mousePosView);
+        fireRateUp->update(mousePosView);
+        bullSpeedUp->update(mousePosView);
+    }
+
 }
 
 /**
@@ -109,6 +128,7 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
         if(!enemies[i]->isAlive() || enemies[i] == nullptr) {
             delete enemies[i];
             enemies.erase(enemies.begin() + i);
+            player->increaseScore();
             
             continue;
         } else {
@@ -177,6 +197,12 @@ void MainMap::render(sf::RenderTarget* target) {
     this->renderEnemies(target);
 
     player->render(*target);
+    
+    if(upgrading){
+        dmgUp->render(*target);
+        fireRateUp->render(*target);
+        bullSpeedUp->render(*target);
+    }
 }
 
 /**
@@ -240,4 +266,48 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/bull.png"))
         textures["ENEMY_BULL"] = temp;
+}
+
+void MainMap::checkUpgrade(int score)
+{
+
+    if(score==upAvailable[upAvailable.size()-1]&&upgrading==false){
+        dmgUp->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
+        bullSpeedUp->setPosition(player->getPosition());
+        fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2) ,player->getPosition().y));
+        upAvailable.pop_back();
+        runUpgrade();
+        upgrading=true;
+        pause=true;
+    }else if(upgrading==true){
+        runUpgrade();
+    }
+}
+
+void MainMap::runUpgrade()
+{
+    if(dmgUp->getState()==2){
+        player->increaseDmg();
+        upgrading=false;
+        pause=false;
+    }else if(fireRateUp->getState()==2){
+        player->increasefireRate();
+        upgrading=false;
+        pause=false;
+    }else if(bullSpeedUp->getState()==2){
+        player->increaseBullSpeed();
+        upgrading=false;
+        pause=false;
+    }
+}
+
+/**
+ * @brief Loads all textures into map
+ * 
+ */
+void MainMap::initializeFonts() {
+    sf::Font temp;
+
+    if(temp.loadFromFile("Fonts/Sono-Regular.ttf"))
+        fonts["SONO_R"] = temp;
 }

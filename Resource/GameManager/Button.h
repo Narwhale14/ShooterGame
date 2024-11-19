@@ -1,7 +1,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "../Entity/Enemy.h"
+#include "../GameManager/Map.h"
 
 class Button {
     public:
