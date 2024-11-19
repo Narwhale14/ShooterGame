@@ -54,6 +54,15 @@ float Map::getTotalSize() const {
 }
 
 /**
+ * @brief Returns the individual grid size
+ * 
+ * @return float 
+ */
+float Map::getGridSize() const {
+    return gridSize;
+}
+
+/**
  * @brief Returns the map center
  * 
  * @return sf::Vector2f 

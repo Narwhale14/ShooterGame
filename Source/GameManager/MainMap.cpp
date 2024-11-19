@@ -21,8 +21,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     spawnIntervalMS = 2000;
     enemyCap = 10;
 
-    map = new Map(window, 10, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
+    levelBar = new LevelBar(player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
     dmgUp = new Button(fonts["SONO_R"], "DAMAGE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     fireRateUp = new Button(fonts["SONO_R"], "FIRE RATE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
@@ -58,21 +59,6 @@ void MainMap::checkForQuit() {
 }
 
 /**
- * @brief Checks if enough time passed since last enemy spawn
- * 
- * @return true 
- * @return false 
- */
-bool MainMap::checkSpawnTimer() {
-    if(spawnTimer.getElapsedTime().asMilliseconds() > spawnIntervalMS) {
-        spawnTimer.restart();
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * @brief Moves camera and detects if camera's border is crossing map's borders
  * 
  * @param dt deltaTime
@@ -88,6 +74,42 @@ void MainMap::move(const float& dt, const float dir_x, const float dir_y, const 
 }
 
 /**
+ * @brief Checks if enough time passed since last enemy spawn
+ * 
+ * @return true 
+ * @return false 
+ */
+bool MainMap::checkSpawnTimer() {
+    if(spawnTimer.getElapsedTime().asMilliseconds() > spawnIntervalMS) {
+        spawnTimer.restart();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @brief Spawns an enemy in a random position
+ * 
+ */
+void MainMap::spawnEnemy() {
+    int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
+    int minRange = player->getHitboxBounds().width;
+
+    // Makes sure enemy spawns away from player
+    sf::Vector2f getRandCoords;
+    while(true) {
+        getRandCoords.x = rand() % maxRange + minRange;
+        getRandCoords.y = rand() % maxRange + minRange;
+
+        if(!map->viewContains(getRandCoords))
+            break;
+    }
+
+    enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
+}
+
+/**
  * @brief Updates GameState based on deltaTime and any entities
  * 
  * @param dt deltaTime
@@ -100,12 +122,18 @@ void MainMap::update(const float& dt) {
         dmgUp->update(mousePosView);
         fireRateUp->update(mousePosView);
         bullSpeedUp->update(mousePosView);
+
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
         updateMobs(dt);
+
+        if(checkSpawnTimer() && player->isAlive() && enemies.size() < enemyCap)
+            spawnEnemy();
+
         updateInput(dt);
+
+        updateLevelBar();
         player->update();
-        player->updateLevelBar(map->getViewCenter());
     }
 }
 
@@ -115,11 +143,6 @@ void MainMap::update(const float& dt) {
  * @param dt 
  */
 void MainMap::updateMobs(const float& dt) {
-    int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
-    int minRange = player->getHitboxBounds().width;
-
-    sf::Vector2u getRandCoords(rand() % maxRange + minRange, rand() % maxRange + minRange);
-
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
         // If dead, delete enemy
         if(!enemies[i]->isAlive() || enemies[i] == nullptr) {
@@ -127,7 +150,7 @@ void MainMap::updateMobs(const float& dt) {
             enemies.erase(enemies.begin() + i);
 
             // Checks if player levels up from getting xp from killing enemy
-            if(player->increaseScore(enemies[i]->getXPValue()))
+            if(levelBar->addXp(enemies[i]->getXPValue()))
                 upgrading = true;
             
             continue;
@@ -135,10 +158,16 @@ void MainMap::updateMobs(const float& dt) {
 
         enemies[i]->update();
 
-        // Tracks enemy to player and follows them
-        enemies[i]->trackToPlayer(player->getPosition());
-        if(!enemies[i]->checkCollision(player->getHitboxBounds()))
-            enemies[i]->followPlayer(dt, player->getPosition());
+        // Checks if player is close to enemy, and moves the enemy towards play when it is
+        if(enemies[i]->getDistanceTo(player->getPosition()) < map->getGridSize() * enemies[i]->getSightDistance()) {
+            enemies[i]->track(player->getPosition());
+
+            // If not touching player then move towards
+            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
+                enemies[i]->follow(dt, player->getPosition());
+
+            map->containInMap(enemies[i]);
+        }
 
         // If enemy is touching player and is alive, damage player
         if(player->checkCollision(enemies[i]->getHitboxBounds()) && !player->getImmunity())
@@ -149,19 +178,11 @@ void MainMap::updateMobs(const float& dt) {
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
                 enemies[i]->negateHealth(100);
 
-                // Deletes bullet
-                if(player->getActiveBullets()[i] != nullptr) {
-                    delete player->getActiveBullets()[i];
-                    player->getActiveBullets().erase(player->getActiveBullets().begin() + i);
-                }
+                delete player->getActiveBullets()[i];
+                player->getActiveBullets().erase(player->getActiveBullets().begin() + i);
             }
-            
         }
     }
-
-    // Spawns new enemy if timer passes interval
-    if(checkSpawnTimer() && player->isAlive() && enemies.size() < enemyCap)
-        enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
 }
 
 /**
@@ -214,6 +235,14 @@ void MainMap::updateUpgrade()
 }
 
 /**
+ * @brief Updates player level bar
+ * 
+ */
+void MainMap::updateLevelBar() {
+    levelBar->setPosition(map->getViewCenter().x, map->getViewCenter().y + (player->getHitboxBounds().height * 5.5f));
+}
+
+/**
  * @brief Renders the GameState
  * 
  * @param target target window
@@ -226,8 +255,10 @@ void MainMap::render(sf::RenderTarget* target) {
     map->render(*target);
     this->renderEnemies(target);
 
+    if(levelBar)
+        levelBar->render(*target);
+
     player->render(*target);
-    player->renderLevelBar(*target);
     
     if(upgrading){
         dmgUp->render(*target);

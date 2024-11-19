@@ -16,16 +16,21 @@ class Enemy : public Entity {
         virtual ~Enemy();
 
         int getXPValue() const;
+        int getSightDistance() const;
+        short unsigned getType() const;
 
-        void trackToPlayer(sf::Vector2f playerPosition);
-        void followPlayer(const float& dt, sf::Vector2f playerPosition);
+        void track(sf::Vector2f playerPosition);
+        void follow(const float& dt, sf::Vector2f playerPosition);
 
         virtual void render(sf::RenderTarget& target);
         virtual void update();
     private:
         enum type {wolf = 0, bull};
+        short unsigned type;
 
         int xpValue;
+        int sightDistance;
+
         short unsigned generateEnemyType();
 };
 

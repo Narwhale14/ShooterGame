@@ -55,6 +55,16 @@ sf::Vector2f Entity::getPosition() {
 }
 
 /**
+ * @brief Gets the distance to an obj from the entity
+ * 
+ * @param objPos 
+ * @return float 
+ */
+float Entity::getDistanceTo(sf::Vector2f objPos) {
+    return sqrt(pow(objPos.x - sprite->getPosition().x, 2) + pow(objPos.y - sprite->getPosition().y, 2));
+}
+
+/**
  * @brief Checks if entity is dead
  * 
  * @return true 

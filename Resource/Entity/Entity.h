@@ -17,6 +17,7 @@ class Entity : public Object {
 
         float getMovementSpeed();
         virtual sf::Vector2f getPosition();
+        float getDistanceTo(sf::Vector2f objPos);
         bool isAlive();
 
         bool getImmunity();
