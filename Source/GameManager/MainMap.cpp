@@ -280,8 +280,6 @@ void MainMap::checkUpgrade(int score)
         dmgUp->setPosition(sf::Vector2f(player->getPosition().x-300,player->getPosition().y));
         bullSpeedUp->setPosition(player->getPosition());
         fireRateUp->setPosition(sf::Vector2f(player->getPosition().x+300,player->getPosition().y));
-        
-        
         upAvailable.pop_back();
         runUpgrade();
         upgrading=true;
