@@ -29,6 +29,10 @@ class Weapon{
         std::deque<Bullet*>& getBulletList();
         int getDmg();
         void setDmg(int d);
+
+        void increaseDmg();
+        void increaseBullSpeed();
+        void increaseFireRate();
     protected:
         sf::Texture* texture;
         sf::Sprite* sprite;

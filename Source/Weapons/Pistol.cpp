@@ -84,8 +84,3 @@ void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 void Pistol::update(sf::Vector2f playerTrack) {
     sprite->setPosition(playerTrack.x,playerTrack.y);
 }
-
-void Pistol::increaseFireRate(float percent){
-    percent=percent/100;
-    bulletSpeed=bulletSpeed+(bulletSpeed*percent);
-}
