@@ -19,6 +19,8 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
 
     handheld = new Pistol(textures);
     handheldType = gun;
+
+    movementSpeed = 250;
     score=0;
 }
 

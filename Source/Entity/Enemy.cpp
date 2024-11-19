@@ -7,8 +7,22 @@
 
 #include "../../Resource/Entity/Enemy.h"
 
-Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y, float s) {
-    createSprite(&textures["PLAYER_NORMAL"], s);
+Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
+    srand(time(0));
+
+    switch(generateEnemyType()) {
+        case 0:
+            createSprite(&textures["ENEMY_WOLF"], 0.4f);
+            movementSpeed = 300;
+            break;
+        case 1:
+            createSprite(&textures["ENEMY_BULL"], 0.4f);
+            movementSpeed = 200;
+            break;
+        default:
+            exit(1);
+    }
+
     setPosition(sf::Vector2f(x, y));
 
     createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
@@ -17,6 +31,15 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y, float s
 
 Enemy::~Enemy() {
 
+}
+
+short unsigned Enemy::generateEnemyType() {
+    int value = (rand() % 100) + 1;
+
+    if(value <= 20)
+        return wolf;
+    else
+        return bull;
 }
 
 void Enemy::trackToPlayer(sf::Vector2f playerPosition) {
@@ -29,7 +52,7 @@ void Enemy::trackToPlayer(sf::Vector2f playerPosition) {
 }
 
 void Enemy::followPlayer(const float& dt, sf::Vector2f playerPosition) {
-    move(dt, 0.5f * cos(angle * 3.14 / 180), 0.5f * sin(angle * 3.14 / 180));
+    move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
 }
 
 void Enemy::render(sf::RenderTarget& target) {

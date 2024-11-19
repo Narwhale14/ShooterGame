@@ -72,6 +72,15 @@ sf::Vector2f Map::getCameraSize() const {
 }
 
 /**
+ * @brief Gets view center
+ * 
+ * @return sf::Vector2f 
+ */
+sf::Vector2f Map::getViewCenter() const {
+    return view.getCenter();
+}
+
+/**
  * @brief Sets camera position
  * 
  * @param pos 

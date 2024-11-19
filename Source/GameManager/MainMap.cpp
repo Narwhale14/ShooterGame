@@ -18,10 +18,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
     srand(time(0));
 
-    spawnIntervalMS = 1000;
+    spawnIntervalMS = 5000;
+    enemyCap = 10;
 
     map = new Map(window, 10, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
 
     dmgUp = new Button(fonts["SONO_R"], "DAMAGE +", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
@@ -124,23 +124,12 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
     sf::Vector2u getRandCoords(rand() % maxRange + minRange, rand() % maxRange + minRange);
 
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
-        // If enemy doesn't exist, spawn if timer has passed
-        if(enemies[i] == nullptr) {
-            if(i == enemies.size() - 1)
-                enemies.pop_back();
-
-            // Spawn enemy if timer passed set interval
-            if(checkSpawnTimer() && spawn)
-                enemies[i] = new Enemy(textures, getRandCoords.x, getRandCoords.y, 0.075f);
-            else
-                continue;
-        }
-
         // If dead, delete enemy
-        if(!enemies[i]->isAlive()) {
+        if(!enemies[i]->isAlive() || enemies[i] == nullptr) {
             delete enemies[i];
-            enemies[i] = nullptr;
+            enemies.erase(enemies.begin() + i);
             player->increaseScore();
+            
             continue;
         } else {
             enemies[i]->update();
@@ -157,14 +146,14 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
             // If a bullet is touching enemy, damage enemy
             for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
                 if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds()))
-                    enemies[i]->negateHealth(100);
+                    enemies[i]->negateHealth(25);
             }
         }
     }
 
-    // Spawns new enemy if timer passes interval
-    if(checkSpawnTimer() && spawn)
-        enemies.push_back(new Enemy(textures, getRandCoords.x, getRandCoords.y, 0.075f));
+    // Spawns new enemy if timer passes interval (ADDS TO VECTOR)
+    if(checkSpawnTimer() && spawn && enemies.size() < enemyCap)
+        enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
 }
 
 /**
@@ -271,15 +260,21 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/shotgun.png"))
         textures["SHOTGUN"] = temp;
+
+    if(temp.loadFromFile("Textures/wolf.png"))
+        textures["ENEMY_WOLF"] = temp;
+
+    if(temp.loadFromFile("Textures/bull.png"))
+        textures["ENEMY_BULL"] = temp;
 }
 
 void MainMap::checkUpgrade(int score)
 {
 
     if(score==upAvailable[upAvailable.size()-1]&&upgrading==false){
-        dmgUp->setPosition(sf::Vector2f(player->getPosition().x-300,player->getPosition().y));
+        dmgUp->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
         bullSpeedUp->setPosition(player->getPosition());
-        fireRateUp->setPosition(sf::Vector2f(player->getPosition().x+300,player->getPosition().y));
+        fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2) ,player->getPosition().y));
         upAvailable.pop_back();
         runUpgrade();
         upgrading=true;

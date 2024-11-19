@@ -18,6 +18,7 @@ class Map {
         float getTotalSize() const;
         sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
+        sf::Vector2f getViewCenter() const;
         void setViewCenter(float xpos, float ypos);
         
         bool viewContains(sf::Vector2f objPos) const;
