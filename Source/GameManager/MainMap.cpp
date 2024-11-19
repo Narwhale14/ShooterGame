@@ -101,13 +101,8 @@ void MainMap::update(const float& dt) {
         dmgUp->update(mousePosView);
         fireRateUp->update(mousePosView);
         bullSpeedUp->update(mousePosView);
-
-        return;
-    }
-
-    updateMobs(dt, player->isAlive());
-
-    if(player->isAlive() && !upgrading) {
+    } else if(player->isAlive() && !upgrading) {
+        updateMobs(dt, player->isAlive());
         updateInput(dt);
         player->update();
         player->updateLevelBar(map->getViewCenter());
@@ -137,30 +132,32 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
             if(player->increaseScore(enemies[i]->getXPValue()))
                 upgrading = true;
             
-        } else if(player->isAlive()) {
-             enemies[i]->update();
+            continue;
+        }
 
-            // Tracks enemy to player and follows them
-            enemies[i]->trackToPlayer(player->getPosition());
-            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
-                enemies[i]->followPlayer(dt, player->getPosition());
+        enemies[i]->update();
 
-            // If enemy is touching player and is alive, damage player
-            if(player->checkCollision(enemies[i]->getHitboxBounds()) && !player->getImmunity())
-                player->negateHealth(10);
+        // Tracks enemy to player and follows them
+        enemies[i]->trackToPlayer(player->getPosition());
+        if(!enemies[i]->checkCollision(player->getHitboxBounds()))
+            enemies[i]->followPlayer(dt, player->getPosition());
 
-            // If a bullet is touching enemy, damage enemy
-            for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
-                if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
-                    enemies[i]->negateHealth(100);
+        // If enemy is touching player and is alive, damage player
+        if(player->checkCollision(enemies[i]->getHitboxBounds()) && !player->getImmunity())
+            player->negateHealth(10);
 
-                    // Deletes bullet
-                    if(player->getActiveBullets()[i] != nullptr) {
-                        delete player->getActiveBullets()[i];
-                        player->getActiveBullets().erase(player->getActiveBullets().begin() + i);
-                    }
+        // If a bullet is touching enemy, damage enemy
+        for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
+            if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
+                enemies[i]->negateHealth(100);
+
+                // Deletes bullet
+                if(player->getActiveBullets()[i] != nullptr) {
+                    delete player->getActiveBullets()[i];
+                    player->getActiveBullets().erase(player->getActiveBullets().begin() + i);
                 }
             }
+            
         }
     }
 
