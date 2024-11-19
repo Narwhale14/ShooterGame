@@ -96,20 +96,22 @@ void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
     checkUpgrade(player->getScore());
+
     if(!pause){
         updateMobs(dt, player->isAlive());
 
         if(player->isAlive()) {
             updateInput(dt);
             player->update();
+            player->updateLevelBar(map->getViewCenter());
         }
     }
+
     if(upgrading){
         dmgUp->update(mousePosView);
         fireRateUp->update(mousePosView);
         bullSpeedUp->update(mousePosView);
     }
-
 }
 
 /**
@@ -151,7 +153,7 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
         }
     }
 
-    // Spawns new enemy if timer passes interval (ADDS TO VECTOR)
+    // Spawns new enemy if timer passes interval
     if(checkSpawnTimer() && spawn && enemies.size() < enemyCap)
         enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
 }
@@ -197,6 +199,7 @@ void MainMap::render(sf::RenderTarget* target) {
     this->renderEnemies(target);
 
     player->render(*target);
+    player->renderLevelBar(*target);
     
     if(upgrading){
         dmgUp->render(*target);

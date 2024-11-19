@@ -51,7 +51,7 @@ HealthBar::~HealthBar() {
  */
 void HealthBar::setPosition(float pos_x, float pos_y) {
     barBack->setPosition(pos_x, pos_y);
-    barMain->setPosition(pos_x, pos_y);
+    barMain->setPosition(barBack->getPosition());
 }
 
 /**
