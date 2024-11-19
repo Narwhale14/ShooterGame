@@ -27,6 +27,7 @@ class HealthBar {
 
         sf::RectangleShape barBack;
         sf::RectangleShape barMain;
+        float maxMainBarSize;
 
         sf::Color color;
 };

@@ -98,10 +98,10 @@ void Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 }
 
 void Bullet::render(sf::RenderTarget& target) {
-    if(sprite) {
+    if(sprite)
         target.draw(*sprite);
-        hitbox->render(target);
-    }
+
+    hitbox->render(target);
 }
 
 sf::Vector2f Bullet::getPostion(){

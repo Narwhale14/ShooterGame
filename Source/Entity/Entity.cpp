@@ -99,8 +99,8 @@ void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_
  * 
  * @param damage 
  */
-void Entity::negateHealth(int damage) {
-    healthBar->setHealth(healthBar->getHealth() - damage);
+void Entity::changeHealth(int incoming) {
+    healthBar->setHealth(healthBar->getHealth() + incoming);
     immunityTimer.restart();
 }
 

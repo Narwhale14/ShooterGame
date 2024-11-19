@@ -32,6 +32,8 @@ HealthBar::HealthBar(float size_x, float size_y, float pos_x, float pos_y) {
 
     maxHealth = 100;
     health = maxHealth;
+
+    maxMainBarSize = barMain.getSize().x;
 }
 
 /**
@@ -61,10 +63,12 @@ void HealthBar::setPosition(float pos_x, float pos_y) {
 void HealthBar::setHealth(int new_health) {
     if(new_health < 0)
         health = 0;
+    else if(new_health > 100)
+        health = 100;
     else
         health = new_health;
 
-    barMain.setSize(sf::Vector2f(barMain.getSize().x * (health / static_cast<float>(maxHealth)), barMain.getSize().y));
+    barMain.setSize(sf::Vector2f(maxMainBarSize * (health / static_cast<float>(maxHealth)), barMain.getSize().y));
 }
 
 /**

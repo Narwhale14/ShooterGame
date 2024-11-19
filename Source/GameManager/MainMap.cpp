@@ -19,7 +19,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 2000;
-    enemyCap = 10;
+    enemyCap = 1;
 
     map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
@@ -152,6 +152,8 @@ void MainMap::updateMobs(const float& dt) {
             // Checks if player levels up from getting xp from killing enemy
             if(levelBar->addXp(enemies[i]->getXPValue()))
                 upgrading = true;
+
+            player->changeHealth(5);
             
             continue;
         }
@@ -172,20 +174,18 @@ void MainMap::updateMobs(const float& dt) {
             map->containInMap(enemies[i]);
         }
 
-        std::cout << enemies[i]->getState() << std::endl;
-
         // If enemy is touching player and is alive, damage player
         if(player->checkCollision(enemies[i]->getHitboxBounds()) && !player->getImmunity())
-            player->negateHealth(10);
+            player->changeHealth(-10);
 
         // If a bullet is touching enemy, damage enemy
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
-                enemies[i]->negateHealth(10);
+                enemies[i]->changeHealth(-10);
                 enemies[i]->setState(1); // Enraged
 
-                delete player->getActiveBullets()[i];
-                player->getActiveBullets().erase(player->getActiveBullets().begin() + i);
+                delete player->getActiveBullets()[j];
+                player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
             }
         }
     }
