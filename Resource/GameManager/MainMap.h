@@ -39,7 +39,7 @@ class MainMap : public State {
         void initializeFonts();
 
         void updateDamageCollisions();
-        void updateMobs(const float& dt, bool spawn);
+        void updateMobs(const float& dt);
         void renderEnemies(sf::RenderTarget* target);
         void updateUpgrade();
 

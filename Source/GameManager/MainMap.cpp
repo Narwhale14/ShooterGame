@@ -18,7 +18,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
     srand(time(0));
 
-    spawnIntervalMS = 5000;
+    spawnIntervalMS = 2000;
     enemyCap = 10;
 
     map = new Map(window, 10, 100.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
@@ -95,14 +95,14 @@ void MainMap::move(const float& dt, const float dir_x, const float dir_y, const 
 void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
-    updateUpgrade();
 
     if(upgrading) {
         dmgUp->update(mousePosView);
         fireRateUp->update(mousePosView);
         bullSpeedUp->update(mousePosView);
+        updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
-        updateMobs(dt, player->isAlive());
+        updateMobs(dt);
         updateInput(dt);
         player->update();
         player->updateLevelBar(map->getViewCenter());
@@ -114,11 +114,9 @@ void MainMap::update(const float& dt) {
  * 
  * @param dt 
  */
-void MainMap::updateMobs(const float& dt, bool spawn) {
+void MainMap::updateMobs(const float& dt) {
     int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
     int minRange = player->getHitboxBounds().width;
-
-    std::cout << upgrading << std::endl;
 
     sf::Vector2u getRandCoords(rand() % maxRange + minRange, rand() % maxRange + minRange);
 
@@ -162,7 +160,7 @@ void MainMap::updateMobs(const float& dt, bool spawn) {
     }
 
     // Spawns new enemy if timer passes interval
-    if(checkSpawnTimer() && spawn && enemies.size() < enemyCap)
+    if(checkSpawnTimer() && player->isAlive() && enemies.size() < enemyCap)
         enemies.emplace_back(new Enemy(textures, getRandCoords.x, getRandCoords.y));
 }
 

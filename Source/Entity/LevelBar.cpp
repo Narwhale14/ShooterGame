@@ -66,7 +66,7 @@ int LevelBar::getXp() const {
 bool LevelBar::addXp(int incoming) {
     xp += incoming;
 
-    if(xp > requiredXpToLevelUp) {
+    if(xp >= requiredXpToLevelUp) {
         xp -= requiredXpToLevelUp;
         requiredXpToLevelUp *= levelRatio;
         level++;

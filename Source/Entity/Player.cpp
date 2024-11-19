@@ -140,10 +140,7 @@ void Player::updateLevelBar(const sf::Vector2f& viewPos) {
  * @return false 
  */
 bool Player::increaseScore(int xp) const {
-    if(levelBar->addXp(xp))
-        return true;
-    
-    return false;
+    return levelBar->addXp(xp);
 }
 
 void Player::increaseDmg()

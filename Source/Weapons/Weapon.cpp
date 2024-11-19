@@ -60,7 +60,7 @@ void Weapon::renderBull(sf::RenderTarget& target) {
 }
 
 /**
- * @brief Initializes sprite and sets its origin to the center + scales it down to 10%
+ * @brief Initializes sprite and sets its origin to the center
  * 
  * @param texture a pointer pointing to a texture
  */
