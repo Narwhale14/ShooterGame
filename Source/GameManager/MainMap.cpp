@@ -19,9 +19,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 1;
+    enemyCap = 15;
 
-    map = new Map(window, 10, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
@@ -145,7 +145,7 @@ void MainMap::update(const float& dt) {
 void MainMap::updateMobs(const float& dt) {
     for(size_t i = 0; i < enemies.size(); i++) { // All enemies
         // If dead, delete enemy
-        if(!enemies[i]->isAlive() || enemies[i] == nullptr) {
+        if(!enemies[i]->isAlive()) {
             delete enemies[i];
             enemies.erase(enemies.begin() + i);
 

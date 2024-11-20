@@ -180,7 +180,7 @@ void Enemy::setState(short unsigned state) {
 short unsigned Enemy::generateEnemyType() {
     int value = (rand() % 100) + 1;
 
-    if(value <= 20)
+    if(value <= 33)
         return wolf;
     else
         return bull;
