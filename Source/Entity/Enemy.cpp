@@ -35,7 +35,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
 
     setPosition(sf::Vector2f(x, y));
 
-    createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
+    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red, true);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
     sightDistance = 7;

@@ -60,9 +60,9 @@ void Object::showHitbox(bool visible) {
  * @param width width of hitbox
  * @param height height of hitbox
  */
-void Object::createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color) {
+void Object::createHitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity) {
     this->color = color;
-    hitbox = new Hitbox(s, offset_x, offset_y, width, height, this->color);
+    hitbox = new Hitbox(s, width, height, this->color, isEntity);
 }
 
 /**

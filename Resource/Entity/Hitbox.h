@@ -12,7 +12,7 @@
 
 class Hitbox {
     public:
-        Hitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
+        Hitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity);
         ~Hitbox();
 
         sf::Vector2f getPosition();
@@ -22,14 +22,16 @@ class Hitbox {
         void setVisibility(bool visible);
 
         void update();
+        void updateNextBox(sf::Vector2f velocity);
         void render(sf::RenderTarget& target);
     private:
         sf::RectangleShape box;
         sf::Sprite* sprite;
 
-        float offsetX;
-        float offsetY;
+        sf::RectangleShape nextBox;
+
         bool visible;
+        bool isEntity;
 };
 
 #endif

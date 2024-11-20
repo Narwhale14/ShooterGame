@@ -127,4 +127,7 @@ void Entity::move(const float& dt, const float dir_x, const float dir_y) {
 
     if(sprite)
         sprite->move(velocity.x, velocity.y);
+
+    if(hitbox)
+        hitbox->updateNextBox(sf::Vector2f(velocity.x * 5, velocity.y * 5));
 }
