@@ -27,13 +27,11 @@ class MainMap : public State {
         Enemy* enemy;
 
         Map* map;
-        sf::View view;
         
         std::vector<Enemy*> enemies;
         sf::Clock spawnTimer;
-        sf::Clock despawnTimer;
         int spawnIntervalMS;
-        int despawnIntervalMS;
+        
         size_t enemyCap;
 
         LevelBar* levelBar;

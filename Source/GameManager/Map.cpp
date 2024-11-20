@@ -111,6 +111,22 @@ bool Map::viewContains(sf::Vector2f objPos) const {
 }
 
 /**
+ * @brief Determins if an obj is touching map border
+ * 
+ * @param objPos 
+ * @return true 
+ * @return false 
+ */
+bool Map::borderIsTouching(sf::Vector2f objPos) const {
+    sf::Vector2f objGridPos(static_cast<int>(objPos.x / gridSize) + 1, static_cast<int>(objPos.y / gridSize) + 1);
+
+    if(objGridPos.x == 1 || objGridPos.x == mapSize || objGridPos.y == 1 || objGridPos.y == mapSize)
+        return true;
+    
+    return false;
+}
+
+/**
  * @brief Checks if passed entity is in map and limits it to it's bounds
  * 
  * @param entity 

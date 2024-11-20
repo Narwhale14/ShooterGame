@@ -23,6 +23,8 @@ class Map {
         void setViewCenter(float xpos, float ypos);
         
         bool viewContains(sf::Vector2f objPos) const;
+        bool borderIsTouching(sf::Vector2f objPos) const;
+
         void containInMap(Entity* entity);
         
         void render(sf::RenderTarget& target);

@@ -23,11 +23,15 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
             createSprite(&textures["ENEMY_WOLF"], 0.4f);
             movementSpeed = 300;
             xpValue = 15;
+            killHealthValue = 7;
+            sightDistance = 8;
             break;
         case 1:
             createSprite(&textures["ENEMY_BULL"], 0.4f);
             movementSpeed = 200;
             xpValue = 10;
+            sightDistance = 7;
+            killHealthValue = 5;
             break;
         default:
             exit(1);
@@ -38,8 +42,8 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red, true);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
-    sightDistance = 7;
-    state = idle;
+    state = relaxed;
+    relaxationTimeMS = 3000;
 
     thresholdHeath = healthBar->getHealth() / 3;
     fearSpeedMultiplier = 1.3f;
@@ -72,6 +76,15 @@ int Enemy::getSightDistance() const {
 }
 
 /**
+ * @brief Gets the amount of HP player gains from killing enemy
+ * 
+ * @return int 
+ */
+int Enemy::getKillHealthValue() const {
+    return killHealthValue;
+}
+
+/**
  * @brief Gets the enemy type
  * 
  * @return short unsigned 
@@ -87,6 +100,24 @@ short unsigned Enemy::getType() const {
  */
 short unsigned Enemy::getState() const {
     return state;
+}
+
+/**
+ * @brief Gets relaxation timer
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::relaxationTimerPassed() const {
+    return relaxationTimer.getElapsedTime().asMilliseconds() > relaxationTimeMS;
+}
+
+/**
+ * @brief Restarts clock externally
+ * 
+ */
+void Enemy::restartRelaxationTimer() {
+    relaxationTimer.restart();
 }
 
 /**
@@ -113,6 +144,14 @@ short unsigned Enemy::generateEnemyType() {
 }
 
 /**
+ * @brief Relaxes enemy
+ * 
+ */
+void Enemy::relax() {
+    state = relaxed;
+}
+
+/**
  * @brief Tracks enemy to position
  * 
  * @param playerPosition 
@@ -123,7 +162,7 @@ void Enemy::track(sf::Vector2f pos) {
 
     angle = ((atan2(dist_y, dist_x)) * 180 / 3.14);
     
-    if(state == enraged)
+    if(state == enraged || state == determined)
         sprite->setRotation(angle - 90);
     else if(state == scared)
         sprite->setRotation(angle - 270);
@@ -136,10 +175,12 @@ void Enemy::track(sf::Vector2f pos) {
  * @param pos 
  */
 void Enemy::follow(const float& dt, sf::Vector2f pos) {
-    if(state == enraged)
+    if(state == enraged) // Normal speed
         move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
-    else if(state == scared)
+    else if(state == scared) // Running away faster
         move(dt, -cos(angle * 3.14 / 180) * fearSpeedMultiplier, -sin(angle * 3.14 / 180) * fearSpeedMultiplier);
+    else if(state == determined) // Attacking faster
+        move(dt, cos(angle * 3.14 / 180) * fearSpeedMultiplier, sin(angle * 3.14 / 180) * fearSpeedMultiplier);
 }
 
 /**
@@ -166,6 +207,6 @@ void Enemy::update() {
     healthBar->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
     hitbox->update();
 
-    if(healthBar->getHealth() < thresholdHeath)
+    if(healthBar->getHealth() < thresholdHeath && state != determined && state != relaxed)
         state = scared;
 }

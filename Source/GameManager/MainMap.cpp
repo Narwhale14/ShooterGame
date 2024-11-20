@@ -18,10 +18,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
     srand(time(0));
 
-    spawnIntervalMS = 2000;
-    enemyCap = 1;
+    spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
+    enemyCap = 10;
 
-    map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 30, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
@@ -93,12 +93,12 @@ bool MainMap::checkSpawnTimer() {
  * 
  */
 void MainMap::spawnEnemy() {
-    int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
-    int minRange = player->getHitboxBounds().width;
-
     // Makes sure enemy spawns away from player
     sf::Vector2f getRandCoords;
     while(true) {
+        int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
+        int minRange = player->getHitboxBounds().width;
+
         getRandCoords.x = rand() % maxRange + minRange;
         getRandCoords.y = rand() % maxRange + minRange;
 
@@ -153,7 +153,7 @@ void MainMap::updateMobs(const float& dt) {
             if(levelBar->addXp(enemies[i]->getXPValue()))
                 upgrading = true;
 
-            player->changeHealth(5);
+            player->changeHealth(enemies[i]->getKillHealthValue());
             
             continue;
         }
@@ -162,7 +162,7 @@ void MainMap::updateMobs(const float& dt) {
 
         // Checks if player is close to enemy, and moves the enemy towards play when it is, or when enemy is enraged
         if(enemies[i]->getDistanceTo(player->getPosition()) < map->getGridSize() * enemies[i]->getSightDistance() || enemies[i]->getState() != 0) {
-            if(enemies[i]->getState() != 2)
+            if(enemies[i]->getState() != 2 && enemies[i]->getState() != 3)
                 enemies[i]->setState(1); // Enraged if not scared
 
             enemies[i]->track(player->getPosition());
@@ -172,6 +172,18 @@ void MainMap::updateMobs(const float& dt) {
                 enemies[i]->follow(dt, player->getPosition());
 
             map->containInMap(enemies[i]);
+
+            // If enemy is touching border while running from player, become determined
+            if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContains(enemies[i]->getPosition()))
+                enemies[i]->setState(3);
+
+            // If enemy is off screen for longer than a set despawn timer
+            if(!map->viewContains(enemies[i]->getPosition())) {
+                if(enemies[i]->relaxationTimerPassed())
+                    enemies[i]->setState(0); // Idle
+            } else {
+                enemies[i]->restartRelaxationTimer();
+            }
         }
 
         // If enemy is touching player and is alive, damage player
@@ -182,7 +194,10 @@ void MainMap::updateMobs(const float& dt) {
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
                 enemies[i]->changeHealth(-10);
-                enemies[i]->setState(1); // Enraged
+
+                // If enemy is not determined
+                if(enemies[i]->getState() != 3)
+                    enemies[i]->setState(1); // Enraged
 
                 delete player->getActiveBullets()[j];
                 player->getActiveBullets().erase(player->getActiveBullets().begin() + j);

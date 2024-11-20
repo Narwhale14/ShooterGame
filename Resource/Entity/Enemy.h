@@ -17,11 +17,15 @@ class Enemy : public Entity {
 
         int getXPValue() const;
         int getSightDistance() const;
+        int getKillHealthValue() const;
         short unsigned getType() const;
         short unsigned getState() const;
+        bool relaxationTimerPassed() const;
 
         void setState(short unsigned state);
+        void restartRelaxationTimer();
 
+        void relax();
         void track(sf::Vector2f playerPosition);
         void follow(const float& dt, sf::Vector2f playerPosition);
 
@@ -31,10 +35,14 @@ class Enemy : public Entity {
         enum type {wolf = 0, bull};
         short unsigned type;
 
-        enum state {idle = 0, enraged, scared};
+        enum state {relaxed = 0, enraged, scared, determined};
         short unsigned state;
 
+        sf::Clock relaxationTimer;
+        int relaxationTimeMS;
+
         int xpValue;
+        int killHealthValue;
         int sightDistance;
 
         float fearSpeedMultiplier;
