@@ -8,7 +8,7 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "State.h"
+#include "Settings.h"
 
 class MainMenu : public State {
     public:
