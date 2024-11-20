@@ -81,9 +81,7 @@ void Button::setPosition(sf::Vector2f position) {
     if(sprite)
         sprite->setPosition(position.x, position.y);
 
-    unsigned int fontSize = button.getGlobalBounds().height / 2;
-    text.setCharacterSize(fontSize);
-    text.setPosition(position.x, position.y - fontSize / 4);
+    text.setPosition(position.x, position.y - button.getGlobalBounds().height / 8);
 }
 
 /**

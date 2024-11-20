@@ -19,11 +19,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 15;
+    enemyCap = 10;
 
     map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
-    levelBar = new LevelBar(player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
+    levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
     dmgUp = new Button(fonts["SONO_R"], "DAMAGE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     fireRateUp = new Button(fonts["SONO_R"], "FIRE RATE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
@@ -209,26 +209,37 @@ void MainMap::updateMobs(const float& dt) {
  * @param dt deltaTime
  */
 void MainMap::updateInput(const float& dt) {
-    // Updates weapon input
-    move(dt, 0.f, 0.f, player->getMovementSpeed());
+    sf::Vector2f velocity(0.f, 0.f);
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT"))) && player->getHandheldType() == 1)
         player->useHandheld(mousePosView);
     else if(!(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SHOOT")))))
         player->stopHandheld(mousePosView);
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_LEFT"))))
-        move(dt, -1.f, 0.f, player->getMovementSpeed());
+        velocity.x = -1;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_RIGHT"))))
-        move(dt, 1.f, 0.f, player->getMovementSpeed());
+        velocity.x = 1;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_UP"))))
-        move(dt, 0.f, -1.f, player->getMovementSpeed());
+        velocity.y = -1;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
-        move(dt, 0.f, 1.f, player->getMovementSpeed());
+        velocity.y = 1;
 
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SWAP_TO_FISTS"))))
+        player->setHandheldType(0);
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SWAP_TO_GUN_1"))))
+        player->setHandheldType(1);
+
+    if(abs(velocity.x) == abs(velocity.y) && velocity.x != 0) {
+        velocity.x /= sqrt(2);
+        velocity.y /= sqrt(2);
+    }
+
+    move(dt, velocity.x, velocity.y, player->getMovementSpeed());
     player->updateRotation(mousePosView);
 }
 
@@ -358,4 +369,7 @@ void MainMap::initializeFonts() {
 
     if(temp.loadFromFile("Fonts/Sono-Regular.ttf"))
         fonts["SONO_R"] = temp;
+
+    if(temp.loadFromFile("Fonts/Sono-Bold.ttf"))
+        fonts["SONO_B"] = temp;
 }

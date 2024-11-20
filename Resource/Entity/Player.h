@@ -16,6 +16,7 @@ class Player : public Entity {
         virtual ~Player();
 
         std::deque<Bullet*>& getActiveBullets() const;
+        unsigned short getHandheldType() const;
 
         void increaseDmg();
         void increasefireRate();
@@ -23,6 +24,7 @@ class Player : public Entity {
 
         virtual void useHandheld(const sf::Vector2f& mousePos);
         virtual void stopHandheld(const sf::Vector2f& mousePos);
+        void setHandheldType(unsigned short type);
 
         virtual void updateRotation(const sf::Vector2f& mousePos);
         virtual void update();

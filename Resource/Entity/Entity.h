@@ -37,6 +37,8 @@ class Entity : public Object {
 
         int movementSpeed;
         float angle;
+
+        float multiplier;
 };
 
 #endif

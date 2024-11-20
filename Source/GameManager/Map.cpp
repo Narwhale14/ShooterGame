@@ -107,7 +107,7 @@ void Map::setViewCenter(float xpos, float ypos) {
  */
 bool Map::viewContains(sf::Vector2f objPos) const {
     return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - gridSize) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - gridSize)
-        && (objPos.x < view.getCenter().x + (view.getSize().x / 2)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) );
+        && (objPos.x < view.getCenter().x + (view.getSize().x / 2) + gridSize) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) + gridSize);
 }
 
 /**

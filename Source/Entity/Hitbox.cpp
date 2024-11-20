@@ -27,7 +27,7 @@ Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color, bool i
     box.setOutlineThickness(1.f);
     box.setOutlineColor(color);
 
-    visible = true;
+    visible = false;
     this->isEntity = isEntity;
 
     if(this->isEntity) {
@@ -102,9 +102,9 @@ void Hitbox::updateNextBox(sf::Vector2f velocity) {
  * @param target 
  */
 void Hitbox::render(sf::RenderTarget& target) {
-    if(visible)
-        target.draw(box);
-
     if(visible && isEntity)
         target.draw(nextBox);
+
+    if(visible)
+        target.draw(box);
 }
