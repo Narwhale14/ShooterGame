@@ -26,6 +26,7 @@ class Player : public Entity {
 
         virtual void updateRotation(const sf::Vector2f& mousePos);
         virtual void update();
+        int getDmg();
 
         virtual void render(sf::RenderTarget& target);
     private:

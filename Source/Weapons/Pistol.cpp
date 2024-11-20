@@ -49,6 +49,7 @@ void Pistol::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         for(unsigned int i=0;i<BulletShot.size();i++){ 
             BulletShot[i]->fireBull(mouseLoc,playerLoc);
             if(!(BulletShot.front()->getFiringStat())){
+                delete BulletShot.front();
                 BulletShot.pop_front();
             }
         }
