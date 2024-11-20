@@ -17,13 +17,16 @@ class Entity : public Object {
 
         float getMovementSpeed();
         virtual sf::Vector2f getPosition();
+        sf::Vector2f getVelocity();
         float getDistanceTo(sf::Vector2f objPos);
         bool isAlive();
 
         virtual void setPosition(sf::Vector2f pos);
+        void setVelocity(sf::Vector2f new_velocity);
 
         void changeSprite(sf::Texture* texture);
         virtual void changeHealth(int incoming);
+        bool checkCollision(const sf::FloatRect rect);
         
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
 

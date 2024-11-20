@@ -27,7 +27,7 @@ Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color, bool i
     box.setOutlineThickness(1.f);
     box.setOutlineColor(color);
 
-    visible = false;
+    visible = true;
     this->isEntity = isEntity;
 
     if(this->isEntity) {
@@ -63,6 +63,15 @@ sf::Vector2f Hitbox::getPosition() {
  */
 sf::FloatRect Hitbox::getGlobalBounds() {
     return box.getGlobalBounds();
+}
+
+/**
+ * @brief Returns next pos box bounds
+ * 
+ * @return sf::FloatRect 
+ */
+sf::FloatRect Hitbox::getNextPosBounds() {
+    return nextBox.getGlobalBounds();
 }
 
 /**

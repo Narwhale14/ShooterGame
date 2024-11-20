@@ -85,6 +85,17 @@ void Entity::changeSprite(sf::Texture* texture) {
 }
 
 /**
+ * @brief Checks to see if hitbox collides with another FloatRect
+ * 
+ * @param rect 
+ * @return true 
+ * @return false 
+ */
+bool Entity::checkCollision(const sf::FloatRect rect) {
+    return hitbox->getGlobalBounds().intersects(rect);
+}
+
+/**
  * @brief Creates healthbar
  * 
  * @param size_x 
