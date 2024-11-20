@@ -19,9 +19,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 10;
+    enemyCap = 1;
 
-    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 10, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
@@ -178,12 +178,8 @@ void MainMap::updateMobs(const float& dt) {
                 enemies[i]->setState(3);
 
             // If enemy is off screen for longer than a set despawn timer
-            if(!map->viewContains(enemies[i]->getPosition())) {
-                if(enemies[i]->relaxationTimerPassed())
-                    enemies[i]->setState(0); // Idle
-            } else {
-                enemies[i]->restartRelaxationTimer();
-            }
+            if(!map->viewContains(enemies[i]->getPosition()) && enemies[i]->relaxationTimerPassed())
+                enemies[i]->setState(0); // Idle
         }
 
         // If enemy is touching player and is alive, damage player
@@ -193,6 +189,7 @@ void MainMap::updateMobs(const float& dt) {
         // If a bullet is touching enemy, damage enemy
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
+                enemies[i]->resetInjuryTimer();
                 enemies[i]->changeHealth(-10);
 
                 // If enemy is not determined
@@ -271,7 +268,6 @@ void MainMap::updateLevelBar() {
  * @param target target window
  */
 void MainMap::render(sf::RenderTarget* target) {
-    // If target is a nullptr, then set target to the window used from State class
     if(!target)
         target = window;
 

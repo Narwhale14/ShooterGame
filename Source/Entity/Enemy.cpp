@@ -47,11 +47,15 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
 
     thresholdHeath = healthBar->getHealth() / 3;
     fearSpeedMultiplier = 1.3f;
+    injurySpeedMultiplier = 0.5f;
 
     biteTimeMS = 500;
+    injuryTimeMS = 250;
 
     angle = (rand() % 360) + 1;
     sprite->setRotation(angle);
+
+    hasBeenRestarted = false;
 }
 
 /**
@@ -113,8 +117,13 @@ short unsigned Enemy::getState() const {
  * @return true 
  * @return false 
  */
-bool Enemy::relaxationTimerPassed() const {
-    return relaxationTimer.getElapsedTime().asMilliseconds() > relaxationTimeMS;
+bool Enemy::relaxationTimerPassed() {
+    if(relaxationTimer.getElapsedTime().asMilliseconds() > relaxationTimeMS) {
+        relaxationTimer.restart();
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -133,11 +142,25 @@ bool Enemy::biteTimerPassed() {
 }
 
 /**
- * @brief Restarts clock externally
+ * @brief Checks if injury timer passed
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::injuryTimerPassed() {
+    if(injuryTimer.getElapsedTime().asMilliseconds() < injuryTimeMS)
+        return true;
+
+    return false;
+}
+
+/**
+ * @brief Restarts injury timer
  * 
  */
-void Enemy::restartRelaxationTimer() {
-    relaxationTimer.restart();
+void Enemy::resetInjuryTimer() {
+    injuryTimer.restart();
+    hasBeenRestarted = true;
 }
 
 /**
@@ -195,12 +218,20 @@ void Enemy::track(sf::Vector2f pos) {
  * @param pos 
  */
 void Enemy::follow(const float& dt, sf::Vector2f pos) {
-    if(state == enraged) // Normal speed
-        move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
-    else if(state == scared) // Running away faster
-        move(dt, -cos(angle * 3.14 / 180) * fearSpeedMultiplier, -sin(angle * 3.14 / 180) * fearSpeedMultiplier);
+    float multiplier = 1; // Default speed
+        
+    if(state == scared) // Running away faster
+        multiplier *= -1 * fearSpeedMultiplier;
     else if(state == determined) // Attacking faster
-        move(dt, cos(angle * 3.14 / 180) * fearSpeedMultiplier, sin(angle * 3.14 / 180) * fearSpeedMultiplier);
+        multiplier *= fearSpeedMultiplier;
+
+    if(injuryTimerPassed() && hasBeenRestarted)
+        multiplier *= injurySpeedMultiplier;
+        
+
+    move(dt, cos(angle * 3.14 / 180) * multiplier, sin(angle * 3.14 / 180) * multiplier);
+
+    std::cout << multiplier << std::endl;
 }
 
 /**

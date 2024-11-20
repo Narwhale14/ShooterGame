@@ -20,11 +20,13 @@ class Enemy : public Entity {
         int getKillHealthValue() const;
         short unsigned getType() const;
         short unsigned getState() const;
-        bool relaxationTimerPassed() const;
+
+        bool relaxationTimerPassed();
         bool biteTimerPassed();
+        bool injuryTimerPassed();
 
         void setState(short unsigned state);
-        void restartRelaxationTimer();
+        void resetInjuryTimer();
 
         void relax();
         void track(sf::Vector2f playerPosition);
@@ -44,6 +46,11 @@ class Enemy : public Entity {
 
         sf::Clock biteTimer;
         int biteTimeMS;
+
+        sf::Clock injuryTimer;
+        int injuryTimeMS;
+        float injurySpeedMultiplier;
+        bool hasBeenRestarted; // Literally only used once but it makes me less annoyed
 
         int xpValue;
         int killHealthValue;
