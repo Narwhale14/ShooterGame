@@ -16,7 +16,7 @@ Weapon::Weapon() {
     sprite = nullptr;
     fireRate=1; //the closer to 0 the less time between each shot
     bulletSpeed=6; //when fire rate 1 dont go above 8
-    dmg=1;
+    dmg=100;
 }
 
 std::deque<Bullet*>& Weapon::getBulletList() {
@@ -120,12 +120,13 @@ void Weapon::increaseDmg()
 
 void Weapon::increaseBullSpeed()
 {
+    if(bulletSpeed>0 && bulletSpeed<20)
     bulletSpeed=bulletSpeed+(bulletSpeed*2);
 }
 
 void Weapon::increaseFireRate()
 {
-    if(fireRate>.1){
+    if(fireRate>.1&&fireRate<20){
         fireRate-=.1;
     }
 }
