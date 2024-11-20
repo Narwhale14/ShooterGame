@@ -25,8 +25,9 @@ class HealthBar {
         int health;
         int maxHealth;
 
-        sf::RectangleShape* barBack;
-        sf::RectangleShape* barMain;
+        sf::RectangleShape barBack;
+        sf::RectangleShape barMain;
+        float maxMainBarSize;
 
         sf::Color color;
 };

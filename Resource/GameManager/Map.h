@@ -16,12 +16,15 @@ class Map {
         ~Map();
 
         float getTotalSize() const;
+        float getGridSize() const;
         sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
         sf::Vector2f getViewCenter() const;
         void setViewCenter(float xpos, float ypos);
         
         bool viewContains(sf::Vector2f objPos) const;
+        bool borderIsTouching(sf::Vector2f objPos) const;
+
         void containInMap(Entity* entity);
         
         void render(sf::RenderTarget& target);

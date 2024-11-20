@@ -53,9 +53,8 @@ void Weapon::render(sf::RenderTarget& target) {
 }
 
 void Weapon::renderBull(sf::RenderTarget& target) {
-    for(unsigned int i=0;i<BulletShot.size();i++){
-        if(BulletShot[i]->getFiringStat())
-            BulletShot[i]->render(target);
+    for(size_t i=0;i<BulletShot.size();i++){
+        BulletShot[i]->render(target);
     }
 }
 

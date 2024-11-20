@@ -27,23 +27,28 @@ class MainMap : public State {
         Enemy* enemy;
 
         Map* map;
-        sf::View view;
         
         std::vector<Enemy*> enemies;
         sf::Clock spawnTimer;
         int spawnIntervalMS;
+        
         size_t enemyCap;
+
+        LevelBar* levelBar;
 
         void initializeKeybinds();
         void initializeTextures();
         void initializeFonts();
 
+        bool checkSpawnTimer();
+        void spawnEnemy();
+
         void updateDamageCollisions();
         void updateMobs(const float& dt);
-        void renderEnemies(sf::RenderTarget* target);
+        void updateLevelBar();
         void updateUpgrade();
 
-        bool checkSpawnTimer();
+        void renderEnemies(sf::RenderTarget* target);
 
         Button* dmgUp;
         Button* fireRateUp;

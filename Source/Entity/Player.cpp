@@ -14,10 +14,8 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     createSprite(idle, s);
     setPosition(sf::Vector2f(x, y));
 
-    createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green);
+    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green, true);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
-
-    levelBar = new LevelBar(hitbox->getGlobalBounds().width * 7, hitbox->getGlobalBounds().height * 1.5f, sprite->getPosition().x, sprite->getPosition().y + (hitbox->getGlobalBounds().height * 5.5f));
 
     handheld = new Pistol(textures);
     handheldType = gun;
@@ -40,7 +38,6 @@ std::deque<Bullet*>& Player::getActiveBullets() const {
  */
 Player::~Player() { 
     delete handheld;
-    delete levelBar;
 }
 
 /**
@@ -94,16 +91,6 @@ void Player::render(sf::RenderTarget& target) {
 }
 
 /**
- * @brief Renders level bar
- * 
- * @param target 
- */
-void Player::renderLevelBar(sf::RenderTarget& target) {
-    if(levelBar)
-        levelBar->render(target);
-}
-
-/**
  * @brief Updates player and it's sprite
  * 
  */
@@ -122,25 +109,6 @@ void Player::update() {
             changeSprite(idle);
             break;
     }
-}
-
-/**
- * @brief Updates player level bar
- * 
- */
-void Player::updateLevelBar(const sf::Vector2f& viewPos) {
-    levelBar->setPosition(viewPos.x, viewPos.y + (hitbox->getGlobalBounds().height * 5.5f));
-}
-
-/**
- * @brief Adds xp to player and returns whether player leveled up or not
- * 
- * @param xp 
- * @return true 
- * @return false 
- */
-bool Player::increaseScore(int xp) const {
-    return levelBar->addXp(xp);
 }
 
 void Player::increaseDmg()

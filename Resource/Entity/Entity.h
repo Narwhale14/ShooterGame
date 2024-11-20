@@ -17,14 +17,13 @@ class Entity : public Object {
 
         float getMovementSpeed();
         virtual sf::Vector2f getPosition();
+        float getDistanceTo(sf::Vector2f objPos);
         bool isAlive();
 
-        bool getImmunity();
-
-        virtual void negateHealth(int damage);
         virtual void setPosition(sf::Vector2f pos);
 
         void changeSprite(sf::Texture* texture);
+        virtual void changeHealth(int incoming);
         
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
 
@@ -35,9 +34,6 @@ class Entity : public Object {
     protected:
         HealthBar* healthBar;
         sf::Vector2f velocity;
-
-        sf::Clock immunityTimer;
-        int immunityTimeMS;
 
         int movementSpeed;
         float angle;

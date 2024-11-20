@@ -19,7 +19,7 @@ class Object {
         sf::Color getHitboxColor() const;
         void showHitbox(bool visible);
         
-        void createHitbox(sf::Sprite* s, float offset_x, float offset_y, float width, float height, sf::Color color);
+        void createHitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity);
         virtual bool checkCollision(const sf::FloatRect rect);
 
         virtual void createSprite(sf::Texture* texture, float scale);

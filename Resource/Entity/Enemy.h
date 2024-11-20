@@ -16,16 +16,49 @@ class Enemy : public Entity {
         virtual ~Enemy();
 
         int getXPValue() const;
+        int getSightDistance() const;
+        int getKillHealthValue() const;
+        short unsigned getType() const;
+        short unsigned getState() const;
 
-        void trackToPlayer(sf::Vector2f playerPosition);
-        void followPlayer(const float& dt, sf::Vector2f playerPosition);
+        bool relaxationTimerPassed();
+        bool biteTimerPassed();
+        bool injuryTimerPassed();
+
+        void setState(short unsigned state);
+        void resetInjuryTimer();
+
+        void relax();
+        void track(sf::Vector2f playerPosition);
+        void follow(const float& dt, sf::Vector2f playerPosition);
 
         virtual void render(sf::RenderTarget& target);
         virtual void update();
     private:
         enum type {wolf = 0, bull};
+        short unsigned type;
+
+        enum state {relaxed = 0, enraged, scared, determined};
+        short unsigned state;
+
+        sf::Clock relaxationTimer;
+        int relaxationTimeMS;
+
+        sf::Clock biteTimer;
+        int biteTimeMS;
+
+        sf::Clock injuryTimer;
+        int injuryTimeMS;
+        float injurySpeedMultiplier;
+        bool hasBeenRestarted; // Literally only used once but it makes me less annoyed
 
         int xpValue;
+        int killHealthValue;
+        int sightDistance;
+
+        float fearSpeedMultiplier;
+        int thresholdHeath;
+
         short unsigned generateEnemyType();
 };
 

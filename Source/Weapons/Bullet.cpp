@@ -15,7 +15,7 @@
  */
 Bullet::Bullet(float r, sf::Texture* texture){
     createSprite(texture, 0.1f);
-    createHitbox(sprite, 0.f, 0.f, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
+    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red, false);
     hitbox->setSize(sf::Vector2f(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2));
     range=r;
     adjRng=0;
@@ -98,10 +98,10 @@ void Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 }
 
 void Bullet::render(sf::RenderTarget& target) {
-    if(sprite) {
+    if(sprite)
         target.draw(*sprite);
-        hitbox->render(target);
-    }
+
+    hitbox->render(target);
 }
 
 sf::Vector2f Bullet::getPostion(){

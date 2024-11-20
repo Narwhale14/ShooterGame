@@ -17,8 +17,6 @@ class Player : public Entity {
 
         std::deque<Bullet*>& getActiveBullets() const;
 
-        bool increaseScore(int xp) const;
-
         void increaseDmg();
         void increasefireRate();
         void increaseBullSpeed();
@@ -27,11 +25,9 @@ class Player : public Entity {
         virtual void stopHandheld(const sf::Vector2f& mousePos);
 
         virtual void updateRotation(const sf::Vector2f& mousePos);
-        void updateLevelBar(const sf::Vector2f& viewPos);
         virtual void update();
 
         virtual void render(sf::RenderTarget& target);
-        void renderLevelBar(sf::RenderTarget& target);
     private:
         Weapon* handheld;
 
@@ -41,8 +37,6 @@ class Player : public Entity {
 
         short unsigned handheldType;
         enum weaponTypes {empty = 0, gun};
-
-        LevelBar* levelBar;
 };
 
 #endif

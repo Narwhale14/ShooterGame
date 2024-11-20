@@ -13,8 +13,6 @@ Entity::Entity() {
     
     angle = 0.f;
     scale = 0.f;
-
-    immunityTimeMS = 500;
 }
 
 /**
@@ -55,6 +53,16 @@ sf::Vector2f Entity::getPosition() {
 }
 
 /**
+ * @brief Gets the distance to an obj from the entity
+ * 
+ * @param objPos 
+ * @return float 
+ */
+float Entity::getDistanceTo(sf::Vector2f objPos) {
+    return sqrt(pow(objPos.x - sprite->getPosition().x, 2) + pow(objPos.y - sprite->getPosition().y, 2));
+}
+
+/**
  * @brief Checks if entity is dead
  * 
  * @return true 
@@ -89,19 +97,8 @@ void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_
  * 
  * @param damage 
  */
-void Entity::negateHealth(int damage) {
-    healthBar->setHealth(healthBar->getHealth() - damage);
-    immunityTimer.restart();
-}
-
-/**
- * @brief Checks if hit clock is passed hit timer
- * 
- * @return true 
- * @return false 
- */
-bool Entity::getImmunity() {
-    return immunityTimer.getElapsedTime().asMilliseconds() < immunityTimeMS;
+void Entity::changeHealth(int incoming) {
+    healthBar->setHealth(healthBar->getHealth() + incoming);
 }
 
 /**
@@ -117,4 +114,7 @@ void Entity::move(const float& dt, const float dir_x, const float dir_y) {
 
     if(sprite)
         sprite->move(velocity.x, velocity.y);
+
+    if(hitbox)
+        hitbox->updateNextBox(sf::Vector2f(velocity.x * 5, velocity.y * 5));
 }

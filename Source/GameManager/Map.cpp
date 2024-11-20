@@ -54,6 +54,15 @@ float Map::getTotalSize() const {
 }
 
 /**
+ * @brief Returns the individual grid size
+ * 
+ * @return float 
+ */
+float Map::getGridSize() const {
+    return gridSize;
+}
+
+/**
  * @brief Returns the map center
  * 
  * @return sf::Vector2f 
@@ -99,6 +108,22 @@ void Map::setViewCenter(float xpos, float ypos) {
 bool Map::viewContains(sf::Vector2f objPos) const {
     return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - gridSize) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - gridSize)
         && (objPos.x < view.getCenter().x + (view.getSize().x / 2)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) );
+}
+
+/**
+ * @brief Determins if an obj is touching map border
+ * 
+ * @param objPos 
+ * @return true 
+ * @return false 
+ */
+bool Map::borderIsTouching(sf::Vector2f objPos) const {
+    sf::Vector2f objGridPos(static_cast<int>(objPos.x / gridSize) + 1, static_cast<int>(objPos.y / gridSize) + 1);
+
+    if(objGridPos.x == 1 || objGridPos.x == mapSize || objGridPos.y == 1 || objGridPos.y == mapSize)
+        return true;
+    
+    return false;
 }
 
 /**
