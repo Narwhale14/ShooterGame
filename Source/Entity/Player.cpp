@@ -125,3 +125,8 @@ void Player::increaseBullSpeed()
 {
     handheld->increaseBullSpeed();
 }
+
+int Player::getDmg()
+{
+    return handheld->getDmg();
+}
