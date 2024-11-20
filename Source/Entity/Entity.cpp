@@ -13,8 +13,6 @@ Entity::Entity() {
     
     angle = 0.f;
     scale = 0.f;
-
-    immunityTimeMS = 500;
 }
 
 /**
@@ -101,17 +99,6 @@ void Entity::createHealthBar(float size_x, float size_y, float pos_x, float pos_
  */
 void Entity::changeHealth(int incoming) {
     healthBar->setHealth(healthBar->getHealth() + incoming);
-    immunityTimer.restart();
-}
-
-/**
- * @brief Checks if hit clock is passed hit timer
- * 
- * @return true 
- * @return false 
- */
-bool Entity::getImmunity() {
-    return immunityTimer.getElapsedTime().asMilliseconds() < immunityTimeMS;
 }
 
 /**

@@ -20,8 +20,6 @@ class Entity : public Object {
         float getDistanceTo(sf::Vector2f objPos);
         bool isAlive();
 
-        bool getImmunity();
-
         virtual void setPosition(sf::Vector2f pos);
 
         void changeSprite(sf::Texture* texture);
@@ -36,9 +34,6 @@ class Entity : public Object {
     protected:
         HealthBar* healthBar;
         sf::Vector2f velocity;
-
-        sf::Clock immunityTimer;
-        int immunityTimeMS;
 
         int movementSpeed;
         float angle;

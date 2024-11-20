@@ -21,6 +21,7 @@ class Enemy : public Entity {
         short unsigned getType() const;
         short unsigned getState() const;
         bool relaxationTimerPassed() const;
+        bool biteTimerPassed();
 
         void setState(short unsigned state);
         void restartRelaxationTimer();
@@ -40,6 +41,9 @@ class Enemy : public Entity {
 
         sf::Clock relaxationTimer;
         int relaxationTimeMS;
+
+        sf::Clock biteTimer;
+        int biteTimeMS;
 
         int xpValue;
         int killHealthValue;

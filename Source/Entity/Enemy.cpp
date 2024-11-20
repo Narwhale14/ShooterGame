@@ -47,6 +47,11 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
 
     thresholdHeath = healthBar->getHealth() / 3;
     fearSpeedMultiplier = 1.3f;
+
+    biteTimeMS = 500;
+
+    angle = (rand() % 360) + 1;
+    sprite->setRotation(angle);
 }
 
 /**
@@ -110,6 +115,21 @@ short unsigned Enemy::getState() const {
  */
 bool Enemy::relaxationTimerPassed() const {
     return relaxationTimer.getElapsedTime().asMilliseconds() > relaxationTimeMS;
+}
+
+/**
+ * @brief Checks if hit clock is passed hit timer
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::biteTimerPassed() {
+    if(biteTimer.getElapsedTime().asMilliseconds() > biteTimeMS) {
+        biteTimer.restart();
+        return true;
+    }
+
+    return false;
 }
 
 /**
