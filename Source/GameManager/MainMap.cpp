@@ -19,15 +19,15 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 2;
+    enemyCap = 0;
 
     map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
-    dmgUp = new Button(fonts["SONO_R"], "DAMAGE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
-    fireRateUp = new Button(fonts["SONO_R"], "FIRE RATE+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
-    bullSpeedUp = new Button(fonts["SONO_R"], "BULLET SPEED+", sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
+    fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
+    bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
     
     upgrading = false;
 }
@@ -190,7 +190,7 @@ void MainMap::updateMobs(const float& dt) {
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
                 enemies[i]->resetInjuryTimer();
-                enemies[i]->changeHealth(-10);
+                enemies[i]->changeHealth(-(player->getDmg()));
 
                 // If enemy is not determined
                 if(enemies[i]->getState() != 3)
@@ -253,15 +253,18 @@ void MainMap::updateUpgrade()
     bullSpeedUp->setPosition(player->getPosition());
     fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2) ,player->getPosition().y));
 
-    if(dmgUp->getState()==2){
-        player->increaseDmg();
-        upgrading=false;
-    }else if(fireRateUp->getState()==2){
-        player->increasefireRate();
-        upgrading=false;
-    }else if(bullSpeedUp->getState()==2){
-        player->increaseBullSpeed();
-        upgrading=false;
+    if(upgrading){
+        //TO DO: generate random num and also then include that in if statement for which upgrades will apear
+        if(dmgUp->getState()==2){
+            player->increaseDmg();
+            upgrading=false;
+        }else if(fireRateUp->getState()==2){
+            player->increasefireRate();
+            upgrading=false;
+        }else if(bullSpeedUp->getState()==2){
+            player->increaseBullSpeed();
+            upgrading=false;
+        }
     }
 }
 
@@ -358,6 +361,15 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/bull.png"))
         textures["ENEMY_BULL"] = temp;
+
+    if(temp.loadFromFile("Textures/increaseDmgCard.png"))
+        textures["increaseDmgCard"] = temp;   
+
+    if(temp.loadFromFile("Textures/increaseBullSpeedCard.png"))
+        textures["increaseBullSpeedCard"] = temp;  
+
+    if(temp.loadFromFile("Textures/increaseFireRateCard.png"))
+        textures["increaseFireRateCard"] = temp;   
 }
 
 /**
