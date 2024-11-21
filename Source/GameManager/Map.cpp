@@ -142,21 +142,14 @@ bool Map::borderIsTouching(sf::Vector2f objPos) const {
  * @param entity 
  */
 void Map::updateCollision(Entity* entity) {
-    if(entity->getPosition().x < 0 + entity->getHitboxBounds().width / 2) { // Left wall
+    if(entity->getPosition().x < 0 + entity->getHitboxBounds().width / 2) // Left wall
         entity->setPosition(sf::Vector2f(entity->getHitboxBounds().width / 2, entity->getPosition().y));
-        entity->stopVelocityX();
-    } else if(entity->getPosition().x > this->getTotalSize() - entity->getHitboxBounds().width / 2) { // Right wall
+    else if(entity->getPosition().x > this->getTotalSize() - entity->getHitboxBounds().width / 2) // Right wall
         entity->setPosition(sf::Vector2f(this->getTotalSize() - entity->getHitboxBounds().width / 2, entity->getPosition().y));
-        entity->stopVelocityX();
-    }
-
-    if(entity->getPosition().y < 0 + entity->getHitboxBounds().height / 2) { // Top wall
+    if(entity->getPosition().y < 0 + entity->getHitboxBounds().height / 2) // Top wall
         entity->setPosition(sf::Vector2f(entity->getPosition().x, entity->getHitboxBounds().height / 2));
-        entity->stopVelocityY();
-    } else if(entity->getPosition().y > this->getTotalSize() - entity->getHitboxBounds().height / 2) { // Bottom wall
+    else if(entity->getPosition().y > this->getTotalSize() - entity->getHitboxBounds().height / 2) // Bottom wall
         entity->setPosition(sf::Vector2f(entity->getPosition().x, this->getTotalSize() - entity->getHitboxBounds().height / 2));
-        entity->stopVelocityY();
-    }
 }
 
 /**

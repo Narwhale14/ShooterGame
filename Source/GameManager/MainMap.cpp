@@ -111,14 +111,13 @@ void MainMap::update(const float& dt) {
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
         updateMobs(dt);
+        player->update();
+        updateInput(dt);
 
         if(checkSpawnTimer() && player->isAlive() && enemies.size() < enemyCap)
             spawnEnemy();
 
-        updateInput(dt);
-
         updateLevelBar();
-        player->update();
     }
 }
 
@@ -143,8 +142,6 @@ void MainMap::updateMobs(const float& dt) {
             continue;
         }
 
-        enemies[i]->update();
-
         // Checks if player is close to enemy, and moves the enemy towards play when it is, or when enemy is enraged
         if(enemies[i]->getDistanceTo(player->getPosition()) < map->getGridSize() * enemies[i]->getSightDistance() || enemies[i]->getState() != 0) {
             if(enemies[i]->getState() != 2 && enemies[i]->getState() != 3)
@@ -153,8 +150,8 @@ void MainMap::updateMobs(const float& dt) {
             enemies[i]->track(player->getPosition());
 
             // If not touching player then move towards
-            enemies[i]->checkCollision(player);
-            //enemies[i]->follow(dt, player->getPosition());
+            if(!enemies[i]->checkCollision(player))
+                enemies[i]->follow(dt, player->getPosition());
 
             map->updateCollision(enemies[i]);
 
@@ -166,6 +163,8 @@ void MainMap::updateMobs(const float& dt) {
             if(!map->viewContains(enemies[i]->getPosition()) && enemies[i]->relaxationTimerPassed())
                 enemies[i]->setState(0); // Idle
         }
+
+        enemies[i]->update();
 
         // // If enemy is touching player and is alive, damage player
         // if(player->checkCollision(enemies[i]->getHitboxBounds()) && enemies[i]->biteTimerPassed())

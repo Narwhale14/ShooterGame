@@ -24,12 +24,9 @@ class Entity : public Object {
         virtual void setPosition(sf::Vector2f pos);
         void setVelocity(sf::Vector2f new_velocity);
 
-        void stopVelocityX();
-        void stopVelocityY();
-
         void changeSprite(sf::Texture* texture);
         virtual void changeHealth(int incoming);
-        void checkCollision(Entity* entity);
+        bool checkCollision(Entity* entity);
         
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
 

@@ -48,22 +48,6 @@ float Entity::getMaxVelocity() {
 }
 
 /**
- * @brief Stops X velocity
- * 
- */
-void Entity::stopVelocityX() {
-    velocity.x = 0.f;
-}
-
-/**
- * @brief Stops Y velocity
- * 
- */
-void Entity::stopVelocityY() {
-    velocity.y = 0.f;
-}
-
-/**
  * @brief Returns the entity's position
  * 
  * @return sf::Vector2f 
@@ -113,41 +97,40 @@ const sf::FloatRect& Entity::getNextPositionBounds() const {
  * @return true 
  * @return false 
  */
-void Entity::checkCollision(Entity* entity) {
+bool Entity::checkCollision(Entity* entity) {
     sf::FloatRect homeBounds = hitbox->getGlobalBounds();
     sf::FloatRect entityBounds = entity->getHitboxBounds();
     sf::FloatRect nextPosition = entity->getNextPositionBounds();
 
     if(hitbox->getGlobalBounds().intersects(nextPosition)) {
         // Bottom collision
-        
         if(entityBounds.top < homeBounds.top && entityBounds.top + entityBounds.height < homeBounds.top + homeBounds.height 
         && entityBounds.left < homeBounds.left + homeBounds.width && entityBounds.left + entityBounds.width > homeBounds.left) {
-            entity->stopVelocityY();
             entity->setPosition(sf::Vector2f(entityBounds.left + (entityBounds.width / 2.f), homeBounds.top - (entityBounds.height / 2.f)));
         }
 
         // Top collision
         else if(entityBounds.top > homeBounds.top && entityBounds.top + entityBounds.height > homeBounds.top + homeBounds.height
         && entityBounds.left < homeBounds.left + homeBounds.width && entityBounds.left + entityBounds.width > homeBounds.left) {
-            entity->stopVelocityY();
             entity->setPosition(sf::Vector2f(entityBounds.left + (entityBounds.width / 2.f), homeBounds.top + homeBounds.height + (entityBounds.height / 2.f)));
         }
         
         // Right collision
         if(entityBounds.left < homeBounds.left && entityBounds.left + homeBounds.width < homeBounds.left + homeBounds.width
         && entityBounds.top < homeBounds.top + homeBounds.height && entityBounds.top + entityBounds.height > homeBounds.top) {
-            entity->stopVelocityX();
             entity->setPosition(sf::Vector2f(homeBounds.left - (entityBounds.width / 2.f), entityBounds.top + (entityBounds.height / 2.f)));
         }
         
         // Left collision
         else if(entityBounds.left > homeBounds.left && entityBounds.left + homeBounds.width > homeBounds.left + homeBounds.width
         && entityBounds.top < homeBounds.top + homeBounds.height && entityBounds.top + entityBounds.height > homeBounds.top) {
-            entity->stopVelocityX();
             entity->setPosition(sf::Vector2f(homeBounds.left + homeBounds.width + (entityBounds.width / 2.f), entityBounds.top + (entityBounds.height / 2.f)));
         }
+
+        return true;
     }
+
+    return false;
 }
 
 /**

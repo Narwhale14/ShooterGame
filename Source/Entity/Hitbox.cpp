@@ -71,8 +71,8 @@ const sf::FloatRect Hitbox::getGlobalBounds() {
  * @return sf::FloatRect 
  */
 const sf::FloatRect& Hitbox::getNextPosition(const sf::Vector2f& velocity) {
-    nextPosition.left = box.getPosition().x - (nextPosition.width / 2) + (velocity.x / 50.f);
-    nextPosition.top = box.getPosition().y - (nextPosition.height / 2) + (velocity.y / 50.f);
+    nextPosition.left = box.getPosition().x - (nextPosition.width / 2.f) + (velocity.x / 50.f);
+    nextPosition.top = box.getPosition().y - (nextPosition.height / 2.f) + (velocity.y / 50.f);
 
     return nextPosition;
 }
