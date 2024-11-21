@@ -21,14 +21,14 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     switch(type) {
         case 0:
             createSprite(&textures["ENEMY_WOLF"], 0.4f);
-            movementSpeed = 300;
+            maxVelocity = 300;
             xpValue = 15;
             killHealthValue = 7;
             sightDistance = 8;
             break;
         case 1:
             createSprite(&textures["ENEMY_BULL"], 0.4f);
-            movementSpeed = 200;
+            maxVelocity = 200;
             xpValue = 10;
             sightDistance = 7;
             killHealthValue = 5;

@@ -20,24 +20,24 @@
 Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity) {
     sprite = s;
 
+    if(width > height)
+        height = width;
+    else
+        width = height;
+
     box.setSize(sf::Vector2f(width, height));
     box.setPosition(sprite->getPosition().x, sprite->getPosition().y);
     box.setOrigin(box.getGlobalBounds().width / 2, box.getGlobalBounds().height / 2);
     box.setFillColor(sf::Color::Transparent);
-    box.setOutlineThickness(1.f);
+    box.setOutlineThickness(-1.f);
     box.setOutlineColor(color);
 
-    visible = true;
-    this->isEntity = isEntity;
+    nextPosition.left = 0.f;
+    nextPosition.top = 0.f;
+    nextPosition.width = width;
+    nextPosition.height = height;
 
-    if(this->isEntity) {
-        nextBox.setSize(sf::Vector2f(width, height));
-        nextBox.setPosition(box.getPosition());
-        nextBox.setOrigin(box.getOrigin());
-        nextBox.setFillColor(sf::Color::Transparent);
-        nextBox.setOutlineThickness(1.f);
-        nextBox.setOutlineColor(sf::Color::White);
-    }
+    visible = true;
 }
 /**
  * @brief Destroy the Hitbox:: Hitbox object
@@ -52,7 +52,7 @@ Hitbox::~Hitbox() {
  * 
  * @return sf::Vector2f 
  */
-sf::Vector2f Hitbox::getPosition() {
+const sf::Vector2f Hitbox::getPosition() {
     return box.getPosition();
 }
 
@@ -61,7 +61,7 @@ sf::Vector2f Hitbox::getPosition() {
  * 
  * @return sf::FloatRect 
  */
-sf::FloatRect Hitbox::getGlobalBounds() {
+const sf::FloatRect Hitbox::getGlobalBounds() {
     return box.getGlobalBounds();
 }
 
@@ -70,8 +70,11 @@ sf::FloatRect Hitbox::getGlobalBounds() {
  * 
  * @return sf::FloatRect 
  */
-sf::FloatRect Hitbox::getNextPosBounds() {
-    return nextBox.getGlobalBounds();
+const sf::FloatRect& Hitbox::getNextPosition(const sf::Vector2f& velocity) {
+    nextPosition.left = box.getPosition().x - (nextPosition.width / 2) + (velocity.x / 50.f);
+    nextPosition.top = box.getPosition().y - (nextPosition.height / 2) + (velocity.y / 50.f);
+
+    return nextPosition;
 }
 
 /**
@@ -100,20 +103,12 @@ void Hitbox::update() {
     box.setPosition(sprite->getPosition().x, sprite->getPosition().y);
 }
 
-void Hitbox::updateNextBox(sf::Vector2f velocity) {
-    if(isEntity)
-        nextBox.setPosition(sprite->getPosition().x + velocity.x, sprite->getPosition().y + velocity.y);
-}
-
 /**
  * @brief Draws hitbox
  * 
  * @param target 
  */
 void Hitbox::render(sf::RenderTarget& target) {
-    if(visible && isEntity)
-        target.draw(nextBox);
-
     if(visible)
         target.draw(box);
 }

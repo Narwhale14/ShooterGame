@@ -33,15 +33,6 @@ sf::FloatRect Object::getHitboxBounds() const {
 }
 
 /**
- * @brief Returns next pos bounds
- * 
- * @return sf::FloatRect 
- */
-sf::FloatRect Object::getNextPosBounds() const {
-    return hitbox->getNextPosBounds();
-}
-
-/**
  * @brief Returns the color of thie hitbox (type)
  * 
  * @return sf::Color 

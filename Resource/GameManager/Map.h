@@ -26,7 +26,7 @@ class Map {
         bool viewContains(sf::Vector2f objPos) const;
         bool borderIsTouching(sf::Vector2f objPos) const;
 
-        void containInMap(Entity* entity);
+        void updateCollision(Entity* entity);
         
         void render(sf::RenderTarget& target);
     private:

@@ -16,7 +16,6 @@ class Object {
         virtual ~Object();
         
         sf::FloatRect getHitboxBounds() const;
-        sf::FloatRect getNextPosBounds() const;
         sf::Color getHitboxColor() const;
         void showHitbox(bool visible);
         

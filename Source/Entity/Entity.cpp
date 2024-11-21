@@ -15,6 +15,8 @@ Entity::Entity() {
     scale = 0.f;
 
     multiplier = 1;
+    velocity.x = 0;
+    velocity.y = 0;
 }
 
 /**
@@ -41,8 +43,24 @@ void Entity::setPosition(sf::Vector2f pos) {
  * 
  * @return float 
  */
-float Entity::getMovementSpeed() {
-    return movementSpeed;
+float Entity::getMaxVelocity() {
+    return maxVelocity;
+}
+
+/**
+ * @brief Stops X velocity
+ * 
+ */
+void Entity::stopVelocityX() {
+    velocity.x = 0.f;
+}
+
+/**
+ * @brief Stops Y velocity
+ * 
+ */
+void Entity::stopVelocityY() {
+    velocity.y = 0.f;
 }
 
 /**
@@ -50,7 +68,7 @@ float Entity::getMovementSpeed() {
  * 
  * @return sf::Vector2f 
  */
-sf::Vector2f Entity::getPosition() {
+const sf::Vector2f Entity::getPosition() {
     return sprite->getPosition();
 }
 
@@ -84,24 +102,8 @@ void Entity::changeSprite(sf::Texture* texture) {
     sprite->setTexture(*(this->texture));
 }
 
-/**
- * @brief Checks to see if hitbox collides with another FloatRect and keeps it from entering said hitbox
- * 
- * @param rect 
- * @return true 
- * @return false 
- */
-bool Entity::checkCollisionContain(sf::FloatRect nextPos, const sf::FloatRect bounds) {
-    if(hitbox->getGlobalBounds().intersects(nextPos)) {
-        if(bounds.left < hitbox->getGlobalBounds().left && bounds.left + bounds.width < hitbox->getGlobalBounds().left + hitbox->getGlobalBounds().width
-        && bounds.top < hitbox->getGlobalBounds().top + hitbox->getGlobalBounds().height && bounds.top + bounds.height > hitbox->getGlobalBounds().top) {
-            std::cout << "true!!\n";
-        }
-
-        return true;
-    }
-
-    return false;
+const sf::FloatRect& Entity::getNextPositionBounds() const {
+    return hitbox->getNextPosition(velocity);
 }
 
 /**
@@ -111,8 +113,41 @@ bool Entity::checkCollisionContain(sf::FloatRect nextPos, const sf::FloatRect bo
  * @return true 
  * @return false 
  */
-bool Entity::checkCollision(const sf::FloatRect rect) const {
-    return hitbox->getGlobalBounds().intersects(rect);
+void Entity::checkCollision(Entity* entity) {
+    sf::FloatRect homeBounds = hitbox->getGlobalBounds();
+    sf::FloatRect entityBounds = entity->getHitboxBounds();
+    sf::FloatRect nextPosition = entity->getNextPositionBounds();
+
+    if(hitbox->getGlobalBounds().intersects(nextPosition)) {
+        // Bottom collision
+        
+        if(entityBounds.top < homeBounds.top && entityBounds.top + entityBounds.height < homeBounds.top + homeBounds.height 
+        && entityBounds.left < homeBounds.left + homeBounds.width && entityBounds.left + entityBounds.width > homeBounds.left) {
+            entity->stopVelocityY();
+            entity->setPosition(sf::Vector2f(entityBounds.left + (entityBounds.width / 2.f), homeBounds.top - (entityBounds.height / 2.f)));
+        }
+
+        // Top collision
+        else if(entityBounds.top > homeBounds.top && entityBounds.top + entityBounds.height > homeBounds.top + homeBounds.height
+        && entityBounds.left < homeBounds.left + homeBounds.width && entityBounds.left + entityBounds.width > homeBounds.left) {
+            entity->stopVelocityY();
+            entity->setPosition(sf::Vector2f(entityBounds.left + (entityBounds.width / 2.f), homeBounds.top + homeBounds.height + (entityBounds.height / 2.f)));
+        }
+        
+        // Right collision
+        if(entityBounds.left < homeBounds.left && entityBounds.left + homeBounds.width < homeBounds.left + homeBounds.width
+        && entityBounds.top < homeBounds.top + homeBounds.height && entityBounds.top + entityBounds.height > homeBounds.top) {
+            entity->stopVelocityX();
+            entity->setPosition(sf::Vector2f(homeBounds.left - (entityBounds.width / 2.f), entityBounds.top + (entityBounds.height / 2.f)));
+        }
+        
+        // Left collision
+        else if(entityBounds.left > homeBounds.left && entityBounds.left + homeBounds.width > homeBounds.left + homeBounds.width
+        && entityBounds.top < homeBounds.top + homeBounds.height && entityBounds.top + entityBounds.height > homeBounds.top) {
+            entity->stopVelocityX();
+            entity->setPosition(sf::Vector2f(homeBounds.left + homeBounds.width + (entityBounds.width / 2.f), entityBounds.top + (entityBounds.height / 2.f)));
+        }
+    }
 }
 
 /**
@@ -142,12 +177,8 @@ void Entity::changeHealth(int incoming) {
  * @param dir_y from -1 to 1 in terms velocity on the Y axis
  */
 void Entity::move(const float& dt, const float dir_x, const float dir_y) {
-    velocity.x = dir_x * movementSpeed * dt;
-    velocity.y = dir_y * movementSpeed * dt;
+    velocity.x = maxVelocity * dir_x;
+    velocity.y = maxVelocity * dir_y;
 
-    if(sprite)
-        sprite->move(velocity.x * multiplier, velocity.y * multiplier);
-
-    if(hitbox)
-        hitbox->updateNextBox(sf::Vector2f(velocity.x * 5, velocity.y * 5));
+    sprite->move(velocity.x * multiplier * dt, velocity.y * multiplier * dt);
 }

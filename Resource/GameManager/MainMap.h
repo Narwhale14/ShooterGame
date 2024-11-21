@@ -14,8 +14,7 @@ class MainMap : public State {
     public:
         MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMap();
-
-        void move(const float& dt, const float dir_x, const float dir_y, const float movementSpeed);
+        
         void updateInput(const float& dt);
 
         virtual void checkForQuit();
