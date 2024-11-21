@@ -19,9 +19,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 0;
+    enemyCap = 20;
 
-    map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
@@ -30,6 +30,12 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
     
     upgrading = false;
+    for(unsigned int i=0; i<3;i++)
+        cardChoice2.push_back("DMG");
+    for(unsigned int i=0; i<3;i++)
+        cardChoice2.push_back("FIRERATE");
+    for(unsigned int i=0; i<3;i++)
+        cardChoice2.push_back("BULLSPEED");
 }
 
 /**
@@ -117,12 +123,9 @@ void MainMap::spawnEnemy() {
 void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
+    
 
     if(upgrading) {
-        dmgUp->update(mousePosView);
-        fireRateUp->update(mousePosView);
-        bullSpeedUp->update(mousePosView);
-
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
         updateMobs(dt);
@@ -150,9 +153,18 @@ void MainMap::updateMobs(const float& dt) {
             enemies.erase(enemies.begin() + i);
 
             // Checks if player levels up from getting xp from killing enemy
-            if(levelBar->addXp(enemies[i]->getXPValue()))
+            if(levelBar->addXp(enemies[i]->getXPValue())){
                 upgrading = true;
-
+                //generates the the random menu choices
+                Menu1= rand() % 8;
+                if(Menu1<3)
+                    Menu2=(rand()%5)+3;
+                else if(Menu1<6){
+                    while(Menu2==3||Menu2==4||Menu2==5)
+                        Menu2=rand()%8;
+                }else
+                    Menu2=rand()%5;
+            }
             player->changeHealth(enemies[i]->getKillHealthValue());
             
             continue;
@@ -249,21 +261,56 @@ void MainMap::updateInput(const float& dt) {
  */
 void MainMap::updateUpgrade()
 {
-    dmgUp->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
-    bullSpeedUp->setPosition(player->getPosition());
-    fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2) ,player->getPosition().y));
-
-    if(upgrading){
-        //TO DO: generate random num and also then include that in if statement for which upgrades will apear
+    //based off random menu1 choose the upgrade from cardChoice which conatians the upgrade options
+    if(cardChoice2[Menu1]=="DMG"){
+        dmgUp->update(mousePosView);
+        dmgUp->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
         if(dmgUp->getState()==2){
             player->increaseDmg();
             upgrading=false;
-        }else if(fireRateUp->getState()==2){
+            std::cout<<"Increased Dmg\n";
+        }
+    }else if(cardChoice2[Menu1]=="FIRERATE"){
+        fireRateUp->update(mousePosView);
+        fireRateUp->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(fireRateUp->getState()==2){
             player->increasefireRate();
             upgrading=false;
-        }else if(bullSpeedUp->getState()==2){
+            std::cout<<"Increased Fire Rate\n";
+        } 
+    }else{
+        bullSpeedUp->update(mousePosView);
+        bullSpeedUp->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(bullSpeedUp->getState()==2){
             player->increaseBullSpeed();
             upgrading=false;
+            std::cout<<"Increased BullSpeed\n";
+        }
+    }
+    //based off random menu2 choose the upgrade from cardChoice which conatians the upgrade options
+    if(cardChoice2[Menu2]=="DMG"){
+        dmgUp->update(mousePosView);
+        dmgUp->setPosition(sf::Vector2f(player->getPosition().x + (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(dmgUp->getState()==2){
+            player->increaseDmg();
+            upgrading=false;
+            std::cout<<"Increased Dmg\n";
+        }
+    }else if(cardChoice2[Menu2]=="FIRERATE"){
+        fireRateUp->update(mousePosView);
+        fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(fireRateUp->getState()==2){
+            player->increasefireRate();
+            upgrading=false;
+            std::cout<<"Increased Fire Rate\n";
+        } 
+    }else{
+        bullSpeedUp->update(mousePosView);
+        bullSpeedUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(bullSpeedUp->getState()==2){
+            player->increaseBullSpeed();
+            upgrading=false;
+            std::cout<<"Increased BullSpeed\n";
         }
     }
 }
@@ -294,9 +341,12 @@ void MainMap::render(sf::RenderTarget* target) {
     player->render(*target);
     
     if(upgrading){
-        dmgUp->render(*target);
-        fireRateUp->render(*target);
-        bullSpeedUp->render(*target);
+        if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
+            dmgUp->render(*target);
+        if(cardChoice2[Menu1]=="FIRERATE"||cardChoice2[Menu2]=="FIRERATE")  
+            fireRateUp->render(*target);
+        if(cardChoice2[Menu1]=="BULLSPEED"||cardChoice2[Menu2]=="BULLSPEED")
+            bullSpeedUp->render(*target);
     }
 }
 

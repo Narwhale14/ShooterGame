@@ -54,6 +54,10 @@ class MainMap : public State {
         Button* fireRateUp;
         Button* bullSpeedUp;
         bool upgrading;
+        int Menu1;
+        int Menu2;
+        std::map<int,std::string> cardChoice;
+        std::vector<std::string> cardChoice2;
 };
 
 #endif
