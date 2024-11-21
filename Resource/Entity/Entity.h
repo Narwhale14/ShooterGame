@@ -26,7 +26,8 @@ class Entity : public Object {
 
         void changeSprite(sf::Texture* texture);
         virtual void changeHealth(int incoming);
-        bool checkCollision(const sf::FloatRect rect);
+        bool checkCollisionContain(sf::FloatRect nextPos, const sf::FloatRect bounds);
+        bool checkCollision(const sf::FloatRect rect) const;
         
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
 

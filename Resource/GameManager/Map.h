@@ -17,6 +17,7 @@ class Map {
 
         float getTotalSize() const;
         float getGridSize() const;
+        float getSizeAcross() const;
         sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
         sf::Vector2f getViewCenter() const;

@@ -85,13 +85,33 @@ void Entity::changeSprite(sf::Texture* texture) {
 }
 
 /**
- * @brief Checks to see if hitbox collides with another FloatRect
+ * @brief Checks to see if hitbox collides with another FloatRect and keeps it from entering said hitbox
  * 
  * @param rect 
  * @return true 
  * @return false 
  */
-bool Entity::checkCollision(const sf::FloatRect rect) {
+bool Entity::checkCollisionContain(sf::FloatRect nextPos, const sf::FloatRect bounds) {
+    if(hitbox->getGlobalBounds().intersects(nextPos)) {
+        if(bounds.left < hitbox->getGlobalBounds().left && bounds.left + bounds.width < hitbox->getGlobalBounds().left + hitbox->getGlobalBounds().width
+        && bounds.top < hitbox->getGlobalBounds().top + hitbox->getGlobalBounds().height && bounds.top + bounds.height > hitbox->getGlobalBounds().top) {
+            std::cout << "true!!\n";
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief Checks to see if another hitbox collides with this hitbox
+ * 
+ * @param rect 
+ * @return true 
+ * @return false 
+ */
+bool Entity::checkCollision(const sf::FloatRect rect) const {
     return hitbox->getGlobalBounds().intersects(rect);
 }
 

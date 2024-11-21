@@ -19,9 +19,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 0;
+    enemyCap = 1;
 
-    map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 16, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
@@ -102,7 +102,7 @@ void MainMap::spawnEnemy() {
         getRandCoords.x = rand() % maxRange + minRange;
         getRandCoords.y = rand() % maxRange + minRange;
 
-        if(!map->viewContains(getRandCoords))
+        if(!map->viewContains(getRandCoords) || map->getSizeAcross() < 15)
             break;
     }
 
@@ -168,7 +168,7 @@ void MainMap::updateMobs(const float& dt) {
             enemies[i]->track(player->getPosition());
 
             // If not touching player then move towards
-            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
+            if(!enemies[i]->checkCollisionContain(player->getNextPosBounds(), player->getHitboxBounds()))
                 enemies[i]->follow(dt, player->getPosition());
 
             map->containInMap(enemies[i]);
@@ -183,7 +183,7 @@ void MainMap::updateMobs(const float& dt) {
         }
 
         // If enemy is touching player and is alive, damage player
-        if(player->checkCollision(enemies[i]->getHitboxBounds()) && enemies[i]->biteTimerPassed())
+        if(player->checkCollisionContain(enemies[i]->getNextPosBounds(), enemies[i]->getHitboxBounds()) && enemies[i]->biteTimerPassed())
             player->changeHealth(-10);
 
         // If a bullet is touching enemy, damage enemy

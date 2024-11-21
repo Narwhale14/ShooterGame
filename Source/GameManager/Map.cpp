@@ -54,6 +54,16 @@ float Map::getTotalSize() const {
 }
 
 /**
+ * @brief returns map size
+ * 
+ * @return float 
+ */
+float Map::getSizeAcross() const {
+    return mapSize;
+}
+
+
+/**
  * @brief Returns the individual grid size
  * 
  * @return float 
