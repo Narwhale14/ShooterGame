@@ -8,7 +8,7 @@
 #ifndef SHOTGUN_H
 #define SHOTGUN_H
 
-#include "Pistol.h"
+#include "Lazergun.h"
 
 class Shotgun : public Weapon {
     public:

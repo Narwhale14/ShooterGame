@@ -19,7 +19,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 20;
+    enemyCap = 0;
 
     map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
@@ -30,6 +30,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
     
     upgrading = false;
+    //adds the upgrade options to the vector
     for(unsigned int i=0; i<3;i++)
         cardChoice2.push_back("DMG");
     for(unsigned int i=0; i<3;i++)
@@ -124,7 +125,6 @@ void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
     
-
     if(upgrading) {
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
@@ -419,7 +419,10 @@ void MainMap::initializeTextures() {
         textures["increaseBullSpeedCard"] = temp;  
 
     if(temp.loadFromFile("Textures/increaseFireRateCard.png"))
-        textures["increaseFireRateCard"] = temp;   
+        textures["increaseFireRateCard"] = temp; 
+
+    if(temp.loadFromFile("Textures/lazerBull.png"))
+        textures["LAZERBULL"] = temp; 
 }
 
 /**
