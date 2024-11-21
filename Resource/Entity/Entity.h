@@ -17,7 +17,6 @@ class Entity : public Object {
 
         float getMaxVelocity();
         const sf::Vector2f getPosition();
-        const sf::FloatRect& getNextPositionBounds() const;
         float getDistanceTo(sf::Vector2f objPos);
         bool isAlive();
 
@@ -26,7 +25,7 @@ class Entity : public Object {
 
         void changeSprite(sf::Texture* texture);
         virtual void changeHealth(int incoming);
-        bool checkCollision(Entity* entity);
+        bool checkCollision(const sf::FloatRect rect) const;
         
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
 

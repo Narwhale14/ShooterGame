@@ -86,10 +86,6 @@ void Entity::changeSprite(sf::Texture* texture) {
     sprite->setTexture(*(this->texture));
 }
 
-const sf::FloatRect& Entity::getNextPositionBounds() const {
-    return hitbox->getNextPosition(velocity);
-}
-
 /**
  * @brief Checks to see if another hitbox collides with this hitbox
  * 
@@ -97,40 +93,8 @@ const sf::FloatRect& Entity::getNextPositionBounds() const {
  * @return true 
  * @return false 
  */
-bool Entity::checkCollision(Entity* entity) {
-    sf::FloatRect homeBounds = hitbox->getGlobalBounds();
-    sf::FloatRect entityBounds = entity->getHitboxBounds();
-    sf::FloatRect nextPosition = entity->getNextPositionBounds();
-
-    if(hitbox->getGlobalBounds().intersects(nextPosition)) {
-        // Bottom collision
-        if(entityBounds.top < homeBounds.top && entityBounds.top + entityBounds.height < homeBounds.top + homeBounds.height 
-        && entityBounds.left < homeBounds.left + homeBounds.width && entityBounds.left + entityBounds.width > homeBounds.left) {
-            entity->setPosition(sf::Vector2f(entityBounds.left + (entityBounds.width / 2.f), homeBounds.top - (entityBounds.height / 2.f)));
-        }
-
-        // Top collision
-        else if(entityBounds.top > homeBounds.top && entityBounds.top + entityBounds.height > homeBounds.top + homeBounds.height
-        && entityBounds.left < homeBounds.left + homeBounds.width && entityBounds.left + entityBounds.width > homeBounds.left) {
-            entity->setPosition(sf::Vector2f(entityBounds.left + (entityBounds.width / 2.f), homeBounds.top + homeBounds.height + (entityBounds.height / 2.f)));
-        }
-        
-        // Right collision
-        if(entityBounds.left < homeBounds.left && entityBounds.left + homeBounds.width < homeBounds.left + homeBounds.width
-        && entityBounds.top < homeBounds.top + homeBounds.height && entityBounds.top + entityBounds.height > homeBounds.top) {
-            entity->setPosition(sf::Vector2f(homeBounds.left - (entityBounds.width / 2.f), entityBounds.top + (entityBounds.height / 2.f)));
-        }
-        
-        // Left collision
-        else if(entityBounds.left > homeBounds.left && entityBounds.left + homeBounds.width > homeBounds.left + homeBounds.width
-        && entityBounds.top < homeBounds.top + homeBounds.height && entityBounds.top + entityBounds.height > homeBounds.top) {
-            entity->setPosition(sf::Vector2f(homeBounds.left + homeBounds.width + (entityBounds.width / 2.f), entityBounds.top + (entityBounds.height / 2.f)));
-        }
-
-        return true;
-    }
-
-    return false;
+bool Entity::checkCollision(const sf::FloatRect rect) const {
+    return hitbox->getGlobalBounds().intersects(rect);
 }
 
 /**

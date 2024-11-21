@@ -25,6 +25,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
             xpValue = 15;
             killHealthValue = 7;
             sightDistance = 8;
+            damage = 7;
             break;
         case 1:
             createSprite(&textures["ENEMY_BULL"], 0.4f);
@@ -32,6 +33,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
             xpValue = 10;
             sightDistance = 7;
             killHealthValue = 5;
+            damage = 10;
             break;
         default:
             exit(1);
@@ -109,6 +111,15 @@ short unsigned Enemy::getType() const {
  */
 short unsigned Enemy::getState() const {
     return state;
+}
+
+/**
+ * @brief Returns enemy damage
+ * 
+ * @return int 
+ */
+int Enemy::getDamage() const {
+    return damage;
 }
 
 /**

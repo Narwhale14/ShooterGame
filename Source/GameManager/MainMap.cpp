@@ -19,9 +19,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 1;
+    enemyCap = 15;
 
-    map = new Map(window, 10, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
@@ -150,7 +150,7 @@ void MainMap::updateMobs(const float& dt) {
             enemies[i]->track(player->getPosition());
 
             // If not touching player then move towards
-            if(!enemies[i]->checkCollision(player))
+            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
                 enemies[i]->follow(dt, player->getPosition());
 
             map->updateCollision(enemies[i]);
@@ -166,24 +166,24 @@ void MainMap::updateMobs(const float& dt) {
 
         enemies[i]->update();
 
-        // // If enemy is touching player and is alive, damage player
-        // if(player->checkCollision(enemies[i]->getHitboxBounds()) && enemies[i]->biteTimerPassed())
-        //     player->changeHealth(0);
+        // If enemy is touching player and is alive, damage player
+        if(player->checkCollision(enemies[i]->getHitboxBounds()) && enemies[i]->biteTimerPassed())
+            player->changeHealth(-enemies[i]->getDamage());
 
         // If a bullet is touching enemy, damage enemy
-        // for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
-        //     if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
-        //         enemies[i]->resetInjuryTimer();
-        //         enemies[i]->changeHealth(-(player->getDmg()));
+        for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
+            if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
+                enemies[i]->resetInjuryTimer();
+                enemies[i]->changeHealth(-(player->getDmg()));
 
-        //         // If enemy is not determined
-        //         if(enemies[i]->getState() != 3)
-        //             enemies[i]->setState(1); // Enraged
+                // If enemy is not determined
+                if(enemies[i]->getState() != 3)
+                    enemies[i]->setState(1); // Enraged
 
-        //         delete player->getActiveBullets()[j];
-        //         player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
-        //     }
-        // }
+                delete player->getActiveBullets()[j];
+                player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
+            }
+        }
     }
 }
 

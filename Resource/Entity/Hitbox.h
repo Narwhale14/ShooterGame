@@ -17,7 +17,6 @@ class Hitbox {
 
         const sf::Vector2f getPosition();
         const sf::FloatRect getGlobalBounds();
-        const sf::FloatRect& getNextPosition(const sf::Vector2f& velocity);
 
         void setSize(sf::Vector2f size);
         void setVisibility(bool visible);
@@ -27,8 +26,6 @@ class Hitbox {
     private:
         sf::RectangleShape box;
         sf::Sprite* sprite;
-
-        sf::FloatRect nextPosition;
 
         bool visible;
 };

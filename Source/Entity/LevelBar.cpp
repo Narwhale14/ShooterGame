@@ -43,7 +43,7 @@ LevelBar::LevelBar(sf::Font& font, float size_x, float size_y, float pos_x, floa
 
     xp = 0;
     requiredXpToLevelUp = 25;
-    levelRatio = 1.5f;
+    levelRatio = 1.25f;
     levelCap = 15;
 }
 
