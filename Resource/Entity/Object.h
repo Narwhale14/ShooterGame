@@ -16,11 +16,11 @@ class Object {
         virtual ~Object();
         
         sf::FloatRect getHitboxBounds() const;
+        sf::FloatRect getNextPosBounds() const;
         sf::Color getHitboxColor() const;
         void showHitbox(bool visible);
         
         void createHitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity);
-        virtual bool checkCollision(const sf::FloatRect rect);
 
         virtual void createSprite(sf::Texture* texture, float scale);
 

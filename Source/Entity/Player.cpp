@@ -33,6 +33,15 @@ std::deque<Bullet*>& Player::getActiveBullets() const {
 }
 
 /**
+ * @brief Gets the player handheld type
+ * 
+ * @return unsigned short 
+ */
+unsigned short Player::getHandheldType() const {
+    return handheldType;
+}
+
+/**
  * @brief Destroy the Player:: Player object
  * 
  */
@@ -70,17 +79,27 @@ void Player::stopHandheld(const sf::Vector2f& mousePos)
 }
 
 /**
+ * @brief Sets the player handheld type
+ * 
+ * @param type 
+ */
+void Player::setHandheldType(unsigned short type) {
+    handheldType = type;
+}
+
+/**
  * @brief Posts sprite to window
  * 
  * @param target 
  */
 void Player::render(sf::RenderTarget& target) {
-    handheld->renderBull(target);
 
     if(healthBar)
         healthBar->render(target);
 
-    if(handheld)
+    handheld->renderBull(target);
+
+    if(handheld && handheldType == gun)
         handheld->render(target);
 
     if(sprite)
@@ -101,9 +120,11 @@ void Player::update() {
     switch(handheldType) {
         case empty:
             changeSprite(idle);
+            multiplier = 1.25f;
             break;
         case gun:
             changeSprite(aimed);
+            multiplier = 1;
             break;
         default:
             changeSprite(idle);

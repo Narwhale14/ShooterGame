@@ -13,6 +13,8 @@ Entity::Entity() {
     
     angle = 0.f;
     scale = 0.f;
+
+    multiplier = 1;
 }
 
 /**
@@ -83,6 +85,17 @@ void Entity::changeSprite(sf::Texture* texture) {
 }
 
 /**
+ * @brief Checks to see if hitbox collides with another FloatRect
+ * 
+ * @param rect 
+ * @return true 
+ * @return false 
+ */
+bool Entity::checkCollision(const sf::FloatRect rect) {
+    return hitbox->getGlobalBounds().intersects(rect);
+}
+
+/**
  * @brief Creates healthbar
  * 
  * @param size_x 
@@ -113,7 +126,7 @@ void Entity::move(const float& dt, const float dir_x, const float dir_y) {
     velocity.y = dir_y * movementSpeed * dt;
 
     if(sprite)
-        sprite->move(velocity.x, velocity.y);
+        sprite->move(velocity.x * multiplier, velocity.y * multiplier);
 
     if(hitbox)
         hitbox->updateNextBox(sf::Vector2f(velocity.x * 5, velocity.y * 5));

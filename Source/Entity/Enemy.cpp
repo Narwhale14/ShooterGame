@@ -43,7 +43,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
     state = relaxed;
-    relaxationTimeMS = 3000;
+    relaxationTimeMS = 5000;
 
     thresholdHeath = healthBar->getHealth() / 3;
     fearSpeedMultiplier = 1.3f;
@@ -180,7 +180,7 @@ void Enemy::setState(short unsigned state) {
 short unsigned Enemy::generateEnemyType() {
     int value = (rand() % 100) + 1;
 
-    if(value <= 33)
+    if(value <= 15)
         return wolf;
     else
         return bull;
@@ -218,7 +218,7 @@ void Enemy::track(sf::Vector2f pos) {
  * @param pos 
  */
 void Enemy::follow(const float& dt, sf::Vector2f pos) {
-    float multiplier = 1; // Default speed
+    multiplier = 1; // Default speed
         
     if(state == scared) // Running away faster
         multiplier *= -1 * fearSpeedMultiplier;
@@ -229,9 +229,7 @@ void Enemy::follow(const float& dt, sf::Vector2f pos) {
         multiplier *= injurySpeedMultiplier;
         
 
-    move(dt, cos(angle * 3.14 / 180) * multiplier, sin(angle * 3.14 / 180) * multiplier);
-
-    std::cout << multiplier << std::endl;
+    move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
 }
 
 /**

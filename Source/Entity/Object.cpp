@@ -33,6 +33,15 @@ sf::FloatRect Object::getHitboxBounds() const {
 }
 
 /**
+ * @brief Returns next pos bounds
+ * 
+ * @return sf::FloatRect 
+ */
+sf::FloatRect Object::getNextPosBounds() const {
+    return hitbox->getNextPosBounds();
+}
+
+/**
  * @brief Returns the color of thie hitbox (type)
  * 
  * @return sf::Color 
@@ -63,17 +72,6 @@ void Object::showHitbox(bool visible) {
 void Object::createHitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity) {
     this->color = color;
     hitbox = new Hitbox(s, width, height, this->color, isEntity);
-}
-
-/**
- * @brief Checks to see if hitbox collides with another FloatRect
- * 
- * @param rect 
- * @return true 
- * @return false 
- */
-bool Object::checkCollision(const sf::FloatRect rect) {
-    return hitbox->getGlobalBounds().intersects(rect);
 }
 
 /**

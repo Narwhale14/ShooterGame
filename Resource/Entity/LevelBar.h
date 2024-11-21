@@ -25,7 +25,7 @@
 
 class LevelBar {
     public:
-        LevelBar(float size_x, float size_y, float pos_x, float pos_y);
+        LevelBar(sf::Font& font, float size_x, float size_y, float pos_x, float pos_y);
         ~LevelBar();
 
         int getXp() const;
@@ -41,9 +41,11 @@ class LevelBar {
         int requiredXpToLevelUp;
         float maxMainBarSize;
         float levelRatio;
+        int levelCap;
 
         sf::RectangleShape barBack;
         sf::RectangleShape barMain;
+
         sf::Text text;
         sf::Font font;
 

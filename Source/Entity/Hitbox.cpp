@@ -66,6 +66,15 @@ sf::FloatRect Hitbox::getGlobalBounds() {
 }
 
 /**
+ * @brief Returns next pos box bounds
+ * 
+ * @return sf::FloatRect 
+ */
+sf::FloatRect Hitbox::getNextPosBounds() {
+    return nextBox.getGlobalBounds();
+}
+
+/**
  * @brief Sets hitbox size
  * 
  * @param size 
@@ -102,9 +111,9 @@ void Hitbox::updateNextBox(sf::Vector2f velocity) {
  * @param target 
  */
 void Hitbox::render(sf::RenderTarget& target) {
-    if(visible)
-        target.draw(box);
-
     if(visible && isEntity)
         target.draw(nextBox);
+
+    if(visible)
+        target.draw(box);
 }
