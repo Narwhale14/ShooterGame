@@ -26,7 +26,7 @@ class MainMap : public State {
         Enemy* enemy;
 
         Map* map;
-        Tree* tree;
+        std::vector<Tree*> trees;
         
         std::vector<Enemy*> enemies;
         sf::Clock spawnTimer;
@@ -41,6 +41,7 @@ class MainMap : public State {
         void initializeFonts();
 
         bool checkSpawnTimer();
+        void spawnTrees(int sparsity);
         void spawnEnemy();
 
         void updateDamageCollisions();
@@ -48,7 +49,8 @@ class MainMap : public State {
         void updateLevelBar();
         void updateUpgrade();
 
-        void renderEnemies(sf::RenderTarget* target);
+        void renderEnemies(sf::RenderTarget& target);
+        void renderTrees(sf::RenderTarget& target);
 
         Button* dmgUp;
         Button* fireRateUp;

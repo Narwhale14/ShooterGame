@@ -21,16 +21,15 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
     enemyCap = 15;
 
-    map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees) !!!! Don't go above 10 with large maps 20x20 or greater if you want the game to start fast
+
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
 
     dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
     fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
-
-    tree = new Tree(textures["TREE_1"], 0.25f);
-    tree->setPosition(player->getPosition());
 
     upgrading = false;
 }
@@ -44,6 +43,11 @@ MainMap::~MainMap() {
         delete enemies[enemies.size() - 1];
         enemies.pop_back();
     }
+
+    while(!trees.empty()) {
+        delete trees[trees.size() - 1];
+        trees.pop_back();
+    } 
 
     delete dmgUp;
     delete fireRateUp;
@@ -77,6 +81,44 @@ bool MainMap::checkSpawnTimer() {
 }
 
 /**
+ * @brief Spawns an amount of trees all around the map
+ * 
+ * @param amount 
+ */
+void MainMap::spawnTrees(int sparsity) {
+    size_t amount = sparsity * pow(map->getSizeAcross(), 2) / 100;
+    float scale = 1.f;
+
+    sf::Vector2f getRandCoords;
+    int range = map->getTotalSize();
+
+    for(size_t i = 0; i < amount; i++) {
+        // 0.15 - 0.34 scale
+        scale = (rand() % 20 + 15) / 100.f;
+        trees.emplace_back(new Tree(textures["TREE_1"], scale));
+
+        while(true) {
+            getRandCoords.x = rand() % range;
+            getRandCoords.y = rand() % range;
+
+            trees[i]->setPosition(sf::Vector2f(getRandCoords.x, getRandCoords.y));
+            trees[i]->update();
+
+            // Keeps trees from intersecting with another's hitbox: O(n^2) complexity btw so be careful with map size
+            bool intersecting = false;
+            for(size_t j = 0; j < trees.size() - 1; j++) {
+                if(trees[i]->getHitboxBounds().intersects(trees[j]->getHitboxBounds()))
+                    intersecting = true;
+            }
+
+            // Keeps tree in map
+            if(map->mapContains(getRandCoords, trees[i]->getHitboxBounds()) && !intersecting)
+                break;
+        }
+    }
+}
+
+/**
  * @brief Spawns an enemy in a random position
  * 
  */
@@ -84,13 +126,13 @@ void MainMap::spawnEnemy() {
     // Makes sure enemy spawns away from player
     sf::Vector2f getRandCoords;
     while(true) {
-        int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
-        int minRange = player->getHitboxBounds().width;
+        int maxRange = map->getTotalSize() - map->getGridSize();
+        int minRange = map->getGridSize();
 
         getRandCoords.x = rand() % maxRange + minRange;
         getRandCoords.y = rand() % maxRange + minRange;
 
-        if(!map->viewContains(getRandCoords) || map->getSizeAcross() < 15)
+        if(!map->viewContainsCoords(getRandCoords) || map->getSizeAcross() < 15)
             break;
     }
 
@@ -122,8 +164,6 @@ void MainMap::update(const float& dt) {
 
         updateLevelBar();
     }
-
-    tree->update();
 }
 
 /**
@@ -161,11 +201,11 @@ void MainMap::updateMobs(const float& dt) {
             map->updateCollision(enemies[i]);
 
             // If enemy is touching border while running from player, become determined
-            if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContains(enemies[i]->getPosition()))
+            if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
                 enemies[i]->setState(3);
 
             // If enemy is off screen for longer than a set despawn timer
-            if(!map->viewContains(enemies[i]->getPosition()) && enemies[i]->relaxationTimerPassed())
+            if(!map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()) && enemies[i]->relaxationTimerPassed())
                 enemies[i]->setState(0); // Idle
         }
 
@@ -278,14 +318,13 @@ void MainMap::render(sf::RenderTarget* target) {
         target = window;
 
     map->render(*target);
-    this->renderEnemies(target);
+    this->renderEnemies(*target);
+
+    player->render(*target);
+    this->renderTrees(*target);
 
     if(levelBar)
         levelBar->render(*target);
-
-    player->render(*target);
-
-    tree->render(*target);
     
     if(upgrading){
         dmgUp->render(*target);
@@ -299,10 +338,22 @@ void MainMap::render(sf::RenderTarget* target) {
  * 
  * @param target 
  */
-void MainMap::renderEnemies(sf::RenderTarget* target) {
+void MainMap::renderEnemies(sf::RenderTarget& target) {
     for(size_t i = 0; i < enemies.size(); i++) {
-        if(enemies[i] != nullptr && enemies[i]->isAlive() && map->viewContains(enemies[i]->getPosition()))
-            enemies[i]->render(*target);
+        if(enemies[i] != nullptr && enemies[i]->isAlive() && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
+            enemies[i]->render(target);
+    }
+}
+
+/**
+ * @brief Renders active trees
+ * 
+ * @param target 
+ */
+void MainMap::renderTrees(sf::RenderTarget& target) {
+    for(size_t i = 0; i < trees.size(); i++) {
+        if(trees[i] != nullptr && map->viewContainsObject(trees[i]->getPosition(), trees[i]->getHitboxBounds()))
+            trees[i]->render(target);
     }
 }
 

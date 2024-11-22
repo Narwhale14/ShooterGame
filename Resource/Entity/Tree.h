@@ -12,10 +12,11 @@
 
 class Tree : public Object {
     public:
-        Tree(sf::Texture& texture, float size);
+        Tree(sf::Texture& texture, float scale);
         virtual ~Tree();
 
         void setPosition(sf::Vector2f pos);
+        sf::Vector2f getPosition() const;
 
         virtual void update();
         virtual void render(sf::RenderTarget& target);
