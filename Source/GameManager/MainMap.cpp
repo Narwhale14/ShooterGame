@@ -19,13 +19,13 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 15;
+    enemyCap = 50;
 
-    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
+    map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    spawnTrees(2); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
-    levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
+    levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
 
     dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
     fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
@@ -336,7 +336,7 @@ void MainMap::updateUpgrade()
  * 
  */
 void MainMap::updateLevelBar() {
-    levelBar->setPosition(map->getViewCenter().x, map->getViewCenter().y + (player->getHitboxBounds().height * 5.5f));
+    levelBar->setPosition(map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
 }
 
 /**
