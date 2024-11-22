@@ -54,6 +54,16 @@ float Map::getTotalSize() const {
 }
 
 /**
+ * @brief returns map size
+ * 
+ * @return int 
+ */
+int Map::getSizeAcross() const {
+    return mapSize;
+}
+
+
+/**
  * @brief Returns the individual grid size
  * 
  * @return float 
@@ -99,15 +109,42 @@ void Map::setViewCenter(float xpos, float ypos) {
 }
 
 /**
- * @brief Determines if an obj is on the map
+ * @brief Determines if an set of coords is on the map
  * 
  * @param obj 
  * @return true 
  * @return false 
  */
-bool Map::viewContains(sf::Vector2f objPos) const {
+bool Map::viewContainsCoords(const sf::Vector2f& objPos) const {
     return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - gridSize) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - gridSize)
         && (objPos.x < view.getCenter().x + (view.getSize().x / 2) + gridSize) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) + gridSize);
+}
+
+/**
+ * @brief Determines if an object is on the map
+ * 
+ * @param objPos 
+ * @param objBounds 
+ * @return true 
+ * @return false 
+ */
+bool Map::viewContainsObject(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const {
+    return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - (objBounds.width * 1.5f)) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - (objBounds.height * 1.5f))
+        && (objPos.x < view.getCenter().x + (view.getSize().x / 2) + (objBounds.width * 1.5f)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) + (objBounds.height * 1.5f));
+}
+
+/**
+ * @brief Returns whether a pos is inside the map
+ * 
+ * @param objPos 
+ * @return true 
+ * @return false 
+ */
+bool Map::mapContains(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const {
+    if(objPos.x > objBounds.width / 2 && objPos.x < totalMapSize - objBounds.width && objPos.y > objBounds.width / 2 && objPos.y < totalMapSize - objBounds.width )
+        return true;
+
+    return false;
 }
 
 /**
@@ -117,7 +154,7 @@ bool Map::viewContains(sf::Vector2f objPos) const {
  * @return true 
  * @return false 
  */
-bool Map::borderIsTouching(sf::Vector2f objPos) const {
+bool Map::borderIsTouching(const sf::Vector2f& objPos) const {
     sf::Vector2f objGridPos(static_cast<int>(objPos.x / gridSize) + 1, static_cast<int>(objPos.y / gridSize) + 1);
 
     if(objGridPos.x == 1 || objGridPos.x == mapSize || objGridPos.y == 1 || objGridPos.y == mapSize)
@@ -131,15 +168,14 @@ bool Map::borderIsTouching(sf::Vector2f objPos) const {
  * 
  * @param entity 
  */
-void Map::containInMap(Entity* entity) {
-    // If player is touching wall
+void Map::updateCollision(Entity* entity) {
     if(entity->getPosition().x < 0 + entity->getHitboxBounds().width / 2) // Left wall
         entity->setPosition(sf::Vector2f(entity->getHitboxBounds().width / 2, entity->getPosition().y));
+    else if(entity->getPosition().x > this->getTotalSize() - entity->getHitboxBounds().width / 2) // Right wall
+        entity->setPosition(sf::Vector2f(this->getTotalSize() - entity->getHitboxBounds().width / 2, entity->getPosition().y));
     if(entity->getPosition().y < 0 + entity->getHitboxBounds().height / 2) // Top wall
         entity->setPosition(sf::Vector2f(entity->getPosition().x, entity->getHitboxBounds().height / 2));
-    if(entity->getPosition().x > this->getTotalSize() - entity->getHitboxBounds().width / 2) // Right wall
-        entity->setPosition(sf::Vector2f(this->getTotalSize() - entity->getHitboxBounds().width / 2, entity->getPosition().y));
-    if(entity->getPosition().y > this->getTotalSize() - entity->getHitboxBounds().height / 2) // Bottom wall
+    else if(entity->getPosition().y > this->getTotalSize() - entity->getHitboxBounds().height / 2) // Bottom wall
         entity->setPosition(sf::Vector2f(entity->getPosition().x, this->getTotalSize() - entity->getHitboxBounds().height / 2));
 }
 
@@ -152,7 +188,7 @@ void Map::render(sf::RenderTarget& target) {
     target.setView(view);
     for(int x = 0; x < mapSize; x++) {
         for(int y = 0; y < mapSize; y++) {
-            if(this->viewContains(tileMap[x][y].getPosition()))
+            if(this->viewContainsObject(tileMap[x][y].getPosition(), tileMap[x][y].getGlobalBounds()))
                 target.draw(tileMap[x][y]);
         }
     }

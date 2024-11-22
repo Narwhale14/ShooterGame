@@ -43,7 +43,7 @@ LevelBar::LevelBar(sf::Font& font, float size_x, float size_y, float pos_x, floa
 
     xp = 0;
     requiredXpToLevelUp = 25;
-    levelRatio = 1.5f;
+    levelRatio = 1.25f;
     levelCap = 15;
 }
 
@@ -74,20 +74,24 @@ int LevelBar::getXp() const {
 bool LevelBar::addXp(int incoming) {
     xp += incoming;
 
-    if(xp >= requiredXpToLevelUp) {
+    bool leveledUp = false;;
+    if(xp >= requiredXpToLevelUp && level != levelCap) {
+        level++;
         xp -= requiredXpToLevelUp;
         requiredXpToLevelUp *= levelRatio;
-        level++;
 
-        text.setString("LVL " + std::to_string(level));
-        text.setOrigin(text.getGlobalBounds().width / 2, text.getGlobalBounds().height / 2);
-
-        barMain.setSize(sf::Vector2f(maxMainBarSize * (xp / static_cast<float>(requiredXpToLevelUp)), barMain.getSize().y));
-        return true;
+        leveledUp = true;
     }
 
-    barMain.setSize(sf::Vector2f(maxMainBarSize * (xp / static_cast<float>(requiredXpToLevelUp)), barMain.getSize().y));
-    return false;
+    text.setString("LVL " + std::to_string(level));
+    text.setOrigin(text.getGlobalBounds().width / 2, text.getGlobalBounds().height / 2);
+
+    if((xp / static_cast<float>(requiredXpToLevelUp)) <= 1.f)
+        barMain.setSize(sf::Vector2f(maxMainBarSize * (xp / static_cast<float>(requiredXpToLevelUp)), barMain.getSize().y));
+    else if(level == levelCap)
+        barMain.setSize(sf::Vector2f(maxMainBarSize, barMain.getSize().y));
+
+    return leveledUp;
 }
 
 /**

@@ -8,7 +8,7 @@
 #ifndef HEALTHBAR_H
 #define HEALTHBAR_H
 
-#include "Object.h"
+#include "Tree.h"
 
 class HealthBar {
     public:

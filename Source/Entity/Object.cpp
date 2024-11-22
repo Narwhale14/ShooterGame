@@ -21,6 +21,7 @@ Object::Object() {
  */
 Object::~Object() {
     delete hitbox;
+    delete sprite;
 }
 
 /**
@@ -30,15 +31,6 @@ Object::~Object() {
  */
 sf::FloatRect Object::getHitboxBounds() const {
     return hitbox->getGlobalBounds();
-}
-
-/**
- * @brief Returns next pos bounds
- * 
- * @return sf::FloatRect 
- */
-sf::FloatRect Object::getNextPosBounds() const {
-    return hitbox->getNextPosBounds();
 }
 
 /**
@@ -69,9 +61,9 @@ void Object::showHitbox(bool visible) {
  * @param width width of hitbox
  * @param height height of hitbox
  */
-void Object::createHitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity) {
+void Object::createHitbox(sf::Sprite* s, float width, float height, sf::Color color) {
     this->color = color;
-    hitbox = new Hitbox(s, width, height, this->color, isEntity);
+    hitbox = new Hitbox(s, width, height, this->color);
 }
 
 /**

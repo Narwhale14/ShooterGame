@@ -17,15 +17,18 @@ class Map {
 
         float getTotalSize() const;
         float getGridSize() const;
+        int getSizeAcross() const;
         sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
         sf::Vector2f getViewCenter() const;
         void setViewCenter(float xpos, float ypos);
         
-        bool viewContains(sf::Vector2f objPos) const;
-        bool borderIsTouching(sf::Vector2f objPos) const;
+        bool viewContainsCoords(const sf::Vector2f& objPos) const;
+        bool viewContainsObject(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const;
+        bool mapContains(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const;
+        bool borderIsTouching(const sf::Vector2f& objPos) const;
 
-        void containInMap(Entity* entity);
+        void updateCollision(Entity* entity);
         
         void render(sf::RenderTarget& target);
     private:

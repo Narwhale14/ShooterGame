@@ -20,6 +20,10 @@ class Enemy : public Entity {
         int getKillHealthValue() const;
         short unsigned getType() const;
         short unsigned getState() const;
+        int getDamage() const;
+
+        bool isAttacking() const;
+        bool isLow() const;
 
         bool relaxationTimerPassed();
         bool biteTimerPassed();
@@ -55,6 +59,7 @@ class Enemy : public Entity {
         int xpValue;
         int killHealthValue;
         int sightDistance;
+        int damage;
 
         float fearSpeedMultiplier;
         int thresholdHeath;

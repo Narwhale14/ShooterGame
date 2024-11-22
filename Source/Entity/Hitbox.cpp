@@ -17,27 +17,22 @@
  * @param height height of hitbox
  * @param color hitbox color (green for player, red for damaging, blue for block)
  */
-Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity) {
+Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color) {
     sprite = s;
+
+    if(width > height)
+        height = width;
+    else
+        width = height;
 
     box.setSize(sf::Vector2f(width, height));
     box.setPosition(sprite->getPosition().x, sprite->getPosition().y);
     box.setOrigin(box.getGlobalBounds().width / 2, box.getGlobalBounds().height / 2);
     box.setFillColor(sf::Color::Transparent);
-    box.setOutlineThickness(1.f);
+    box.setOutlineThickness(-1.f);
     box.setOutlineColor(color);
 
-    visible = true;
-    this->isEntity = isEntity;
-
-    if(this->isEntity) {
-        nextBox.setSize(sf::Vector2f(width, height));
-        nextBox.setPosition(box.getPosition());
-        nextBox.setOrigin(box.getOrigin());
-        nextBox.setFillColor(sf::Color::Transparent);
-        nextBox.setOutlineThickness(1.f);
-        nextBox.setOutlineColor(sf::Color::White);
-    }
+    visible = false;
 }
 /**
  * @brief Destroy the Hitbox:: Hitbox object
@@ -52,7 +47,7 @@ Hitbox::~Hitbox() {
  * 
  * @return sf::Vector2f 
  */
-sf::Vector2f Hitbox::getPosition() {
+const sf::Vector2f Hitbox::getPosition() {
     return box.getPosition();
 }
 
@@ -61,17 +56,8 @@ sf::Vector2f Hitbox::getPosition() {
  * 
  * @return sf::FloatRect 
  */
-sf::FloatRect Hitbox::getGlobalBounds() {
+const sf::FloatRect Hitbox::getGlobalBounds() {
     return box.getGlobalBounds();
-}
-
-/**
- * @brief Returns next pos box bounds
- * 
- * @return sf::FloatRect 
- */
-sf::FloatRect Hitbox::getNextPosBounds() {
-    return nextBox.getGlobalBounds();
 }
 
 /**
@@ -100,20 +86,12 @@ void Hitbox::update() {
     box.setPosition(sprite->getPosition().x, sprite->getPosition().y);
 }
 
-void Hitbox::updateNextBox(sf::Vector2f velocity) {
-    if(isEntity)
-        nextBox.setPosition(sprite->getPosition().x + velocity.x, sprite->getPosition().y + velocity.y);
-}
-
 /**
  * @brief Draws hitbox
  * 
  * @param target 
  */
 void Hitbox::render(sf::RenderTarget& target) {
-    if(visible && isEntity)
-        target.draw(nextBox);
-
     if(visible)
         target.draw(box);
 }
