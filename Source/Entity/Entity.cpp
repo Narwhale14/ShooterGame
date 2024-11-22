@@ -24,7 +24,6 @@ Entity::Entity() {
  *        Deletes dynamically allocated sprite and texture
  */
 Entity::~Entity() {
-    delete sprite;
     delete healthBar;
 }
 

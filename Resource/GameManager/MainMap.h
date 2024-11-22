@@ -26,6 +26,7 @@ class MainMap : public State {
         Enemy* enemy;
 
         Map* map;
+        Tree* tree;
         
         std::vector<Enemy*> enemies;
         sf::Clock spawnTimer;

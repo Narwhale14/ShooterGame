@@ -28,7 +28,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
     fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
-    
+
+    tree = new Tree(textures["TREE_1"], 0.5f);
+    tree->setPosition(player->getPosition());
+
     upgrading = false;
 }
 
@@ -285,6 +288,8 @@ void MainMap::render(sf::RenderTarget* target) {
         fireRateUp->render(*target);
         bullSpeedUp->render(*target);
     }
+
+    tree->render(*target);
 }
 
 /**
@@ -357,6 +362,9 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/increaseFireRateCard.png"))
         textures["increaseFireRateCard"] = temp;   
+
+    if(temp.loadFromFile("Textures/tree.png"))
+        textures["TREE_1"] = temp;
 }
 
 /**

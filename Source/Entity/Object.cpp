@@ -21,6 +21,7 @@ Object::Object() {
  */
 Object::~Object() {
     delete hitbox;
+    delete sprite;
 }
 
 /**
