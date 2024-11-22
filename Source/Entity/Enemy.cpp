@@ -133,6 +133,16 @@ bool Enemy::isAttacking() const {
 }
 
 /**
+ * @brief Returns true if enemy is low
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::isLow() const {
+    return healthBar->getHealth() < thresholdHeath;
+}
+
+/**
  * @brief Gets relaxation timer
  * 
  * @return true 

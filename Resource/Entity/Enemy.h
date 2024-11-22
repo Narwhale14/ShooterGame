@@ -23,6 +23,7 @@ class Enemy : public Entity {
         int getDamage() const;
 
         bool isAttacking() const;
+        bool isLow() const;
 
         bool relaxationTimerPassed();
         bool biteTimerPassed();

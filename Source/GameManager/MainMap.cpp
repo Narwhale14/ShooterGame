@@ -208,6 +208,9 @@ void MainMap::updateMobs(const float& dt) {
             if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
                 enemies[i]->setState(3);
 
+            if(!playerUnderTree && enemies[i]->getState() == 2 && !enemies[i]->isLow())
+                enemies[i]->setState(1);
+
             // (ENEMY MOVEMENT) If not touching player then move towards
             if((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0 && !playerUnderTree) || (playerUnderTree && !enemies[i]->isAttacking())) {
                 map->updateCollision(enemies[i]);
