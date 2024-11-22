@@ -19,7 +19,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 0;
+    enemyCap = 15;
+
+    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
@@ -28,8 +31,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
     fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
-    
+
     upgrading = false;
+    playerUnderTree = false;
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<3;i++)
         cardChoice2.push_back("DMG");
@@ -37,6 +41,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
         cardChoice2.push_back("FIRERATE");
     for(unsigned int i=0; i<3;i++)
         cardChoice2.push_back("BULLSPEED");
+
 }
 
 /**
@@ -48,6 +53,11 @@ MainMap::~MainMap() {
         delete enemies[enemies.size() - 1];
         enemies.pop_back();
     }
+
+    while(!trees.empty()) {
+        delete trees[trees.size() - 1];
+        trees.pop_back();
+    } 
 
     delete dmgUp;
     delete fireRateUp;
@@ -66,21 +76,6 @@ void MainMap::checkForQuit() {
 }
 
 /**
- * @brief Moves camera and detects if camera's border is crossing map's borders
- * 
- * @param dt deltaTime
- * @param dir_x direction moving x
- * @param dir_y direction moving y
- * @param movementSpeed speed of player
- */
-void MainMap::move(const float& dt, const float dir_x, const float dir_y, const float movementSpeed) {
-    map->containInMap(player);
-
-    player->move(dt, dir_x, dir_y);
-    map->setViewCenter(player->getPosition().x, player->getPosition().y);
-}
-
-/**
  * @brief Checks if enough time passed since last enemy spawn
  * 
  * @return true 
@@ -96,6 +91,48 @@ bool MainMap::checkSpawnTimer() {
 }
 
 /**
+ * @brief Spawns an amount of trees all around the map
+ * 
+ * @param amount 
+ */
+void MainMap::spawnTrees(int sparsity) {
+    size_t amount = sparsity * pow(map->getSizeAcross(), 2) / 100;
+
+    // HARD CAP TO AVOID FUNCTION INFINITELY SEARCHING FOR NON-EXISTENT USABLE SPACE (still REALLY dense just won't crash)
+    if(amount > pow(map->getSizeAcross(), 2) / 7)
+        amount = pow(map->getSizeAcross(), 2) / 7;
+
+    float scale = 1.f;
+
+    sf::Vector2f getRandCoords;
+    int range = map->getTotalSize();
+
+    for(size_t i = 0; i < amount; i++) {
+        // 0.15 - 0.34 scale
+        scale = (rand() % 20 + 15) / 100.f;
+        trees.emplace_back(new Tree(textures["TREE_1"], scale));
+
+        while(true) {
+            getRandCoords.x = rand() % range;
+            getRandCoords.y = rand() % range;
+
+            trees[i]->setPosition(sf::Vector2f(getRandCoords.x, getRandCoords.y));
+            trees[i]->update();
+
+            bool intersecting = false;
+            for(size_t j = 0; j < trees.size() - 1; j++) {
+                if(trees[i]->getHitboxBounds().intersects(trees[j]->getHitboxBounds()))
+                    intersecting = true;
+            }
+
+            // Keeps tree in map
+            if(map->mapContains(getRandCoords, trees[i]->getHitboxBounds()) && !intersecting)
+                break;
+        }
+    }
+}
+
+/**
  * @brief Spawns an enemy in a random position
  * 
  */
@@ -103,13 +140,13 @@ void MainMap::spawnEnemy() {
     // Makes sure enemy spawns away from player
     sf::Vector2f getRandCoords;
     while(true) {
-        int maxRange = map->getTotalSize() - (player->getHitboxBounds().width);
-        int minRange = player->getHitboxBounds().width;
+        int maxRange = map->getTotalSize() - map->getGridSize();
+        int minRange = map->getGridSize();
 
         getRandCoords.x = rand() % maxRange + minRange;
         getRandCoords.y = rand() % maxRange + minRange;
 
-        if(!map->viewContains(getRandCoords))
+        if(!map->viewContainsCoords(getRandCoords) || map->getSizeAcross() < 15)
             break;
     }
 
@@ -129,14 +166,15 @@ void MainMap::update(const float& dt) {
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
         updateMobs(dt);
+        updateTrees(dt);
+
+        player->update();
+        updateInput(dt);
 
         if(checkSpawnTimer() && player->isAlive() && enemies.size() < enemyCap)
             spawnEnemy();
 
-        updateInput(dt);
-
         updateLevelBar();
-        player->update();
     }
 }
 
@@ -170,47 +208,71 @@ void MainMap::updateMobs(const float& dt) {
             continue;
         }
 
-        enemies[i]->update();
-
-        // Checks if player is close to enemy, and moves the enemy towards play when it is, or when enemy is enraged
+        // (STATE SETTING) Determines the enemy's state based on promiximity to player
         if(enemies[i]->getDistanceTo(player->getPosition()) < map->getGridSize() * enemies[i]->getSightDistance() || enemies[i]->getState() != 0) {
-            if(enemies[i]->getState() != 2 && enemies[i]->getState() != 3)
-                enemies[i]->setState(1); // Enraged if not scared
-
-            enemies[i]->track(player->getPosition());
-
-            // If not touching player then move towards
-            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
-                enemies[i]->follow(dt, player->getPosition());
-
-            map->containInMap(enemies[i]);
-
-            // If enemy is touching border while running from player, become determined
-            if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContains(enemies[i]->getPosition()))
-                enemies[i]->setState(3);
+            // Enraged if not idle
+            if(enemies[i]->getState() == 0)
+                enemies[i]->setState(1);
 
             // If enemy is off screen for longer than a set despawn timer
-            if(!map->viewContains(enemies[i]->getPosition()) && enemies[i]->relaxationTimerPassed())
-                enemies[i]->setState(0); // Idle
+            if(!map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()) && enemies[i]->relaxationTimerPassed())
+                enemies[i]->setState(0);
+
+            // If enemy is touching border while running from player, become determined
+            if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
+                enemies[i]->setState(3);
+
+            if(!playerUnderTree && enemies[i]->getState() == 2 && !enemies[i]->isLow())
+                enemies[i]->setState(1);
+
+            // (ENEMY MOVEMENT) If not touching player then move towards
+            if((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0 && !playerUnderTree) || (playerUnderTree && !enemies[i]->isAttacking())) {
+                map->updateCollision(enemies[i]);
+                
+                enemies[i]->track(player->getPosition());
+                enemies[i]->follow(dt, player->getPosition());
+            }
         }
+        
+        enemies[i]->update();
 
         // If enemy is touching player and is alive, damage player
         if(player->checkCollision(enemies[i]->getHitboxBounds()) && enemies[i]->biteTimerPassed())
-            player->changeHealth(-10);
+            player->changeHealth(-enemies[i]->getDamage());
 
         // If a bullet is touching enemy, damage enemy
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
-                enemies[i]->resetInjuryTimer();
-                enemies[i]->changeHealth(-(player->getDmg()));
-
-                // If enemy is not determined
-                if(enemies[i]->getState() != 3)
-                    enemies[i]->setState(1); // Enraged
-
                 delete player->getActiveBullets()[j];
                 player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
+
+                enemies[i]->resetInjuryTimer();
+                enemies[i]->changeHealth(-10);
+
+                // If enemy is not determined
+                if(enemies[i]->getState() != 3 && enemies[i]->getState() != 2)
+                    enemies[i]->setState(1); // Enraged
+
+                if(playerUnderTree)
+                    enemies[i]->setState(2);
             }
+        }
+    }
+}
+
+/**
+ * @brief Updates trees on map
+ * 
+ * @param dt 
+ */
+void MainMap::updateTrees(const float& dt) {
+    playerUnderTree = false;
+    for(size_t i = 0; i < trees.size(); i++) {
+        if(trees[i]->getHitboxBounds().intersects(player->getHitboxBounds())) {
+            trees[i]->setOpacity(150);
+            playerUnderTree = true;
+        } else {
+            trees[i]->setOpacity(255);
         }
     }
 }
@@ -251,7 +313,10 @@ void MainMap::updateInput(const float& dt) {
         velocity.y /= sqrt(2);
     }
 
-    move(dt, velocity.x, velocity.y, player->getMovementSpeed());
+    map->updateCollision(player);
+    map->setViewCenter(player->getPosition().x, player->getPosition().y);
+
+    player->move(dt, velocity.x, velocity.y);
     player->updateRotation(mousePosView);
 }
 
@@ -333,12 +398,13 @@ void MainMap::render(sf::RenderTarget* target) {
         target = window;
 
     map->render(*target);
-    this->renderEnemies(target);
+    this->renderEnemies(*target);
+
+    player->render(*target);
+    this->renderTrees(*target);
 
     if(levelBar)
         levelBar->render(*target);
-
-    player->render(*target);
     
     if(upgrading){
         if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
@@ -355,10 +421,22 @@ void MainMap::render(sf::RenderTarget* target) {
  * 
  * @param target 
  */
-void MainMap::renderEnemies(sf::RenderTarget* target) {
+void MainMap::renderEnemies(sf::RenderTarget& target) {
     for(size_t i = 0; i < enemies.size(); i++) {
-        if(enemies[i] != nullptr && enemies[i]->isAlive() && map->viewContains(enemies[i]->getPosition()))
-            enemies[i]->render(*target);
+        if(enemies[i] != nullptr && enemies[i]->isAlive() && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
+            enemies[i]->render(target);
+    }
+}
+
+/**
+ * @brief Renders active trees
+ * 
+ * @param target 
+ */
+void MainMap::renderTrees(sf::RenderTarget& target) {
+    for(size_t i = 0; i < trees.size(); i++) {
+        if(trees[i] != nullptr && map->viewContainsObject(trees[i]->getPosition(), trees[i]->getHitboxBounds()))
+            trees[i]->render(target);
     }
 }
 
@@ -422,7 +500,10 @@ void MainMap::initializeTextures() {
         textures["increaseFireRateCard"] = temp; 
 
     if(temp.loadFromFile("Textures/lazerBull.png"))
-        textures["LAZERBULL"] = temp; 
+        textures["LAZERBULL"] = temp;  
+
+    if(temp.loadFromFile("Textures/tree.png"))
+        textures["TREE_1"] = temp;
 }
 
 /**

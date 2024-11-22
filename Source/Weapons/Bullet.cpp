@@ -15,7 +15,7 @@
  */
 Bullet::Bullet(float r, sf::Texture* texture){
     createSprite(texture, 0.1f);
-    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red, false);
+    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
     hitbox->setSize(sf::Vector2f(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2));
     range=r;
     adjRng=0;

@@ -15,9 +15,8 @@ class Entity : public Object {
         Entity();
         virtual ~Entity();
 
-        float getMovementSpeed();
-        virtual sf::Vector2f getPosition();
-        sf::Vector2f getVelocity();
+        float getMaxVelocity();
+        const sf::Vector2f getPosition();
         float getDistanceTo(sf::Vector2f objPos);
         bool isAlive();
 
@@ -26,7 +25,7 @@ class Entity : public Object {
 
         void changeSprite(sf::Texture* texture);
         virtual void changeHealth(int incoming);
-        bool checkCollision(const sf::FloatRect rect);
+        bool checkCollision(const sf::FloatRect rect) const;
         
         void createHealthBar(float size_x, float size_y, float pos_x, float pos_y);
 
@@ -36,11 +35,11 @@ class Entity : public Object {
         virtual void render(sf::RenderTarget& target) = 0;
     protected:
         HealthBar* healthBar;
+
         sf::Vector2f velocity;
+        float maxVelocity;
 
-        int movementSpeed;
         float angle;
-
         float multiplier;
 };
 

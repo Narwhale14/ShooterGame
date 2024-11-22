@@ -21,17 +21,19 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     switch(type) {
         case 0:
             createSprite(&textures["ENEMY_WOLF"], 0.4f);
-            movementSpeed = 300;
-            xpValue = 30;
+            maxVelocity = 300;
+            xpValue = 15;
             killHealthValue = 7;
             sightDistance = 8;
+            damage = 7;
             break;
         case 1:
             createSprite(&textures["ENEMY_BULL"], 0.4f);
-            movementSpeed = 200;
-            xpValue = 30;
+            maxVelocity = 200;
+            xpValue = 10;
             sightDistance = 7;
             killHealthValue = 5;
+            damage = 10;
             break;
         default:
             exit(1);
@@ -39,7 +41,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
 
     setPosition(sf::Vector2f(x, y));
 
-    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red, true);
+    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
     state = relaxed;
@@ -109,6 +111,35 @@ short unsigned Enemy::getType() const {
  */
 short unsigned Enemy::getState() const {
     return state;
+}
+
+/**
+ * @brief Returns enemy damage
+ * 
+ * @return int 
+ */
+int Enemy::getDamage() const {
+    return damage;
+}
+
+/**
+ * @brief Returns true if enemy is attacking
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::isAttacking() const {
+    return state == enraged || state == determined;
+}
+
+/**
+ * @brief Returns true if enemy is low
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::isLow() const {
+    return healthBar->getHealth() < thresholdHeath;
 }
 
 /**

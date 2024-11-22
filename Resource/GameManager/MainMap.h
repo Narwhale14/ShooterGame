@@ -15,18 +15,16 @@ class MainMap : public State {
         MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMap();
 
-        void move(const float& dt, const float dir_x, const float dir_y, const float movementSpeed);
-        void updateInput(const float& dt);
-
         virtual void checkForQuit();
 
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
     private:
         Player* player;
-        Enemy* enemy;
+        bool playerUnderTree;
 
         Map* map;
+        std::vector<Tree*> trees;
         
         std::vector<Enemy*> enemies;
         sf::Clock spawnTimer;
@@ -41,14 +39,17 @@ class MainMap : public State {
         void initializeFonts();
 
         bool checkSpawnTimer();
+        void spawnTrees(int sparsity);
         void spawnEnemy();
 
-        void updateDamageCollisions();
+        void updateInput(const float& dt);
         void updateMobs(const float& dt);
+        void updateTrees(const float& dt);
         void updateLevelBar();
         void updateUpgrade();
 
-        void renderEnemies(sf::RenderTarget* target);
+        void renderEnemies(sf::RenderTarget& target);
+        void renderTrees(sf::RenderTarget& target);
 
         Button* dmgUp;
         Button* fireRateUp;

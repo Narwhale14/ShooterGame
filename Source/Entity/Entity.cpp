@@ -15,6 +15,8 @@ Entity::Entity() {
     scale = 0.f;
 
     multiplier = 1;
+    velocity.x = 0;
+    velocity.y = 0;
 }
 
 /**
@@ -22,7 +24,6 @@ Entity::Entity() {
  *        Deletes dynamically allocated sprite and texture
  */
 Entity::~Entity() {
-    delete sprite;
     delete healthBar;
 }
 
@@ -41,8 +42,8 @@ void Entity::setPosition(sf::Vector2f pos) {
  * 
  * @return float 
  */
-float Entity::getMovementSpeed() {
-    return movementSpeed;
+float Entity::getMaxVelocity() {
+    return maxVelocity;
 }
 
 /**
@@ -50,7 +51,7 @@ float Entity::getMovementSpeed() {
  * 
  * @return sf::Vector2f 
  */
-sf::Vector2f Entity::getPosition() {
+const sf::Vector2f Entity::getPosition() {
     return sprite->getPosition();
 }
 
@@ -85,13 +86,13 @@ void Entity::changeSprite(sf::Texture* texture) {
 }
 
 /**
- * @brief Checks to see if hitbox collides with another FloatRect
+ * @brief Checks to see if another hitbox collides with this hitbox
  * 
  * @param rect 
  * @return true 
  * @return false 
  */
-bool Entity::checkCollision(const sf::FloatRect rect) {
+bool Entity::checkCollision(const sf::FloatRect rect) const {
     return hitbox->getGlobalBounds().intersects(rect);
 }
 
@@ -122,12 +123,8 @@ void Entity::changeHealth(int incoming) {
  * @param dir_y from -1 to 1 in terms velocity on the Y axis
  */
 void Entity::move(const float& dt, const float dir_x, const float dir_y) {
-    velocity.x = dir_x * movementSpeed * dt;
-    velocity.y = dir_y * movementSpeed * dt;
+    velocity.x = maxVelocity * dir_x;
+    velocity.y = maxVelocity * dir_y;
 
-    if(sprite)
-        sprite->move(velocity.x * multiplier, velocity.y * multiplier);
-
-    if(hitbox)
-        hitbox->updateNextBox(sf::Vector2f(velocity.x * 5, velocity.y * 5));
+    sprite->move(velocity.x * multiplier * dt, velocity.y * multiplier * dt);
 }
