@@ -123,6 +123,16 @@ int Enemy::getDamage() const {
 }
 
 /**
+ * @brief Returns true if enemy is attacking
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::isAttacking() const {
+    return state == enraged || state == determined;
+}
+
+/**
  * @brief Gets relaxation timer
  * 
  * @return true 

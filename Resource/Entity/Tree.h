@@ -15,7 +15,9 @@ class Tree : public Object {
         Tree(sf::Texture& texture, float scale);
         virtual ~Tree();
 
+        void setOpacity(int opacity);
         void setPosition(sf::Vector2f pos);
+
         sf::Vector2f getPosition() const;
 
         virtual void update();

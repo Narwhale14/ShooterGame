@@ -21,7 +21,7 @@ class MainMap : public State {
         void render(sf::RenderTarget* target = nullptr);
     private:
         Player* player;
-        Enemy* enemy;
+        bool playerUnderTree;
 
         Map* map;
         std::vector<Tree*> trees;

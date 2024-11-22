@@ -129,8 +129,8 @@ bool Map::viewContainsCoords(const sf::Vector2f& objPos) const {
  * @return false 
  */
 bool Map::viewContainsObject(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const {
-    return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - (objBounds.width)) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - (objBounds.height))
-        && (objPos.x < view.getCenter().x + (view.getSize().x / 2) + (objBounds.width)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) + (objBounds.height));
+    return (objPos.x > view.getCenter().x - (view.getSize().x / 2) - (objBounds.width * 1.5f)) && (objPos.y > view.getCenter().y - (view.getSize().y / 2) - (objBounds.height * 1.5f))
+        && (objPos.x < view.getCenter().x + (view.getSize().x / 2) + (objBounds.width * 1.5f)) && (objPos.y < view.getCenter().y + (view.getSize().y / 2) + (objBounds.height * 1.5f));
 }
 
 /**

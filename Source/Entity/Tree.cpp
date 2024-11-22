@@ -7,28 +7,68 @@
 
 #include "../../Resource/Entity/Tree.h"
 
+/**
+ * @brief Construct a new Tree:: Tree object
+ * 
+ * @param texture 
+ * @param scale 
+ */
 Tree::Tree(sf::Texture& texture, float scale) {
     createSprite(&texture, scale);
     createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Blue);
 }
 
+/**
+ * @brief Destroy the Tree:: Tree object
+ * 
+ */
 Tree::~Tree() {
 
 }
 
-void Tree::setPosition(sf::Vector2f pos) {
-    sprite->setPosition(pos);
-    
+/**
+ * @brief Sets tree opacity
+ * 
+ * @param opacity 
+ */
+void Tree::setOpacity(int opacity) {
+    if(opacity < 0 || opacity > 255)
+        opacity = 255;
+
+    sprite->setColor(sf::Color(sprite->getColor().r, sprite->getColor().g, sprite->getColor().b, opacity));
 }
 
+/**
+ * @brief Sets position
+ * 
+ * @param pos 
+ */
+void Tree::setPosition(sf::Vector2f pos) {
+    sprite->setPosition(pos);
+}
+
+/**
+ * @brief Gets position
+ * 
+ * @return sf::Vector2f 
+ */
 sf::Vector2f Tree::getPosition() const {
     return sprite->getPosition();
 }
 
+/**
+ * @brief Updates tree
+ * 
+ */
 void Tree::update() {
     hitbox->update();
 }
 
+/**
+ * @brief Renders tree
+ * 
+ * @param target 
+ */
 void Tree::render(sf::RenderTarget& target) {
     if(sprite)
         target.draw(*sprite);

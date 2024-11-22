@@ -32,7 +32,7 @@ Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color) {
     box.setOutlineThickness(-1.f);
     box.setOutlineColor(color);
 
-    visible = true;
+    visible = false;
 }
 /**
  * @brief Destroy the Hitbox:: Hitbox object

@@ -22,7 +22,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     enemyCap = 15;
 
     map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    spawnTrees(5); // # Multiplier of trees (Scales with map size) (0 for no trees)
+    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
@@ -32,6 +32,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
 
     upgrading = false;
+    playerUnderTree = false;
 }
 
 /**
@@ -193,28 +194,29 @@ void MainMap::updateMobs(const float& dt) {
             continue;
         }
 
-        // Checks if player is close to enemy, and moves the enemy towards play when it is, or when enemy is enraged
+        // (STATE SETTING) Determines the enemy's state based on promiximity to player
         if(enemies[i]->getDistanceTo(player->getPosition()) < map->getGridSize() * enemies[i]->getSightDistance() || enemies[i]->getState() != 0) {
-            if(enemies[i]->getState() != 2 && enemies[i]->getState() != 3)
-                enemies[i]->setState(1); // Enraged if not scared
+            // Enraged if not idle
+            if(enemies[i]->getState() == 0)
+                enemies[i]->setState(1);
 
-            enemies[i]->track(player->getPosition());
-
-            // If not touching player then move towards
-            if(!enemies[i]->checkCollision(player->getHitboxBounds()))
-                enemies[i]->follow(dt, player->getPosition());
-
-            map->updateCollision(enemies[i]);
+            // If enemy is off screen for longer than a set despawn timer
+            if(!map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()) && enemies[i]->relaxationTimerPassed())
+                enemies[i]->setState(0);
 
             // If enemy is touching border while running from player, become determined
             if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
                 enemies[i]->setState(3);
 
-            // If enemy is off screen for longer than a set despawn timer
-            if(!map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()) && enemies[i]->relaxationTimerPassed())
-                enemies[i]->setState(0); // Idle
+            // (ENEMY MOVEMENT) If not touching player then move towards
+            if((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0 && !playerUnderTree) || (playerUnderTree && !enemies[i]->isAttacking())) {
+                map->updateCollision(enemies[i]);
+                
+                enemies[i]->track(player->getPosition());
+                enemies[i]->follow(dt, player->getPosition());
+            }
         }
-
+        
         enemies[i]->update();
 
         // If enemy is touching player and is alive, damage player
@@ -224,15 +226,18 @@ void MainMap::updateMobs(const float& dt) {
         // If a bullet is touching enemy, damage enemy
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
-                enemies[i]->resetInjuryTimer();
-                enemies[i]->changeHealth(-(player->getDmg()));
-
-                // If enemy is not determined
-                if(enemies[i]->getState() != 3)
-                    enemies[i]->setState(1); // Enraged
-
                 delete player->getActiveBullets()[j];
                 player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
+
+                enemies[i]->resetInjuryTimer();
+                enemies[i]->changeHealth(-10);
+
+                // If enemy is not determined
+                if(enemies[i]->getState() != 3 && enemies[i]->getState() != 2)
+                    enemies[i]->setState(1); // Enraged
+
+                if(playerUnderTree)
+                    enemies[i]->setState(2);
             }
         }
     }
@@ -244,7 +249,15 @@ void MainMap::updateMobs(const float& dt) {
  * @param dt 
  */
 void MainMap::updateTrees(const float& dt) {
-
+    playerUnderTree = false;
+    for(size_t i = 0; i < trees.size(); i++) {
+        if(trees[i]->getHitboxBounds().intersects(player->getHitboxBounds())) {
+            trees[i]->setOpacity(150);
+            playerUnderTree = true;
+        } else {
+            trees[i]->setOpacity(255);
+        }
+    }
 }
 
 /**

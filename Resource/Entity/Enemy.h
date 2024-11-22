@@ -22,6 +22,8 @@ class Enemy : public Entity {
         short unsigned getState() const;
         int getDamage() const;
 
+        bool isAttacking() const;
+
         bool relaxationTimerPassed();
         bool biteTimerPassed();
         bool injuryTimerPassed();
