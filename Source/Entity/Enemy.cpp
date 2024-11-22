@@ -153,7 +153,8 @@ bool Enemy::isLow() const {
  * @return false 
  */
 bool Enemy::isCloseTo(const sf::Vector2f& objPos, const sf::Vector2f& viewSize) {
-    return (this->getPosition().x > objPos.x - (viewSize.x / 7) && this->getPosition().y > objPos.y - (viewSize.y / 4));
+    return (getPosition().x > objPos.x - (viewSize.x / 10) && getPosition().x < objPos.x + (viewSize.x / 10) 
+         && getPosition().y > objPos.y - (viewSize.y / 7) && getPosition().y < objPos.y + (viewSize.y / 7));
 }
 
 /**
