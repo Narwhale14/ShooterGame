@@ -17,7 +17,7 @@
  * @param height height of hitbox
  * @param color hitbox color (green for player, red for damaging, blue for block)
  */
-Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color, bool isEntity) {
+Hitbox::Hitbox(sf::Sprite* s, float width, float height, sf::Color color) {
     sprite = s;
 
     if(width > height)

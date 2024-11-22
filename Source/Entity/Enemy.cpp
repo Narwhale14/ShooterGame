@@ -41,7 +41,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
 
     setPosition(sf::Vector2f(x, y));
 
-    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red, true);
+    createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Red);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
     state = relaxed;
