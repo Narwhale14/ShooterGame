@@ -25,6 +25,8 @@ class Enemy : public Entity {
         bool isAttacking() const;
         bool isLow() const;
 
+        bool isCloseTo(const sf::Vector2f& objPos, const sf::Vector2f& viewSize);
+
         bool relaxationTimerPassed();
         bool biteTimerPassed();
         bool injuryTimerPassed();
@@ -33,8 +35,8 @@ class Enemy : public Entity {
         void resetInjuryTimer();
 
         void relax();
-        void track(sf::Vector2f playerPosition);
-        void follow(const float& dt, sf::Vector2f playerPosition);
+        void track(const sf::Vector2f& playerPosition);
+        void follow(const float& dt, const sf::Vector2f& playerPosition);
 
         virtual void render(sf::RenderTarget& target);
         virtual void update();
@@ -63,6 +65,9 @@ class Enemy : public Entity {
 
         float fearSpeedMultiplier;
         int thresholdHeath;
+        int angleDeviation;
+
+        int relaxedAngle;
 
         short unsigned generateEnemyType();
 };

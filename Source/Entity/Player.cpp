@@ -21,6 +21,8 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     handheldType = gun;
 
     maxVelocity = 250;
+
+    timeUntilImmunityMS = 1000;
 }
 
 /**
@@ -76,6 +78,24 @@ void Player::useHandheld(const sf::Vector2f& mousePos) {
 void Player::stopHandheld(const sf::Vector2f& mousePos)
 {
     handheld->stopFire(mousePos, weaponPos);
+}
+
+/**
+ * @brief Returns whether player is safe under tree or not
+ * 
+ * @return true 
+ * @return false 
+ */
+bool Player::immunityTimerPassed() {
+    return timeUnderTree.getElapsedTime().asMilliseconds() > timeUntilImmunityMS;
+}
+
+/**
+ * @brief Resets timer
+ * 
+ */
+void Player::resetImmunityTimer() {
+    timeUnderTree.restart();
 }
 
 /**

@@ -21,18 +21,18 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     switch(type) {
         case 0:
             createSprite(&textures["ENEMY_WOLF"], 0.4f);
-            maxVelocity = 300;
+            maxVelocity = 275;
             xpValue = 15;
             killHealthValue = 7;
-            sightDistance = 8;
+            sightDistance = 13;
             damage = 10;
             break;
         case 1:
             createSprite(&textures["ENEMY_BULL"], 0.4f);
-            maxVelocity = 200;
+            maxVelocity = 175;
             xpValue = 10;
             sightDistance = 7;
-            killHealthValue = 5;
+            killHealthValue = 10;
             damage = 15;
             break;
         default:
@@ -47,14 +47,16 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     state = relaxed;
     relaxationTimeMS = 5000;
 
-    thresholdHeath = healthBar->getHealth() / 3;
-    fearSpeedMultiplier = 1.3f;
+    thresholdHeath = healthBar->getHealth() / 4;
+    fearSpeedMultiplier = 1.2f;
     injurySpeedMultiplier = 0.5f;
+    angleDeviation = ((rand() % 60 + 1) - 30);
 
     biteTimeMS = 500;
     injuryTimeMS = 250;
 
     angle = (rand() % 360) + 1;
+    relaxedAngle = angle;
     sprite->setRotation(angle);
 
     hasBeenRestarted = false;
@@ -65,7 +67,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
  * 
  */
 Enemy::~Enemy() {
-
+    
 }
 
 /**
@@ -143,6 +145,18 @@ bool Enemy::isLow() const {
 }
 
 /**
+ * @brief Checks if enemy is close to a player relative to viewSize
+ * 
+ * @param objPos 
+ * @param mapSize 
+ * @return true 
+ * @return false 
+ */
+bool Enemy::isCloseTo(const sf::Vector2f& objPos, const sf::Vector2f& viewSize) {
+    return (this->getPosition().x > objPos.x - (viewSize.x / 7) && this->getPosition().y > objPos.y - (viewSize.y / 4));
+}
+
+/**
  * @brief Gets relaxation timer
  * 
  * @return true 
@@ -179,10 +193,7 @@ bool Enemy::biteTimerPassed() {
  * @return false 
  */
 bool Enemy::injuryTimerPassed() {
-    if(injuryTimer.getElapsedTime().asMilliseconds() < injuryTimeMS)
-        return true;
-
-    return false;
+    return injuryTimer.getElapsedTime().asMilliseconds() < injuryTimeMS;
 }
 
 /**
@@ -230,7 +241,7 @@ void Enemy::relax() {
  * 
  * @param playerPosition 
  */
-void Enemy::track(sf::Vector2f pos) {
+void Enemy::track(const sf::Vector2f& pos) {
     float dist_x = pos.x - sprite->getPosition().x;
     float dist_y = pos.y - sprite->getPosition().y;
 
@@ -239,7 +250,9 @@ void Enemy::track(sf::Vector2f pos) {
     if(state == enraged || state == determined)
         sprite->setRotation(angle - 90);
     else if(state == scared)
-        sprite->setRotation(angle - 270);
+        sprite->setRotation(angle - 270 + angleDeviation);
+    else if(state == relaxed)
+        sprite->setRotation(relaxedAngle);
 }
 
 /**
@@ -248,7 +261,7 @@ void Enemy::track(sf::Vector2f pos) {
  * @param dt 
  * @param pos 
  */
-void Enemy::follow(const float& dt, sf::Vector2f pos) {
+void Enemy::follow(const float& dt, const sf::Vector2f& pos) {
     multiplier = 1; // Default speed
         
     if(state == scared) // Running away faster
@@ -259,8 +272,10 @@ void Enemy::follow(const float& dt, sf::Vector2f pos) {
     if(injuryTimerPassed() && hasBeenRestarted)
         multiplier *= injurySpeedMultiplier;
         
-
-    move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
+    if(state == scared)
+        move(dt, cos((angle + angleDeviation) * 3.14 / 180), sin((angle + angleDeviation) * 3.14 / 180));
+    else
+        move(dt, cos(angle * 3.14 / 180), sin(angle * 3.14 / 180));
 }
 
 /**

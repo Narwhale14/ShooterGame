@@ -208,13 +208,16 @@ void MainMap::updateMobs(const float& dt) {
             if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
                 enemies[i]->setState(3);
 
+            // If enemy re-spots player emerging from the tree
             if(!playerUnderTree && enemies[i]->getState() == 2 && !enemies[i]->isLow())
                 enemies[i]->setState(1);
 
-            // (ENEMY MOVEMENT) If not touching player then move towards
-            if((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0 && !playerUnderTree) || (playerUnderTree && !enemies[i]->isAttacking())) {
+            // (ENEMY MOVEMENT) Behold, the great conditional
+            if(((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0) 
+                && ((!playerUnderTree || enemies[i]->isCloseTo(player->getPosition(), map->getCameraSize())) || (playerUnderTree && !player->immunityTimerPassed())))
+            || (playerUnderTree && !enemies[i]->isAttacking())) {
                 map->updateCollision(enemies[i]);
-                
+
                 enemies[i]->track(player->getPosition());
                 enemies[i]->follow(dt, player->getPosition());
             }
@@ -239,7 +242,7 @@ void MainMap::updateMobs(const float& dt) {
                 if(enemies[i]->getState() != 3 && enemies[i]->getState() != 2)
                     enemies[i]->setState(1); // Enraged
 
-                if(playerUnderTree)
+                if(playerUnderTree && !enemies[i]->isCloseTo(player->getPosition(), map->getCameraSize()))
                     enemies[i]->setState(2);
             }
         }
@@ -261,6 +264,9 @@ void MainMap::updateTrees(const float& dt) {
             trees[i]->setOpacity(255);
         }
     }
+
+    if(!playerUnderTree)
+        player->resetImmunityTimer();
 }
 
 /**

@@ -22,6 +22,9 @@ class Player : public Entity {
         void increasefireRate();
         void increaseBullSpeed();
 
+        bool immunityTimerPassed();
+        void resetImmunityTimer();
+
         virtual void useHandheld(const sf::Vector2f& mousePos);
         virtual void stopHandheld(const sf::Vector2f& mousePos);
         void setHandheldType(unsigned short type);
@@ -37,6 +40,9 @@ class Player : public Entity {
         sf::Texture* idle;
         sf::Texture* aimed;
         sf::Vector2f weaponPos;
+
+        sf::Clock timeUnderTree;
+        int timeUntilImmunityMS;
 
         short unsigned handheldType;
         enum weaponTypes {empty = 0, gun};
