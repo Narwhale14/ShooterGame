@@ -14,8 +14,6 @@ class MainMap : public State {
     public:
         MainMap(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys);
         virtual ~MainMap();
-        
-        void updateInput(const float& dt);
 
         virtual void checkForQuit();
 
@@ -44,8 +42,9 @@ class MainMap : public State {
         void spawnTrees(int sparsity);
         void spawnEnemy();
 
-        void updateDamageCollisions();
+        void updateInput(const float& dt);
         void updateMobs(const float& dt);
+        void updateTrees(const float& dt);
         void updateLevelBar();
         void updateUpgrade();
 

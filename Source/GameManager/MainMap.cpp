@@ -22,7 +22,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     enemyCap = 15;
 
     map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees) !!!! Don't go above 10 with large maps 20x20 or greater if you want the game to start fast
+    spawnTrees(5); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
@@ -87,6 +87,11 @@ bool MainMap::checkSpawnTimer() {
  */
 void MainMap::spawnTrees(int sparsity) {
     size_t amount = sparsity * pow(map->getSizeAcross(), 2) / 100;
+
+    // HARD CAP TO AVOID FUNCTION INFINITELY SEARCHING FOR NON-EXISTENT USABLE SPACE (still REALLY dense just won't crash)
+    if(amount > pow(map->getSizeAcross(), 2) / 7)
+        amount = pow(map->getSizeAcross(), 2) / 7;
+
     float scale = 1.f;
 
     sf::Vector2f getRandCoords;
@@ -104,7 +109,6 @@ void MainMap::spawnTrees(int sparsity) {
             trees[i]->setPosition(sf::Vector2f(getRandCoords.x, getRandCoords.y));
             trees[i]->update();
 
-            // Keeps trees from intersecting with another's hitbox: O(n^2) complexity btw so be careful with map size
             bool intersecting = false;
             for(size_t j = 0; j < trees.size() - 1; j++) {
                 if(trees[i]->getHitboxBounds().intersects(trees[j]->getHitboxBounds()))
@@ -156,6 +160,8 @@ void MainMap::update(const float& dt) {
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
         updateMobs(dt);
+        updateTrees(dt);
+
         player->update();
         updateInput(dt);
 
@@ -230,6 +236,15 @@ void MainMap::updateMobs(const float& dt) {
             }
         }
     }
+}
+
+/**
+ * @brief Updates trees on map
+ * 
+ * @param dt 
+ */
+void MainMap::updateTrees(const float& dt) {
+
 }
 
 /**
