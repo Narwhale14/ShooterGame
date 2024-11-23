@@ -21,10 +21,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
     enemyCap = 50;
 
-    map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     spawnTrees(2); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
-    map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
 
