@@ -247,7 +247,7 @@ void MainMap::updateMobs(const float& dt) {
                 player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
 
                 enemies[i]->resetInjuryTimer();
-                enemies[i]->changeHealth(-10);
+                enemies[i]->changeHealth(-(player->getDmg()));
 
                 // If enemy is not determined
                 if(enemies[i]->getState() != 3 && enemies[i]->getState() != 2)
@@ -333,7 +333,6 @@ void MainMap::updateUpgrade()
         if(dmgUp->getState()==2){
             player->increaseDmg();
             upgrading=false;
-            std::cout<<"Increased Dmg\n";
         }
     }else if(cardChoice2[Menu1]=="FIRERATE"){
         fireRateUp->update(mousePosView);
@@ -341,7 +340,6 @@ void MainMap::updateUpgrade()
         if(fireRateUp->getState()==2){
             player->increasefireRate();
             upgrading=false;
-            std::cout<<"Increased Fire Rate\n";
         } 
     }else{
         bullSpeedUp->update(mousePosView);
@@ -349,7 +347,6 @@ void MainMap::updateUpgrade()
         if(bullSpeedUp->getState()==2){
             player->increaseBullSpeed();
             upgrading=false;
-            std::cout<<"Increased BullSpeed\n";
         }
     }
     //based off random menu2 choose the upgrade from cardChoice which conatians the upgrade options
@@ -359,7 +356,6 @@ void MainMap::updateUpgrade()
         if(dmgUp->getState()==2){
             player->increaseDmg();
             upgrading=false;
-            std::cout<<"Increased Dmg\n";
         }
     }else if(cardChoice2[Menu2]=="FIRERATE"){
         fireRateUp->update(mousePosView);
@@ -367,7 +363,6 @@ void MainMap::updateUpgrade()
         if(fireRateUp->getState()==2){
             player->increasefireRate();
             upgrading=false;
-            std::cout<<"Increased Fire Rate\n";
         } 
     }else{
         bullSpeedUp->update(mousePosView);
@@ -375,7 +370,6 @@ void MainMap::updateUpgrade()
         if(bullSpeedUp->getState()==2){
             player->increaseBullSpeed();
             upgrading=false;
-            std::cout<<"Increased BullSpeed\n";
         }
     }
 }

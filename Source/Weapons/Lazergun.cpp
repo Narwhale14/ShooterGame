@@ -1,20 +1,19 @@
 /**
- * @file Pistol.cpp
+ * @file Lazergun.cpp
  * @author William Wotherspoon
- * @brief function definitions for the pistol class
+ * @brief function definitions for the Lazergun class
  * @version 0.1
  * @date 2024-11-05
  */
 #include "../../Resource/Weapons/Lazergun.h"
 
 /**
- * @brief Construct a new Pistol:: Pistol object
+ * @brief Construct a new Lazergun:: Lazergun object
  * 
- * @param r range of the pistol
+ * @param r range of the Lazergun
  * @param texture bullets texture
  */
 Lazergun::Lazergun(std::map<std::string, sf::Texture>& textures){
-    //important firerate cannot go to much higher than move speed
     amount=100;
     createSprite(&textures["GLOCK"], 0.05);
     sprite->setRotation(90);
