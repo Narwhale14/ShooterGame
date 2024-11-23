@@ -151,3 +151,15 @@ int Player::getDmg()
 {
     return handheld->getDmg();
 }
+
+void Player::equipLazergun(std::map<std::string, sf::Texture>& textures)
+{
+    delete handheld;
+    handheld=new Lazergun(textures);
+}
+
+void Player::equipShotgun(std::map<std::string, sf::Texture>& textures)
+{
+    delete handheld;
+    handheld=new Shotgun(textures);
+}

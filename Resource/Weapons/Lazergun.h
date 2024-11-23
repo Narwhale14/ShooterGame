@@ -5,15 +5,15 @@
  * @version 0.1
  * @date 2024-11-05
  */
-#ifndef PISTOL_H
-#define PISTOL_H
+#ifndef LAZERGUN_H
+#define LAZERGUN_H
 
-#include "Weapon.h"
+#include "Pistol.h"
 
-class Pistol : public Weapon {
+class Lazergun : public Weapon {
     public:
-        Pistol(std::map<std::string, sf::Texture>& textures);
-        ~Pistol();
+        Lazergun(std::map<std::string, sf::Texture>& textures);
+        ~Lazergun();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void update(sf::Vector2f playerTrack);

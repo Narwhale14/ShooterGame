@@ -16,30 +16,16 @@ Weapon::Weapon() {
     sprite = nullptr;
     fireRate=1; //the closer to 0 the less time between each shot
     bulletSpeed=6; //when fire rate 1 dont go above 8
-    dmg=100;
+    dmg=10;
 }
 
+/**
+ * @brief returns the deque of bullets
+ * 
+ * @return std::deque<Bullet*>& 
+ */
 std::deque<Bullet*>& Weapon::getBulletList() {
     return BulletShot;
-}
-
-/**
- * @brief retrieve the firing state
- * 
- * @return true 
- * @return false 
- */
-bool Weapon::getFiringStatus() {
-    return false;
-}
-
-/**
- * @brief set the firing state
- * 
- * @param status 
- */
-void Weapon::setFiringStatus(bool status) {
-    //firing = status;
 }
 
 /**
@@ -110,23 +96,36 @@ int Weapon::getDmg()
  */
 void Weapon::setDmg(int d)
 {
-    dmg=d;
+    dmg+=2;
 }
 
+/**
+ * @brief increase dmg of weapon
+ * 
+ */
 void Weapon::increaseDmg()
 {
     dmg++;
 }
 
+/**
+ * @brief increase bullet speed of weapon
+ * 
+ */
 void Weapon::increaseBullSpeed()
 {
-    if(bulletSpeed>0 && bulletSpeed<20)
-    bulletSpeed=bulletSpeed+(bulletSpeed*2);
+    if(bulletSpeed>0 && bulletSpeed<20){
+        bulletSpeed=bulletSpeed*1.2;
+    }
 }
 
+/**
+ * @brief increase the firerate of weapons
+ * 
+ */
 void Weapon::increaseFireRate()
 {
-    if(fireRate>.1&&fireRate<20){
+    if(fireRate>.1){
         fireRate-=.1;
     }
 }

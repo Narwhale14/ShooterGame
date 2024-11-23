@@ -16,9 +16,6 @@ class Weapon{
         Weapon();
         virtual ~Weapon();
 
-        bool getFiringStatus();
-        void setFiringStatus(bool status);
-
         virtual void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc) = 0;
         virtual void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)=0;
         virtual void render(sf::RenderTarget& target);

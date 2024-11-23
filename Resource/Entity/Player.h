@@ -17,6 +17,8 @@ class Player : public Entity {
 
         std::deque<Bullet*>& getActiveBullets() const;
         unsigned short getHandheldType() const;
+        void equipLazergun(std::map<std::string, sf::Texture>& textures);
+        void equipShotgun(std::map<std::string, sf::Texture>& textures);
 
         void increaseDmg();
         void increasefireRate();
