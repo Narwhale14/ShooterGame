@@ -302,7 +302,4 @@ void Enemy::render(sf::RenderTarget& target) {
 void Enemy::update() {
     healthBar->setPosition(hitbox->getPosition().x, hitbox->getPosition().y + (hitbox->getGlobalBounds().height));
     hitbox->update();
-
-    if(healthBar->getHealth() < thresholdHeath && state != determined && state != relaxed)
-        state = scared;
 }
