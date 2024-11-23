@@ -47,9 +47,8 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     state = relaxed;
     relaxationTimeMS = 5000;
 
-    thresholdHeath = healthBar->getHealth() / 4;
-    fearSpeedMultiplier = 1.2f;
     injurySpeedMultiplier = 0.5f;
+    fearSpeedMultiplier = 1.25f;
     angleDeviation = ((rand() % 60 + 1) - 30);
 
     biteTimeMS = 500;
@@ -122,26 +121,6 @@ short unsigned Enemy::getState() const {
  */
 int Enemy::getDamage() const {
     return damage;
-}
-
-/**
- * @brief Returns true if enemy is attacking
- * 
- * @return true 
- * @return false 
- */
-bool Enemy::isAttacking() const {
-    return state == enraged || state == determined;
-}
-
-/**
- * @brief Returns true if enemy is low
- * 
- * @return true 
- * @return false 
- */
-bool Enemy::isLow() const {
-    return healthBar->getHealth() < thresholdHeath;
 }
 
 /**
@@ -248,7 +227,7 @@ void Enemy::track(const sf::Vector2f& pos) {
 
     angle = ((atan2(dist_y, dist_x)) * 180 / 3.14);
     
-    if(state == enraged || state == determined)
+    if(state == enraged)
         sprite->setRotation(angle - 90);
     else if(state == scared)
         sprite->setRotation(angle - 270 + angleDeviation);
@@ -267,8 +246,6 @@ void Enemy::follow(const float& dt, const sf::Vector2f& pos) {
         
     if(state == scared) // Running away faster
         multiplier *= -1 * fearSpeedMultiplier;
-    else if(state == determined) // Attacking faster
-        multiplier *= fearSpeedMultiplier;
 
     if(injuryTimerPassed() && hasBeenRestarted)
         multiplier *= injurySpeedMultiplier;

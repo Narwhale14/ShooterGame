@@ -26,7 +26,6 @@ class Map {
         bool viewContainsCoords(const sf::Vector2f& objPos) const;
         bool viewContainsObject(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const;
         bool mapContains(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const;
-        bool borderIsTouching(const sf::Vector2f& objPos) const;
 
         void updateCollision(Entity* entity);
         

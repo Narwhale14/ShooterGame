@@ -65,7 +65,7 @@ const sf::FloatRect Hitbox::getGlobalBounds() {
  * 
  * @param size 
  */
-void Hitbox::setSize(sf::Vector2f size) {
+void Hitbox::setSize(const sf::Vector2f& size) {
     box.setSize(size);
 }
 

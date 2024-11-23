@@ -16,7 +16,7 @@ class Tree : public Object {
         virtual ~Tree();
 
         void setOpacity(int opacity);
-        void setPosition(sf::Vector2f pos);
+        void setPosition(const sf::Vector2f& pos);
 
         sf::Vector2f getPosition() const;
 

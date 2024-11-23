@@ -33,7 +33,7 @@ Entity::~Entity() {
  * @param x 
  * @param y 
  */
-void Entity::setPosition(sf::Vector2f pos) {
+void Entity::setPosition(const sf::Vector2f& pos) {
     sprite->setPosition(pos);
 }
 
@@ -61,7 +61,7 @@ const sf::Vector2f Entity::getPosition() {
  * @param objPos 
  * @return float 
  */
-float Entity::getDistanceTo(sf::Vector2f objPos) {
+float Entity::getDistanceTo(const sf::Vector2f& objPos) {
     return sqrt(pow(objPos.x - sprite->getPosition().x, 2) + pow(objPos.y - sprite->getPosition().y, 2));
 }
 

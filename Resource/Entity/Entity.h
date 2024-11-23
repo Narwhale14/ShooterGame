@@ -17,11 +17,11 @@ class Entity : public Object {
 
         float getMaxVelocity();
         const sf::Vector2f getPosition();
-        float getDistanceTo(sf::Vector2f objPos);
+        float getDistanceTo(const sf::Vector2f& objPos);
         bool isAlive();
 
-        virtual void setPosition(sf::Vector2f pos);
-        void setVelocity(sf::Vector2f new_velocity);
+        virtual void setPosition(const sf::Vector2f& pos);
+        void setVelocity(const sf::Vector2f& new_velocity);
 
         void changeSprite(sf::Texture* texture);
         virtual void changeHealth(int incoming);

@@ -20,7 +20,6 @@ class Game {
         void update();
         void render();
         void run();
-
     private:
         sf::RenderWindow *window;
         sf::VideoMode windowBounds;
