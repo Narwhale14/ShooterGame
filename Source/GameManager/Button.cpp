@@ -75,7 +75,7 @@ Button::~Button() {
  * 
  * @param position 
  */
-void Button::setPosition(sf::Vector2f position) {
+void Button::setPosition(const sf::Vector2f& position) {
     button.setPosition(position.x, position.y);
 
     if(sprite)

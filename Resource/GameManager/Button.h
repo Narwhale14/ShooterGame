@@ -9,7 +9,7 @@ class Button {
         Button(sf::Vector2f size, sf::Color hover, sf::Color active, sf::Texture* texture);
         ~Button();
 
-        void setPosition(sf::Vector2f position);
+        void setPosition(const sf::Vector2f& position);
 
         short unsigned getState();
         sf::Vector2f getSize() const;

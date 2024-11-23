@@ -18,7 +18,7 @@ class Hitbox {
         const sf::Vector2f getPosition();
         const sf::FloatRect getGlobalBounds();
 
-        void setSize(sf::Vector2f size);
+        void setSize(const sf::Vector2f& size);
         void setVisibility(bool visible);
 
         void update();

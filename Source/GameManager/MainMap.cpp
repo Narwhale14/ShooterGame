@@ -19,14 +19,13 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 15;
-
-    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
+    enemyCap = 50;
 
     map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    spawnTrees(2); // # Multiplier of trees (Scales with map size) (0 for no trees)
+
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
-    levelBar = new LevelBar(fonts["SONO_B"], player->getHitboxBounds().width * 7, player->getHitboxBounds().height * 1.5f, player->getPosition().x, player->getPosition().y + (player->getHitboxBounds().height * 5.5f));
+    levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
 
     dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
     fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
@@ -218,17 +217,16 @@ void MainMap::updateMobs(const float& dt) {
             if(!map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()) && enemies[i]->relaxationTimerPassed())
                 enemies[i]->setState(0);
 
-            // If enemy is touching border while running from player, become determined
-            if(map->borderIsTouching(enemies[i]->getPosition()) && enemies[i]->getState() == 2 && map->viewContainsObject(enemies[i]->getPosition(), enemies[i]->getHitboxBounds()))
-                enemies[i]->setState(3);
-
-            if(!playerUnderTree && enemies[i]->getState() == 2 && !enemies[i]->isLow())
+            // If enemy re-spots player emerging from the tree
+            if(!playerUnderTree && enemies[i]->getState() == 2)
                 enemies[i]->setState(1);
 
-            // (ENEMY MOVEMENT) If not touching player then move towards
-            if((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0 && !playerUnderTree) || (playerUnderTree && !enemies[i]->isAttacking())) {
+            // (ENEMY MOVEMENT) Behold, the great conditional
+            if(((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0) 
+                && ((!playerUnderTree || enemies[i]->isCloseTo(player->getPosition(), map->getCameraSize())) || (playerUnderTree && !player->immunityTimerPassed())))
+            || (playerUnderTree && !(enemies[i]->getState() == 1))) {
                 map->updateCollision(enemies[i]);
-                
+
                 enemies[i]->track(player->getPosition());
                 enemies[i]->follow(dt, player->getPosition());
             }
@@ -253,7 +251,7 @@ void MainMap::updateMobs(const float& dt) {
                 if(enemies[i]->getState() != 3 && enemies[i]->getState() != 2)
                     enemies[i]->setState(1); // Enraged
 
-                if(playerUnderTree)
+                if(playerUnderTree && !enemies[i]->isCloseTo(player->getPosition(), map->getCameraSize()))
                     enemies[i]->setState(2);
             }
         }
@@ -275,6 +273,9 @@ void MainMap::updateTrees(const float& dt) {
             trees[i]->setOpacity(255);
         }
     }
+
+    if(!playerUnderTree)
+        player->resetImmunityTimer();
 }
 
 /**
@@ -379,7 +380,7 @@ void MainMap::updateUpgrade()
  * 
  */
 void MainMap::updateLevelBar() {
-    levelBar->setPosition(map->getViewCenter().x, map->getViewCenter().y + (player->getHitboxBounds().height * 5.5f));
+    levelBar->setPosition(map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
 }
 
 /**

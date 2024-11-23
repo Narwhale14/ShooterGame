@@ -43,7 +43,7 @@ void Tree::setOpacity(int opacity) {
  * 
  * @param pos 
  */
-void Tree::setPosition(sf::Vector2f pos) {
+void Tree::setPosition(const sf::Vector2f& pos) {
     sprite->setPosition(pos);
 }
 
