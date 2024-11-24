@@ -19,7 +19,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 50;
+    enemyCap = 0;
 
     map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     spawnTrees(2); // # Multiplier of trees (Scales with map size) (0 for no trees)
@@ -526,6 +526,9 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/bullet.png"))
         textures["BULLET"] = temp;
+
+    if(temp.loadFromFile("Textures/pellet.png"))
+        textures["PELLET"] = temp;
 
     if(temp.loadFromFile("Textures/glock.png"))
         textures["GLOCK"] = temp;

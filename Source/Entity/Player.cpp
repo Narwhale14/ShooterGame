@@ -17,7 +17,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
-    handheld = new Pistol(textures);
+    handheld = new Shotgun(textures);
     handheldType = gun;
 
     maxVelocity = 225;

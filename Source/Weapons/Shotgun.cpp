@@ -15,17 +15,20 @@
  */
 Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
     //important bulletSpeed cannot go to much higher than move speed
-    amount=10;
+    amount=20;
     createSprite(&textures["SHOTGUN"], 0.05f);
     sprite->setRotation(90);
-    bulletT=&textures["BULLET"];
+    bulletT=&textures["PELLET"];
     //BulletShot=new Bullet(range,bTexture);
     // BulletShot1=new Bullet(range,bTexture);
     // BulletShot2=new Bullet(range,bTexture);
     if(amount>0){
-        temp = new Bullet(range,bulletT);
-        BulletShot.push_back(temp);
+        for(int i=0;i<5;i++){
+            temp = new Bullet(range,bulletT);
+            BulletShot.push_back(temp);
+        }
     }
+    srand(time(0));
 }
 
 /**
@@ -34,14 +37,9 @@ Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
  */
 Shotgun::~Shotgun() {
     for(unsigned int i=0;i<BulletShot.size();i++){
-        // BulletShot.front()=nullptr;
-        // BulletShot.pop();
-        delete BulletShot[i];
+        delete BulletShot.front();
+        BulletShot.pop_front();
     }
-
-    //delete BulletShot;
-    // delete BulletShot1;
-    // delete BulletShot2;
 }
 
 /**
@@ -52,22 +50,34 @@ Shotgun::~Shotgun() {
  */
 void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {    
-    for(unsigned int x=0;x<bulletSpeed;x++){
-        for(unsigned int i=0;i<BulletShot.size();i++){ 
-            BulletShot[i]->fireBull(mouseLoc,playerLoc);
+    direction=rand()%100;
+    direction1=rand()%100;
+    direction2=rand()%100;
+    direction3=rand()%100;
+
+    for(unsigned int x=0;x<7;x++){
+        for(unsigned int i=0;i<BulletShot.size();i+=5){ 
+            BulletShot[i]->fireBull({mouseLoc.x+direction,mouseLoc.y+direction},playerLoc);
+            BulletShot[i+1]->fireBull({mouseLoc.x-direction1,mouseLoc.y-direction1},playerLoc);
+            BulletShot[i+2]->fireBull({mouseLoc.x+direction2,mouseLoc.y-direction2},playerLoc);
+            BulletShot[i+3]->fireBull({mouseLoc.x-direction3,mouseLoc.y+direction3},playerLoc);
+            BulletShot[i+4]->fireBull({mouseLoc.x+direction2,mouseLoc.y+direction3},playerLoc);
             if(!(BulletShot.front()->getFiringStat())){
-                BulletShot.pop_front();
+                for(int z=0;z<5;z++){
+                    delete BulletShot.front();
+                    BulletShot.pop_front();
+                }
             }
         }
     }
     T=C.getElapsedTime();
-    if(T.asSeconds()>fireRate && BulletShot.size()<amount){
-        Bullet *newTemp = new Bullet(range,bulletT);
-        BulletShot.push_back(newTemp);
+    if(T.asSeconds()>.3 && BulletShot.size()<amount){
+        for(int i=0;i<5;i++){
+            Bullet *newTemp = new Bullet(range,bulletT);
+            BulletShot.push_back(newTemp);
+        }
         C.restart();
     }
-        //BulletShot1->fireBull({mouseLoc.x+100,mouseLoc.y+100},playerLoc, firing);
-        //firing=BulletShot2->fireBull({mouseLoc.x-100,mouseLoc.y-100},playerLoc, firing);
 }
 
 /**
@@ -78,16 +88,21 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
  */
 void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-    for(unsigned int x=0;x<bulletSpeed;x++){
-        for(unsigned int i=0;i<BulletShot.size();i++){ 
-            BulletShot[i]->stopBull(mouseLoc,playerLoc);
+    for(unsigned int x=0;x<7;x++){
+        for(unsigned int i=0;i<BulletShot.size();i+=5){ 
+            BulletShot[i]->fireBull({mouseLoc.x+direction,mouseLoc.y+direction},playerLoc);
+            BulletShot[i+1]->fireBull({mouseLoc.x-direction1,mouseLoc.y-direction1},playerLoc);
+            BulletShot[i+2]->fireBull({mouseLoc.x+direction2,mouseLoc.y-direction2},playerLoc);
+            BulletShot[i+3]->fireBull({mouseLoc.x-direction3,mouseLoc.y+direction3},playerLoc);
+            BulletShot[i+4]->fireBull({mouseLoc.x+direction2,mouseLoc.y+direction3},playerLoc);
             if(!(BulletShot.front()->getFiringStat())){
-                BulletShot.pop_front();
+                for(int z=0;z<5;z++){
+                    delete BulletShot.front();
+                    BulletShot.pop_front();
+                }
             }
         }
     }
-        // BulletShot1->stopBull({mouseLoc.x+100,mouseLoc.y+100},playerLoc, firing);
-        // firing=BulletShot2->stopBull({mouseLoc.x-100,mouseLoc.y-100},playerLoc, firing);
 }
 
 
