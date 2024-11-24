@@ -26,6 +26,8 @@ class Weapon{
         std::deque<Bullet*>& getBulletList();
         int getDmg();
         void setDmg(int d);
+        void setFireRate(int fr);
+        void setBullSpeed(int spd);
 
         void increaseDmg();
         void increaseBullSpeed();

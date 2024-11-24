@@ -19,6 +19,7 @@ class Player : public Entity {
         unsigned short getHandheldType() const;
         void equipLazergun(std::map<std::string, sf::Texture>& textures);
         void equipShotgun(std::map<std::string, sf::Texture>& textures);
+        void equipSniper(std::map<std::string, sf::Texture>& textures);
 
         void increaseDmg();
         void increasefireRate();

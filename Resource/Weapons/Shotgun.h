@@ -18,8 +18,10 @@ class Shotgun : public Weapon {
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void update(sf::Vector2f playerTrack);
     private:
-        // Bullet *BulletShot1;
-        // Bullet *BulletShot2;
+        int direction;
+        int direction1;
+        int direction2;
+        int direction3;
 };
 
 #endif

@@ -19,7 +19,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 50;
+    enemyCap = 30;
 
     map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     spawnTrees(2); // # Multiplier of trees (Scales with map size) (0 for no trees)
@@ -30,17 +30,24 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
     fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
+    lazerGunSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHLAZERGUN"]);
+    shotGunSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSHOTGUN"]);
+    sniperSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSNIPER"]);
 
-    upgrading = false;
+
+    upgrading=false;
+    finalUp=false;
     playerUnderTree = false;
     //adds the upgrade options to the vector
-    for(unsigned int i=0; i<3;i++)
+    for(unsigned int i=0; i<10;i++)
         cardChoice2.push_back("DMG");
-    for(unsigned int i=0; i<3;i++)
+    for(unsigned int i=0; i<10;i++)
         cardChoice2.push_back("FIRERATE");
-    for(unsigned int i=0; i<3;i++)
+    for(unsigned int i=0; i<10;i++)
         cardChoice2.push_back("BULLSPEED");
-
+    cardChoice2.push_back("LAZERGUN");
+    cardChoice2.push_back("SHOTGUN");
+    cardChoice2.push_back("SNIPER");
 }
 
 /**
@@ -62,6 +69,9 @@ MainMap::~MainMap() {
     delete fireRateUp;
     delete bullSpeedUp;
     delete map;
+    delete lazerGunSwitch;
+    delete shotGunSwitch;
+    delete sniperSwitch;
 }
 
 /**
@@ -191,16 +201,29 @@ void MainMap::updateMobs(const float& dt) {
 
             // Checks if player levels up from getting xp from killing enemy
             if(levelBar->addXp(enemies[i]->getXPValue())){
-                upgrading = true;
-                //generates the the random menu choices
-                Menu1= rand() % 8;
-                if(Menu1<3)
-                    Menu2=(rand()%5)+3;
-                else if(Menu1<6){
-                    while(Menu2==3||Menu2==4||Menu2==5)
-                        Menu2=rand()%8;
-                }else
-                    Menu2=rand()%5;
+                if(!finalUp){
+                    upgrading = true;
+                    //generates the the random menu choices
+                    Menu1=rand() % 32;
+                    if(Menu1<10)
+                        Menu2=(rand()%21)+10;
+                    else if(Menu1<20){
+                        while(Menu2>=10 &&Menu2<=19)
+                            Menu2=rand()%31;
+                    }else if(Menu1<29){
+                        Menu2=rand()%19;
+                    }else if(Menu1==30){
+                        while(Menu2==30)
+                            Menu2=rand()%31;
+                    }else if(Menu1==31){
+                        while(Menu2==31)
+                            Menu2=rand()%31;
+                    }else if(Menu1==32){
+                        while(Menu2==32)
+                            Menu2=rand()%32;
+                    }
+                }
+                
             }
             player->changeHealth(enemies[i]->getKillHealthValue());
             
@@ -241,8 +264,12 @@ void MainMap::updateMobs(const float& dt) {
         // If a bullet is touching enemy, damage enemy
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
-                delete player->getActiveBullets()[j];
-                player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
+
+                /*IMPORTANT: when hitting with multiple bullets the game crashes*/
+                if(!finalUp){
+                    delete player->getActiveBullets()[j];
+                    player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
+                }
 
                 enemies[i]->resetInjuryTimer();
                 enemies[i]->changeHealth(-(player->getDmg()));
@@ -342,14 +369,40 @@ void MainMap::updateUpgrade()
             player->increasefireRate();
             upgrading=false;
         } 
-    }else{
+    }else if(cardChoice2[Menu1]=="BULLSPEED"){
         bullSpeedUp->update(mousePosView);
         bullSpeedUp->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(bullSpeedUp->getState()==2){
             player->increaseBullSpeed();
             upgrading=false;
         }
+    }else if(cardChoice2[Menu1]=="LAZERGUN"){
+        lazerGunSwitch->update(mousePosView);
+        lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(lazerGunSwitch->getState()==2){
+            player->equipLazergun(textures);
+            upgrading=false;
+            finalUp=true;
+        }
+
+    }else if(cardChoice2[Menu1]=="SHOTGUN"){
+        shotGunSwitch->update(mousePosView);
+        shotGunSwitch->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(shotGunSwitch->getState()==2){
+            player->equipShotgun(textures);
+            upgrading=false;
+            finalUp=true;
+        }
+    }else if(cardChoice2[Menu1]=="SNIPER"){
+        sniperSwitch->update(mousePosView);
+        sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(sniperSwitch->getState()==2){
+            player->equipSniper(textures);
+            upgrading=false;
+            finalUp=true;
+        }
     }
+
     //based off random menu2 choose the upgrade from cardChoice which conatians the upgrade options
     if(cardChoice2[Menu2]=="DMG"){
         dmgUp->update(mousePosView);
@@ -365,12 +418,36 @@ void MainMap::updateUpgrade()
             player->increasefireRate();
             upgrading=false;
         } 
-    }else{
+    }else if(cardChoice2[Menu2]=="BULLSPEED"){
         bullSpeedUp->update(mousePosView);
         bullSpeedUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(bullSpeedUp->getState()==2){
             player->increaseBullSpeed();
             upgrading=false;
+        }
+    }else if(cardChoice2[Menu2]=="LAZERGUN"){
+        lazerGunSwitch->update(mousePosView);
+        lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(lazerGunSwitch->getState()==2){
+            player->equipLazergun(textures);
+            upgrading=false;
+            finalUp=true;
+        }
+    }else if(cardChoice2[Menu2]=="SHOTGUN"){
+        shotGunSwitch->update(mousePosView);
+        shotGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(shotGunSwitch->getState()==2){
+            player->equipShotgun(textures);
+            upgrading=false;
+            finalUp=true;
+        }
+    }else if(cardChoice2[Menu2]=="SNIPER"){
+        sniperSwitch->update(mousePosView);
+        sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
+        if(sniperSwitch->getState()==2){
+            player->equipSniper(textures);
+            upgrading=false;
+            finalUp=true;
         }
     }
 }
@@ -408,6 +485,10 @@ void MainMap::render(sf::RenderTarget* target) {
             fireRateUp->render(*target);
         if(cardChoice2[Menu1]=="BULLSPEED"||cardChoice2[Menu2]=="BULLSPEED")
             bullSpeedUp->render(*target);
+        if(cardChoice2[Menu1]=="LAZERGUN"||cardChoice2[Menu2]=="LAZERGUN")
+            lazerGunSwitch->render(*target);
+        if(cardChoice2[Menu1]=="SHOTGUN"||cardChoice2[Menu2]=="SHOTGUN")
+            shotGunSwitch->render(*target);
     }
 }
 
@@ -473,6 +554,9 @@ void MainMap::initializeTextures() {
     if(temp.loadFromFile("Textures/bullet.png"))
         textures["BULLET"] = temp;
 
+    if(temp.loadFromFile("Textures/pellet.png"))
+        textures["PELLET"] = temp;
+
     if(temp.loadFromFile("Textures/glock.png"))
         textures["GLOCK"] = temp;
 
@@ -496,6 +580,15 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/lazerBull.png"))
         textures["LAZERBULL"] = temp;  
+
+    if(temp.loadFromFile("Textures/switchLazerGun.png"))
+        textures["SWITCHLAZERGUN"] = temp;  
+    
+    if(temp.loadFromFile("Textures/switchShotGun.png"))
+        textures["SWITCHSHOTGUN"] = temp; 
+
+    if(temp.loadFromFile("Textures/switchSniper.png"))
+        textures["SWITCHSNIPER"] = temp;   
 
     if(temp.loadFromFile("Textures/tree.png"))
         textures["TREE_1"] = temp;
