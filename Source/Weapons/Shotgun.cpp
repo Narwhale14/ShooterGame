@@ -1,5 +1,5 @@
 /**
- * @file Pistol.cpp
+ * @file Shotgun.cpp
  * @author William Wotherspoon
  * @brief function definitions for the pistol class
  * @version 0.1
@@ -8,20 +8,16 @@
 #include "../../Resource/Weapons/Shotgun.h"
 
 /**
- * @brief Construct a new Pistol:: Pistol object
+ * @brief Construct a new Shotgun:: Shotgun object
  * 
- * @param r range of the pistol
+ * @param r range of the Shotgun
  * @param texture bullets texture
  */
 Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
-    //important bulletSpeed cannot go to much higher than move speed
     amount=20;
     createSprite(&textures["SHOTGUN"], 0.05f);
     sprite->setRotation(90);
     bulletT=&textures["PELLET"];
-    //BulletShot=new Bullet(range,bTexture);
-    // BulletShot1=new Bullet(range,bTexture);
-    // BulletShot2=new Bullet(range,bTexture);
     if(amount>0){
         for(int i=0;i<5;i++){
             temp = new Bullet(range,bulletT);
@@ -32,7 +28,7 @@ Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
 }
 
 /**
- * @brief Destroy the Pistol:: Pistol object
+ * @brief Destroy the Shotgun:: Shotgun object
  * 
  */
 Shotgun::~Shotgun() {
@@ -43,7 +39,7 @@ Shotgun::~Shotgun() {
 }
 
 /**
- * @brief fires the bullet out of the pistol
+ * @brief fires the bullet out of the Shotgun using the bullet shoot function
  * 
  * @param mouseLoc location of player mouse
  * @param playerLoc location of player
@@ -81,7 +77,7 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 }
 
 /**
- * @brief fires the last bullet and shoots no more
+ * @brief fires the last bullet and shoots no more used to allow for bullet to travel its course before disapearing
  * 
  * @param mouseLoc location of player mouse
  * @param playerLoc location of player
