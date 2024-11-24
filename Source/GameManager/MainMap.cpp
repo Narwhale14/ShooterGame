@@ -22,7 +22,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     enemyCap = 50;
 
     map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    spawnTrees(2); // # Multiplier of trees (Scales with map size) (0 for no trees)
+    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
@@ -95,13 +95,14 @@ bool MainMap::checkSpawnTimer() {
  * @param amount 
  */
 void MainMap::spawnTrees(int sparsity) {
-    size_t amount = sparsity * pow(map->getSizeAcross(), 2) / 100;
+    size_t amount = sparsity * pow(map->getSizeAcross(), 2) / 200;
 
     // HARD CAP TO AVOID FUNCTION INFINITELY SEARCHING FOR NON-EXISTENT USABLE SPACE (still REALLY dense just won't crash)
     if(amount > pow(map->getSizeAcross(), 2) / 7)
         amount = pow(map->getSizeAcross(), 2) / 7;
 
     float scale = 1.f;
+    int angle = 0;
 
     sf::Vector2f getRandCoords;
     int range = map->getTotalSize();
@@ -110,6 +111,9 @@ void MainMap::spawnTrees(int sparsity) {
         // 0.15 - 0.34 scale
         scale = (rand() % 20 + 15) / 100.f;
         trees.emplace_back(new Tree(textures["TREE_1"], scale));
+
+        angle = (rand() % 360 + 1);
+        trees[i]->setRotation(angle);
 
         while(true) {
             getRandCoords.x = rand() % range;

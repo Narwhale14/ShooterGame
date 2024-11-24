@@ -20,7 +20,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     handheld = new Pistol(textures);
     handheldType = gun;
 
-    maxVelocity = 225;
+    maxVelocity = 240;
 
     timeUntilImmunityMS = 1000;
 }
