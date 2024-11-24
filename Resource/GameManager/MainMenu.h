@@ -8,7 +8,7 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "Settings.h"
+#include "State.h"
 
 class MainMenu : public State {
     public:
@@ -24,7 +24,6 @@ class MainMenu : public State {
     private:
         Button* playButton;
         Button* exitButton;
-        Button* settingsButton;
 
         void initializeKeybinds();
         void initializeFonts();
