@@ -16,7 +16,7 @@
 Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
     //important bulletSpeed cannot go to much higher than move speed
     amount=10;
-    createSprite(&textures["GLOCK"], 0.05f);
+    createSprite(&textures["SHOTGUN"], 0.05f);
     sprite->setRotation(90);
     bulletT=&textures["BULLET"];
     //BulletShot=new Bullet(range,bTexture);

@@ -54,7 +54,10 @@ class MainMap : public State {
         Button* dmgUp;
         Button* fireRateUp;
         Button* bullSpeedUp;
+        Button* lazerGunSwitch;
+        Button* shotGunSwitch;
         bool upgrading;
+        bool finalUp;
         int Menu1;
         int Menu2;
         std::map<int,std::string> cardChoice;

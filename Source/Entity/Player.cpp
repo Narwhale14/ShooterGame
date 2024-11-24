@@ -176,10 +176,12 @@ void Player::equipLazergun(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
     handheld=new Lazergun(textures);
+    handheldType=gun;
 }
 
 void Player::equipShotgun(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
     handheld=new Shotgun(textures);
+    handheldType=gun;
 }
