@@ -31,10 +31,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     // Death screen creation
     tint.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
-    tint.setOrigin(map->getCameraSize());
+    tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
     tint.setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y));
     tint.setFillColor(sf::Color(0, 0, 0, 100));
-    menuButton = new Button(fonts["SONO_R"], "MENU", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    menuButton = new Button(fonts["SONO_R"], "QUIT", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     menuButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2 + menuButton->getSize().y * 1.5f));
 
     // Upgrade buttons creation
@@ -187,6 +187,9 @@ void MainMap::spawnEnemy() {
 void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
+
+    tint.setPosition(map->getViewCenter());
+    menuButton->setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y + menuButton->getSize().y));
     
     if(upgrading) {
         updateUpgrade();
