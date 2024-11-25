@@ -16,6 +16,8 @@
 MainMenu::MainMenu(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
     initializeFonts();
 
+    background.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
+
     // play button
     playButton = new Button(fonts["SONO_R"], "PLAY", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     playButton->setPosition(sf::Vector2f((window->getSize().x / 2) - playButton->getSize().x * 0.75f, window->getSize().y / 2));
@@ -89,4 +91,15 @@ void MainMenu::initializeFonts() {
 
     if(temp.loadFromFile("Fonts/Sono-Regular.ttf"))
         fonts["SONO_R"] = temp;
+}
+
+/**
+ * @brief Loads all textures into map
+ * 
+ */
+void MainMenu::initializeTextures() {
+    sf::Texture temp;
+
+    if(temp.loadFromFile("Textures/background.png"))
+        textures["BACKGROUND"] = temp;
 }

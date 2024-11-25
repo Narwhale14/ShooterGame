@@ -25,7 +25,10 @@ class MainMenu : public State {
         Button* playButton;
         Button* exitButton;
 
+        sf::RectangleShape background;
+
         virtual void initializeFonts();
+        virtual void initializeTextures();
 };
 
 #endif
