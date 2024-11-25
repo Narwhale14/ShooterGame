@@ -214,9 +214,17 @@ void MainMap::updateMobs(const float& dt) {
                         }else{
                            Menu2=(rand()%12)+20; 
                         }
+                    }else if(Menu1<30){
+                        int coin=rand()%20;
+                        if(coin==1){
+                            Menu2=(rand()%2)+30;
+                        }else{
+                            Menu2=rand()%19;
+                        }
                     }else if(Menu1>29){
                         Menu2=rand()%29;
                     }
+                    //std::cout<<"Menu1="<<Menu1<<" | Menu2="<<Menu2<<"\n"; used for testing
                 }
             }
             player->changeHealth(enemies[i]->getKillHealthValue());
