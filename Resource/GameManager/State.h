@@ -41,8 +41,6 @@ class State {
 
         std::map<std::string, sf::Texture> textures;
         std::map<std::string, sf::Font> fonts;
-
-        virtual void initializeKeybinds() = 0;
     private:
 };
 

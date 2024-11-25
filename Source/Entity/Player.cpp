@@ -188,6 +188,8 @@ void Player::equipShotgun(std::map<std::string, sf::Texture>& textures)
 
 void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
 {
+    delete handheld;
+    handheld = new Pistol(textures);
     handheld->setDmg(1000);
     handheld->setFireRate(1);
     handheld->setBullSpeed(35);
