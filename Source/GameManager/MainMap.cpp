@@ -19,10 +19,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 5;
+    enemyCap = 20;
 
     // Map creation
-    map = new Map(window, 20, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     // Player creation
@@ -459,10 +459,10 @@ void MainMap::render(sf::RenderTarget* target) {
     this->renderEnemies(*target);
 
     player->render(*target);
+
     this->renderTrees(*target);
 
-    if(levelBar)
-        levelBar->render(*target);
+    levelBar->render(*target);
     
     if(upgrading){
         if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
