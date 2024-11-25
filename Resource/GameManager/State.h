@@ -32,7 +32,7 @@ class State {
         sf::RenderWindow* window;
 
         std::map<std::string, int>* supportedKeys; // A point to avoid copying list of keys
-        std::map<std::string, int> keybinds; // Each state has its own keybinds ofc
+        std::map<std::string, int> keybinds;
 
         bool quit;
         bool flush;
@@ -41,8 +41,6 @@ class State {
 
         std::map<std::string, sf::Texture> textures;
         std::map<std::string, sf::Font> fonts;
-
-        virtual void initializeKeybinds() = 0;
     private:
 };
 

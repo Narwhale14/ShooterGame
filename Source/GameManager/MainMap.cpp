@@ -19,21 +19,31 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 30;
+    enemyCap = 20;
 
-    map = new Map(window, 40, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
-    spawnTrees(2); // # Multiplier of trees (Scales with map size) (0 for no trees)
+    // Map creation
+    map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
+    // Player creation
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
 
+    // Death screen creation
+    tint.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
+    tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
+    tint.setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y));
+    tint.setFillColor(sf::Color(0, 0, 0, 100));
+    menuButton = new Button(fonts["SONO_R"], "QUIT", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    menuButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2 + menuButton->getSize().y * 1.5f));
+
+    // Upgrade buttons creation
     dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
     fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
     bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
     lazerGunSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHLAZERGUN"]);
     shotGunSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSHOTGUN"]);
     sniperSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSNIPER"]);
-
 
     upgrading=false;
     finalUp=false;
@@ -72,6 +82,7 @@ MainMap::~MainMap() {
     delete lazerGunSwitch;
     delete shotGunSwitch;
     delete sniperSwitch;
+    delete menuButton;
 }
 
 /**
@@ -79,9 +90,11 @@ MainMap::~MainMap() {
  * 
  */
 void MainMap::checkForQuit() {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("CLOSE")))) {
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("CLOSE"))))
         quit = true;
-    }
+
+    if(menuButton->getState() == 2)
+        quit = true;
 }
 
 /**
@@ -105,13 +118,14 @@ bool MainMap::checkSpawnTimer() {
  * @param amount 
  */
 void MainMap::spawnTrees(int sparsity) {
-    size_t amount = sparsity * pow(map->getSizeAcross(), 2) / 100;
+    size_t amount = sparsity * pow(map->getSizeAcross(), 2) / 200;
 
     // HARD CAP TO AVOID FUNCTION INFINITELY SEARCHING FOR NON-EXISTENT USABLE SPACE (still REALLY dense just won't crash)
     if(amount > pow(map->getSizeAcross(), 2) / 7)
         amount = pow(map->getSizeAcross(), 2) / 7;
 
     float scale = 1.f;
+    int angle = 0;
 
     sf::Vector2f getRandCoords;
     int range = map->getTotalSize();
@@ -120,6 +134,9 @@ void MainMap::spawnTrees(int sparsity) {
         // 0.15 - 0.34 scale
         scale = (rand() % 20 + 15) / 100.f;
         trees.emplace_back(new Tree(textures["TREE_1"], scale));
+
+        angle = (rand() % 360 + 1);
+        trees[i]->setRotation(angle);
 
         while(true) {
             getRandCoords.x = rand() % range;
@@ -155,7 +172,7 @@ void MainMap::spawnEnemy() {
         getRandCoords.x = rand() % maxRange + minRange;
         getRandCoords.y = rand() % maxRange + minRange;
 
-        if(!map->viewContainsCoords(getRandCoords) || map->getSizeAcross() < 15)
+        if(!map->viewContainsCoords(getRandCoords) || map->getSizeAcross() < 20)
             break;
     }
 
@@ -170,6 +187,9 @@ void MainMap::spawnEnemy() {
 void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
+
+    tint.setPosition(map->getViewCenter());
+    menuButton->setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y + menuButton->getSize().y));
     
     if(upgrading) {
         updateUpgrade();
@@ -184,6 +204,8 @@ void MainMap::update(const float& dt) {
             spawnEnemy();
 
         updateLevelBar();
+    } else if(!player->isAlive()) {
+        menuButton->update(mousePosView);
     }
 }
 
@@ -248,7 +270,7 @@ void MainMap::updateMobs(const float& dt) {
 
             // (ENEMY MOVEMENT) Behold, the great conditional
             if(((!enemies[i]->checkCollision(player->getHitboxBounds()) && enemies[i]->getState() != 0) 
-                && ((!playerUnderTree || enemies[i]->isCloseTo(player->getPosition(), map->getCameraSize())) || (playerUnderTree && !player->immunityTimerPassed())))
+            && ((!playerUnderTree || enemies[i]->isCloseTo(player->getPosition(), map->getCameraSize())) || (playerUnderTree && !player->immunityTimerPassed())))
             || (playerUnderTree && !(enemies[i]->getState() == 1))) {
                 map->updateCollision(enemies[i]);
 
@@ -445,10 +467,10 @@ void MainMap::render(sf::RenderTarget* target) {
     this->renderEnemies(*target);
 
     player->render(*target);
+
     this->renderTrees(*target);
 
-    if(levelBar)
-        levelBar->render(*target);
+    levelBar->render(*target);
     
     if(upgrading){
         if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
@@ -463,6 +485,11 @@ void MainMap::render(sf::RenderTarget* target) {
             shotGunSwitch->render(*target);
         if(cardChoice2[Menu1]=="SNIPER"||cardChoice2[Menu2]=="SNIPER")
             sniperSwitch->render(*target);
+    }
+
+    if(!player->isAlive()) {
+        target->draw(tint);
+        menuButton->render(*target);
     }
 }
 

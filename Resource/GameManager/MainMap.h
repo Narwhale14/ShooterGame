@@ -17,15 +17,14 @@ class MainMap : public State {
 
         virtual void checkForQuit();
 
-        void update(const float& dt);
-        void render(sf::RenderTarget* target = nullptr);
+        virtual void update(const float& dt);
+        virtual void render(sf::RenderTarget* target = nullptr);
     private:
         Player* player;
         bool playerUnderTree;
 
         Map* map;
         std::vector<Tree*> trees;
-        
         std::vector<Enemy*> enemies;
         sf::Clock spawnTimer;
         int spawnIntervalMS;
@@ -34,9 +33,12 @@ class MainMap : public State {
 
         LevelBar* levelBar;
 
-        void initializeKeybinds();
-        void initializeTextures();
-        void initializeFonts();
+        Button* menuButton;
+        sf::RectangleShape tint;
+
+        virtual void initializeKeybinds();
+        virtual void initializeTextures();
+        virtual void initializeFonts();
 
         bool checkSpawnTimer();
         void spawnTrees(int sparsity);

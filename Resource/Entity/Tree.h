@@ -16,6 +16,7 @@ class Tree : public Object {
         virtual ~Tree();
 
         void setOpacity(int opacity);
+        void setRotation(int angle);
         void setPosition(const sf::Vector2f& pos);
 
         sf::Vector2f getPosition() const;

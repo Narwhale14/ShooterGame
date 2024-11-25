@@ -38,6 +38,15 @@ void Tree::setOpacity(int opacity) {
     sprite->setColor(sf::Color(sprite->getColor().r, sprite->getColor().g, sprite->getColor().b, opacity));
 }
 
+void Tree::setRotation(int angle) {
+    if(angle < 0)
+        angle *= -1;
+    else if(angle > 360)
+        angle %= 360;
+
+    sprite->setRotation(angle);
+}
+
 /**
  * @brief Sets position
  * 

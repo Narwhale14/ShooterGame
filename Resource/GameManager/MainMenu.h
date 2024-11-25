@@ -8,7 +8,7 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "Settings.h"
+#include "State.h"
 
 class MainMenu : public State {
     public:
@@ -17,18 +17,18 @@ class MainMenu : public State {
 
         virtual void checkForQuit();
 
-        void updateInput(const float& dt);
-        void update(const float& dt);
+        virtual void updateInput(const float& dt);
+        virtual void update(const float& dt);
 
-        void render(sf::RenderTarget* target = nullptr);
+        virtual void render(sf::RenderTarget* target = nullptr);
     private:
         Button* playButton;
         Button* exitButton;
-        Button* settingsButton;
 
-        void initializeKeybinds();
-        void initializeFonts();
-        void initializeTextures();
+        sf::RectangleShape background;
+
+        virtual void initializeFonts();
+        virtual void initializeTextures();
 };
 
 #endif

@@ -14,21 +14,21 @@
  * @param supportedKeys takes list of supported keys from Game class and runs it through State classes constructor
  */
 MainMenu::MainMenu(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys) : State(window, supportedKeys) {
-    initializeKeybinds();
     initializeFonts();
     initializeTextures();
 
+    background.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
+    background.setPosition(0, 0);
+
+    background.setTexture(&textures["BACKGROUND"]);
+
     // play button
     playButton = new Button(fonts["SONO_R"], "PLAY", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
-    playButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2));
+    playButton->setPosition(sf::Vector2f((window->getSize().x / 2) - playButton->getSize().x * 0.75f, window->getSize().y / 2));
 
     // exit button
     exitButton = new Button(fonts["SONO_R"], "EXIT", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
-    exitButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2 + playButton->getSize().y * 1.5f));
-
-    // settings button
-    settingsButton = new Button(sf::Vector2f(window->getSize().x / 15, window->getSize().x / 15), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SETTINGS_GEAR"]);
-    settingsButton->setPosition(sf::Vector2f(window->getSize().x / 1.55f, window->getSize().y / 2));
+    exitButton->setPosition(sf::Vector2f((window->getSize().x / 2) + exitButton->getSize().x * 0.75f, window->getSize().y / 2));
 }
 
 /**
@@ -38,7 +38,6 @@ MainMenu::MainMenu(sf::RenderWindow* window, std::map<std::string, int>* support
 MainMenu::~MainMenu() {
     delete playButton;
     delete exitButton;
-    delete settingsButton;
 }
 
 /**
@@ -72,7 +71,6 @@ void MainMenu::update(const float& dt) {
 
     playButton->update(mousePosView);
     exitButton->update(mousePosView);
-    settingsButton->update(mousePosView);
 }
 
 /**
@@ -81,43 +79,12 @@ void MainMenu::update(const float& dt) {
  * @param target target window
  */
 void MainMenu::render(sf::RenderTarget* target) {
-    // If target is a nullptr, then set target to the window used from State class
     if(!target)
         target = window;
 
+    target->draw(background);
     playButton->render(*target);
     exitButton->render(*target);
-    settingsButton->render(*target);
-}
-
-/**
- * @brief Initializes available keybinds for specific GameState object by loading gamestate keybinds from file
- * 
- */
-void MainMenu::initializeKeybinds() {
-    std::ifstream inputFile("Config/mainmenu_keybinds.ini");
-
-    if(inputFile.is_open()) {
-        std::string key = "";
-        std::string key2 = "";
-
-        while(inputFile >> key >> key2) {
-            keybinds[key] = supportedKeys->at(key2);
-        }
-    }
-
-    inputFile.close();
-}
-
-/**
- * @brief Loads all textures into map
- * 
- */
-void MainMenu::initializeTextures() {
-    sf::Texture temp;
-
-    if(temp.loadFromFile("Textures/settings.png"))
-        textures["SETTINGS_GEAR"] = temp;
 }
 
 /**
@@ -129,4 +96,15 @@ void MainMenu::initializeFonts() {
 
     if(temp.loadFromFile("Fonts/Sono-Regular.ttf"))
         fonts["SONO_R"] = temp;
+}
+
+/**
+ * @brief Loads all textures into map
+ * 
+ */
+void MainMenu::initializeTextures() {
+    sf::Texture temp;
+
+    if(temp.loadFromFile("Textures/background.png"))
+        textures["BACKGROUND"] = temp;
 }
