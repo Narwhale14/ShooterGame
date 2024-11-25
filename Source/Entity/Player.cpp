@@ -176,10 +176,20 @@ void Player::equipLazergun(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
     handheld=new Lazergun(textures);
+    handheldType=gun;
 }
 
 void Player::equipShotgun(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
     handheld=new Shotgun(textures);
+    handheldType=gun;
+}
+
+void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
+{
+    handheld->setDmg(1000);
+    handheld->setFireRate(1);
+    handheld->setBullSpeed(35);
+    handheldType=gun;
 }

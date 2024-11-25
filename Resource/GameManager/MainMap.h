@@ -51,10 +51,14 @@ class MainMap : public State {
         void renderEnemies(sf::RenderTarget& target);
         void renderTrees(sf::RenderTarget& target);
 
-        Button* dmgUp;
-        Button* fireRateUp;
-        Button* bullSpeedUp;
+        Button *dmgUp;
+        Button *fireRateUp;
+        Button *bullSpeedUp;
+        Button *lazerGunSwitch;
+        Button *shotGunSwitch;
+        Button *sniperSwitch;
         bool upgrading;
+        bool finalUp;
         int Menu1;
         int Menu2;
         std::map<int,std::string> cardChoice;
