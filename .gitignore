@@ -31,7 +31,6 @@
 *.out
 *.app
 sfml-app
-scores.txt
 
 Object/*
 !Object/.gitkeep

@@ -22,7 +22,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
         case 0:
             createSprite(&textures["ENEMY_WOLF"], 0.4f);
             maxVelocity = 275;
-            xpValue =30;//15;
+            xpValue =15;
             killHealthValue = 7;
             sightDistance = 13;
             damage = 10;
@@ -30,7 +30,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
         case 1:
             createSprite(&textures["ENEMY_BULL"], 0.4f);
             maxVelocity = 175;
-            xpValue =30;//10;
+            xpValue =10;
             sightDistance = 7;
             killHealthValue = 10;
             damage = 15;
