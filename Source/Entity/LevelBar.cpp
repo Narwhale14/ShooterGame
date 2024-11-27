@@ -65,6 +65,15 @@ int LevelBar::getXp() const {
 }
 
 /**
+ * @brief Returns the xp amount
+ * 
+ * @return int 
+ */
+int LevelBar::getLvl() const {
+    return level;
+}
+
+/**
  * @brief Adds xp and returns whether player levels up
  * 
  * @param incoming 

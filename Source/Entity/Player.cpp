@@ -240,7 +240,7 @@ void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
 }
 
 /**
- * @brief adds an apple to the players inventory the apple can be eaten for health
+ * @brief when under a tree theres a 1 in 10 chance to add an apple to the players inventory the apple can be eaten for health
  * 
  * @param textures texture for the apple
  */

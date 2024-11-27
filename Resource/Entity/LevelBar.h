@@ -9,6 +9,7 @@
 #define LEVELBAR_H
 
 #include <iostream>
+#include <iomanip>
 #include <ctime>
 #include <cstdlib>
 #include <fstream>
@@ -29,6 +30,7 @@ class LevelBar {
         ~LevelBar();
 
         int getXp() const;
+        int getLvl() const;
 
         void setPosition(float pos_x, float pos_y);
         bool addXp(int incoming);
