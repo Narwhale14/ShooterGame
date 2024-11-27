@@ -34,3 +34,5 @@ sfml-app
 
 Object/*
 !Object/.gitkeep
+
+scores.txt
