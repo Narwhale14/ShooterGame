@@ -16,7 +16,7 @@ Weapon::Weapon() {
     sprite = nullptr;
     fireRate=1; //the closer to 0 the less time between each shot
     bulletSpeed=6; 
-    dmg=100;
+    dmg=10;
 }
 
 /**
