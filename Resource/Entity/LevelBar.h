@@ -9,6 +9,7 @@
 #define LEVELBAR_H
 
 #include <iostream>
+#include <iomanip>
 #include <ctime>
 #include <cstdlib>
 #include <fstream>

@@ -67,7 +67,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 MainMap::~MainMap() {
     std::ofstream file("scores.txt", std::ios::out | std::ios::app);
     if(file){
-        file<<"Level: "<<levelBar->getLvl()<<" | Extra XP: "<<levelBar->getXp()<<"\n";
+        file<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
         file.close();
     }
     while(!enemies.empty()) {
