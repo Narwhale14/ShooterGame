@@ -29,6 +29,7 @@ class LevelBar {
         ~LevelBar();
 
         int getXp() const;
+        int getLvl() const;
 
         void setPosition(float pos_x, float pos_y);
         bool addXp(int incoming);

@@ -65,6 +65,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
  * 
  */
 MainMap::~MainMap() {
+    std::ofstream file("scores.txt", std::ios::out | std::ios::app);
+    if(file){
+        file<<"Level: "<<levelBar->getLvl()<<" | Extra XP: "<<levelBar->getXp()<<"\n";
+        file.close();
+    }
     while(!enemies.empty()) {
         delete enemies[enemies.size() - 1];
         enemies.pop_back();
@@ -289,7 +294,7 @@ void MainMap::updateMobs(const float& dt) {
         for(size_t j = 0; j < player->getActiveBullets().size(); j++) { // All active bullets
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
 
-                /*IMPORTANT: when hitting with multiple bullets the game crashes*/
+                /*IMPORTANT: when hitting with multiple bullets with shotgun the game crashes*/
                 if(!finalUp){
                     delete player->getActiveBullets()[j];
                     player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
