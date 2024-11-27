@@ -8,7 +8,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../GameManager/Button.h"
+#include "Apple.h"
 
 class Player : public Entity {
     public:
@@ -37,6 +37,9 @@ class Player : public Entity {
         int getDmg();
 
         virtual void render(sf::RenderTarget& target);
+        void addApple(std::map<std::string, sf::Texture> &textures);
+        void eatApple();
+        void renderApple(sf::RenderTarget &target, sf::Vector2f view);
     private:
         Weapon* handheld;
 
@@ -49,6 +52,10 @@ class Player : public Entity {
 
         short unsigned handheldType;
         enum weaponTypes {empty = 0, gun};
+
+        std::vector<Apple*> appleBag;
+        sf::Time tm;
+        sf::Clock cl;
 };
 
 #endif

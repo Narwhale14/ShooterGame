@@ -19,7 +19,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 20;
+    enemyCap = 30;
 
     // Map creation
     map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
@@ -320,6 +320,7 @@ void MainMap::updateTrees(const float& dt) {
         if(trees[i]->getHitboxBounds().intersects(player->getHitboxBounds())) {
             trees[i]->setOpacity(150);
             playerUnderTree = true;
+            player->addApple(textures);
         } else {
             trees[i]->setOpacity(255);
         }
@@ -359,6 +360,9 @@ void MainMap::updateInput(const float& dt) {
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SWAP_TO_GUN_1"))))
         player->setHandheldType(1);
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("EAT_APPLE"))))
+        player->eatApple();
 
     if(abs(velocity.x) == abs(velocity.y) && velocity.x != 0) {
         velocity.x /= sqrt(2);
@@ -420,7 +424,6 @@ void MainMap::updateUpgrade()
             upgrading=false;
             finalUp=true;
         }
-
     }if(cardChoice2[Menu1]=="SHOTGUN" || cardChoice2[Menu2]=="SHOTGUN"){
         shotGunSwitch->update(mousePosView);
         if(cardChoice2[Menu1]=="SHOTGUN")
@@ -471,6 +474,8 @@ void MainMap::render(sf::RenderTarget* target) {
     this->renderTrees(*target);
 
     levelBar->render(*target);
+
+    player->renderApple(*target,map->getViewCenter());
     
     if(upgrading){
         if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
@@ -593,6 +598,9 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/tree.png"))
         textures["TREE_1"] = temp;
+
+    if(temp.loadFromFile("Textures/apple.png"))
+        textures["APPLE"] = temp;
 }
 
 /**
