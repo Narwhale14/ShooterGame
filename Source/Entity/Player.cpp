@@ -1,3 +1,10 @@
+/**
+ * @file Player.cpp
+ * @author Niall and Will
+ * @brief 
+ * @version 0.1
+ * @date 2024-11-26
+ */
 #include "../../Resource/Entity/Player.h"
 
 /**
@@ -49,6 +56,10 @@ unsigned short Player::getHandheldType() const {
  */
 Player::~Player() { 
     delete handheld;
+    for(unsigned i=appleBag.size();i>0;i--){
+        delete appleBag[i];
+        appleBag.pop_back();
+    }
 }
 
 /**
@@ -152,26 +163,48 @@ void Player::update() {
     }
 }
 
+/**
+ * @brief increase the current weapons damage if not an ultimate weapon
+ * 
+ */
 void Player::increaseDmg()
 {
     handheld->increaseDmg();
 }
 
+/**
+ * @brief increase the current weapons rate of fire(the time between each shot) if not an ultimate weapon
+ * 
+ */
 void Player::increasefireRate()
 {
     handheld->increaseFireRate();
 }
 
+/**
+ * @brief increase the current weapons bullet speed(the distance traveled per time) if not an ultimate weapon
+ * 
+ */
 void Player::increaseBullSpeed()
 {
     handheld->increaseBullSpeed();
 }
 
+/**
+ * @brief returns the amount of damage the current weapon does
+ * 
+ * @return int the damage number
+ */
 int Player::getDmg()
 {
     return handheld->getDmg();
 }
 
+/**
+ * @brief equips the ultimate weapon lazergun upgrades no longer possible
+ * 
+ * @param textures textures for the weapon
+ */
 void Player::equipLazergun(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
@@ -179,6 +212,11 @@ void Player::equipLazergun(std::map<std::string, sf::Texture>& textures)
     handheldType=gun;
 }
 
+/**
+ * @brief equips the ultimate weapon shotgun upgrades no longer possible
+ * 
+ * @param textures textures for the weapon
+ */
 void Player::equipShotgun(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
@@ -186,6 +224,11 @@ void Player::equipShotgun(std::map<std::string, sf::Texture>& textures)
     handheldType=gun;
 }
 
+/**
+ * @brief equips the ultimate weapon sniper upgrades no longer possible
+ * 
+ * @param textures textures for the weapon
+ */
 void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
@@ -194,4 +237,51 @@ void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
     handheld->setFireRate(1);
     handheld->setBullSpeed(35);
     handheldType=gun;
+}
+
+/**
+ * @brief adds an apple to the players inventory the apple can be eaten for health
+ * 
+ * @param textures texture for the apple
+ */
+void Player::addApple(std::map<std::string, sf::Texture> &textures)
+{
+    tm=cl.getElapsedTime();
+    if(appleBag.size()<10 && tm.asSeconds()>1){
+        int luck=rand()%10;
+        if(luck==1){
+            appleBag.push_back(new Apple(textures["APPLE"]));
+        }
+        cl.restart();
+    }
+}
+
+/**
+ * @brief removes an apple from the players inventory and increases the players health
+ * 
+ */
+void Player::eatApple()
+{
+    tm=cl.getElapsedTime();
+    if(appleBag.size()>0 && tm.asSeconds()>1){
+        delete appleBag.back();
+        appleBag.pop_back();
+        changeHealth(10);
+        cl.restart();
+    }
+}
+
+/**
+ * @brief displays the apple on the screen if player has any in inventory
+ * 
+ * @param target
+ */
+void Player::renderApple(sf::RenderTarget &target, sf::Vector2f view)
+{
+    if(appleBag.size()>0){
+        for(unsigned i=0;i<appleBag.size();i++){
+            appleBag[i]->setPosition({view.x+390+(i*8),view.y+456});
+            appleBag[i]->render(target);
+        }
+    }
 }
