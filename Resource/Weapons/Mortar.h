@@ -3,7 +3,7 @@
 
 #include "Shotgun.h"
 
-class Mortar : public Weapon {
+class Mortar {
     public:
         Mortar(float r, sf::Texture* texture);
         ~Mortar();

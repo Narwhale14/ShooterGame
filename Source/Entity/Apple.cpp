@@ -39,6 +39,19 @@ sf::Vector2f Apple::getPosition() const
 }
 
 /**
+ * @brief Rotates apple to mouse
+ * 
+ * @param mousePos 
+ */
+void Apple::rotateToMouse(const sf::Vector2f& mousePos) {
+    float dist_x = mousePos.x - sprite->getPosition().x;
+    float dist_y = mousePos.y - sprite->getPosition().y;
+
+    int angle = (atan2(dist_y, dist_x)) * 180 / 3.14;
+    sprite->setRotation(angle);
+}
+
+/**
  * @brief draws the apple inventory item to the screen if the texture is set
  * 
  * @param target 

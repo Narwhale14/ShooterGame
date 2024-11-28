@@ -10,7 +10,7 @@
 Mortar::Mortar(float r, sf::Texture* texture){
     range=r;
 
-    createSprite(texture, 1);
+    //createSprite(texture, 1);
 }
 
 Mortar::~Mortar() {
@@ -19,6 +19,6 @@ Mortar::~Mortar() {
 
 void Mortar::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
 {
-    sprite->setPosition(mouseLoc);
+    //sprite->setPosition(mouseLoc);
     //firing = true;
 }

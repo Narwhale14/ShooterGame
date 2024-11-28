@@ -59,10 +59,11 @@ void Weapon::createSprite(sf::Texture* texture, float scale) {
     sprite->setScale(scale, scale);
 }
 
-void Weapon::update(sf::Vector2f playerTrack){
-
-}
-
+/**
+ * @brief Rotates weapon
+ * 
+ * @param mousePos 
+ */
 void Weapon::rotateWeapon(const sf::Vector2f mousePos){
     float dist_x = mousePos.x - sprite->getPosition().x;
     float dist_y = mousePos.y - sprite->getPosition().y;

@@ -81,6 +81,15 @@ int HealthBar::getHealth() const {
 }
 
 /**
+ * @brief Returns maximum health capacity
+ * 
+ * @return int 
+ */
+int HealthBar::getMaxHealth() const {
+    return maxHealth;
+}
+
+/**
  * @brief Renders visual healthbar
  * 
  * @param target 

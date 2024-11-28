@@ -24,6 +24,7 @@ class MainMap : public State {
     private:
         Player* player;
         bool playerUnderTree;
+        bool playerUnderAppleTree;
 
         Map* map;
         std::vector<Tree*> trees;
