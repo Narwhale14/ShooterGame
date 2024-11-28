@@ -196,7 +196,7 @@ void MainMap::update(const float& dt) {
     tint.setPosition(map->getViewCenter());
     menuButton->setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y + menuButton->getSize().y));
     
-    if(upgrading) {
+    if(upgrading&&levelBar->getLvl()!=levelBar->levelCap) {
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
         updateMobs(dt);
@@ -490,7 +490,7 @@ void MainMap::render(sf::RenderTarget* target) {
 
     player->renderApple(*target,map->getViewCenter());
     
-    if(upgrading && levelBar->getLvl()!=15){
+    if(upgrading && levelBar->getLvl()!=levelBar->levelCap){
         if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
             dmgUp->render(*target);
         if(cardChoice2[Menu1]=="FIRERATE"||cardChoice2[Menu2]=="FIRERATE")  
@@ -504,7 +504,7 @@ void MainMap::render(sf::RenderTarget* target) {
         if(cardChoice2[Menu1]=="SNIPER"||cardChoice2[Menu2]=="SNIPER")
             sniperSwitch->render(*target);
     }
-    if(upgrading&&levelBar->getLvl()==15){
+    if(upgrading&&levelBar->getLvl()==levelBar->levelCap){
         maxLvlUp(target);
     }
 
