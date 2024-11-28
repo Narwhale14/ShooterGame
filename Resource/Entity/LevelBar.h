@@ -38,7 +38,7 @@ class LevelBar {
         bool addXp(int incoming);
 
         void render(sf::RenderTarget& target);
-        int levelCap;
+        
     private:
         int level;
         int xp;
@@ -46,7 +46,7 @@ class LevelBar {
         int requiredXpToLevelUp;
         float maxMainBarSize;
         float levelRatio;
-        
+        int levelCap;
 
         sf::RectangleShape barBack;
         sf::RectangleShape barMain;
