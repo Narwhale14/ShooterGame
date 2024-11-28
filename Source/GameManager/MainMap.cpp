@@ -29,6 +29,19 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
     levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
 
+    // Apple bag display creation
+    appleBagDisplay.setSize(sf::Vector2f(window->getSize().x / 13, window->getSize().y / 13));
+    appleBagDisplay.setOrigin(sf::Vector2f(appleBagDisplay.getSize().x / 2, appleBagDisplay.getSize().y / 2));
+    appleBagDisplay.setPosition(map->getMapCenter().x, map->getMapCenter().y);
+    appleBagDisplay.setFillColor(sf::Color(0, 0, 0, 100));
+
+    appleBagText.setFont(fonts["SONO_R"]);
+    appleBagText.setCharacterSize(appleBagDisplay.getGlobalBounds().width / 6);
+    appleBagText.setString("Apples");
+    appleBagText.setOrigin(appleBagText.getGlobalBounds().width / 2, appleBagText.getGlobalBounds().height / 2);
+    appleBagText.setPosition(appleBagDisplay.getPosition().x, appleBagDisplay.getPosition().y - (appleBagDisplay.getSize().y / 3));
+    appleBagText.setFillColor(sf::Color::White);
+
     // Death screen creation
     tint.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
@@ -45,9 +58,6 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     shotGunSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSHOTGUN"]);
     sniperSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSNIPER"]);
 
-    upgrading=false;
-    finalUp=false;
-    playerUnderTree = false;
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
         cardChoice2.push_back("DMG");
@@ -58,6 +68,12 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     cardChoice2.push_back("LAZERGUN");
     cardChoice2.push_back("SHOTGUN");
     cardChoice2.push_back("SNIPER");
+
+    // Booleans
+    upgrading = false;
+    finalUp = false;
+    playerUnderTree = false;
+    playerUnderAppleTree = false;
 }
 
 /**
@@ -202,8 +218,8 @@ void MainMap::update(const float& dt) {
         updateMobs(dt);
         updateTrees(dt);
 
-        player->update();
         updateInput(dt);
+        player->update();
 
         if(checkSpawnTimer() && player->isAlive() && enemies.size() < enemyCap)
             spawnEnemy();
@@ -212,6 +228,9 @@ void MainMap::update(const float& dt) {
     } else if(!player->isAlive()) {
         menuButton->update(mousePosView);
     }
+
+    appleBagDisplay.setPosition(map->getViewCenter().x + (levelBar->getSize().x / 2) + appleBagDisplay.getSize().x * 0.75f, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
+    appleBagText.setPosition(appleBagDisplay.getPosition().x, appleBagDisplay.getPosition().y - (appleBagDisplay.getSize().y / 3));
 }
 
 /**
@@ -480,33 +499,20 @@ void MainMap::render(sf::RenderTarget* target) {
         target = window;
 
     map->render(*target);
-    this->renderEnemies(*target);
 
+    renderEnemies(*target);
     player->render(*target);
 
-    this->renderTrees(*target);
+    renderTrees(*target);
 
     levelBar->render(*target);
 
-    player->renderApple(*target,map->getViewCenter());
+    // Apple bag display
+    target->draw(appleBagDisplay);
+    target->draw(appleBagText);
+    player->renderAppleBag(*target, sf::Vector2f(appleBagDisplay.getPosition().x - (appleBagDisplay.getSize().x / 3), appleBagDisplay.getPosition().y + (appleBagDisplay.getSize().y / 6)));
     
-    if(upgrading && levelBar->getLvl()!=15){
-        if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
-            dmgUp->render(*target);
-        if(cardChoice2[Menu1]=="FIRERATE"||cardChoice2[Menu2]=="FIRERATE")  
-            fireRateUp->render(*target);
-        if(cardChoice2[Menu1]=="BULLSPEED"||cardChoice2[Menu2]=="BULLSPEED")
-            bullSpeedUp->render(*target);
-        if(cardChoice2[Menu1]=="LAZERGUN"||cardChoice2[Menu2]=="LAZERGUN")
-            lazerGunSwitch->render(*target);
-        if(cardChoice2[Menu1]=="SHOTGUN"||cardChoice2[Menu2]=="SHOTGUN")
-            shotGunSwitch->render(*target);
-        if(cardChoice2[Menu1]=="SNIPER"||cardChoice2[Menu2]=="SNIPER")
-            sniperSwitch->render(*target);
-    }
-    if(upgrading&&levelBar->getLvl()==15){
-        maxLvlUp(target);
-    }
+    renderCards(*target);
 
     if(!player->isAlive()) {
         target->draw(tint);
@@ -537,6 +543,57 @@ void MainMap::renderTrees(sf::RenderTarget& target) {
     for(size_t i = 0; i < trees.size(); i++) {
         if(trees[i] != nullptr && map->viewContainsObject(trees[i]->getPosition(), trees[i]->getHitboxBounds()))
             trees[i]->render(target);
+    }
+}
+
+/**
+ * @brief Renders cards
+ * 
+ * @param target 
+ */
+void MainMap::renderCards(sf::RenderTarget& target) {
+    // Normal upgrading
+    if(upgrading && levelBar->getLvl() != levelBar->getLevelCap()){
+        if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
+            dmgUp->render(target);
+        if(cardChoice2[Menu1]=="FIRERATE"||cardChoice2[Menu2]=="FIRERATE")  
+            fireRateUp->render(target);
+        if(cardChoice2[Menu1]=="BULLSPEED"||cardChoice2[Menu2]=="BULLSPEED")
+            bullSpeedUp->render(target);
+        if(cardChoice2[Menu1]=="LAZERGUN"||cardChoice2[Menu2]=="LAZERGUN")
+            lazerGunSwitch->render(target);
+        if(cardChoice2[Menu1]=="SHOTGUN"||cardChoice2[Menu2]=="SHOTGUN")
+            shotGunSwitch->render(target);
+        if(cardChoice2[Menu1]=="SNIPER"||cardChoice2[Menu2]=="SNIPER")
+            sniperSwitch->render(target);
+    }
+
+    // If player reaches max level
+    if(upgrading&&levelBar->getLvl() == levelBar->getLevelCap()){
+        lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
+        lazerGunSwitch->render(target);
+        lazerGunSwitch->update(mousePosView);
+        if(lazerGunSwitch->getState()==2){
+            player->equipLazergun(textures);
+            upgrading=false;
+            finalUp=true;
+        }
+        shotGunSwitch->setPosition(player->getPosition());
+        shotGunSwitch->render(target);
+        shotGunSwitch->update(mousePosView);
+        if(shotGunSwitch->getState()==2){
+            player->equipShotgun(textures);
+            upgrading=false;
+            finalUp=true;
+        }
+        sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
+        sniperSwitch->render(target);
+        sniperSwitch->update(mousePosView);
+        if(sniperSwitch->getState()==2){
+            player->equipSniper(textures);
+            upgrading=false;
+            finalUp=true;
+        }
     }
 }
 
@@ -645,33 +702,5 @@ void MainMap::scoreText()
     scoreOut<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
     scoreDisplay.setString(scoreOut.str());
     scoreDisplay.setFillColor(sf::Color::White);
-    scoreDisplay.setPosition(map->getViewCenter().x-200,map->getViewCenter().y);
-}
-
-void MainMap::maxLvlUp(sf::RenderTarget* target)
-{
-    lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
-    lazerGunSwitch->render(*target);
-    lazerGunSwitch->update(mousePosView);
-    if(lazerGunSwitch->getState()==2){
-        player->equipLazergun(textures);
-        upgrading=false;
-        finalUp=true;
-    }
-    shotGunSwitch->setPosition(player->getPosition());
-    shotGunSwitch->render(*target);
-    shotGunSwitch->update(mousePosView);
-    if(shotGunSwitch->getState()==2){
-        player->equipShotgun(textures);
-        upgrading=false;
-        finalUp=true;
-    }
-    sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
-    sniperSwitch->render(*target);
-    sniperSwitch->update(mousePosView);
-    if(sniperSwitch->getState()==2){
-        player->equipSniper(textures);
-        upgrading=false;
-        finalUp=true;
-    }
+    scoreDisplay.setPosition(map->getViewCenter().x-(map->getCameraSize().y / 5),map->getViewCenter().y);
 }
