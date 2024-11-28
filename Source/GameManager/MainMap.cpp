@@ -19,7 +19,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 30;
+    enemyCap = 50;
 
     // Map creation
     map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
@@ -50,11 +50,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     playerUnderTree = false;
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("DMG");
+        cardChoice2.push_back("LAZERGUN");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("FIRERATE");
+        cardChoice2.push_back("LAZERGUN");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("BULLSPEED");
+        cardChoice2.push_back("LAZERGUN");
     cardChoice2.push_back("LAZERGUN");
     cardChoice2.push_back("SHOTGUN");
     cardChoice2.push_back("SNIPER");
@@ -482,7 +482,7 @@ void MainMap::render(sf::RenderTarget* target) {
 
     player->renderApple(*target,map->getViewCenter());
     
-    if(upgrading){
+    if(upgrading && levelBar->getLvl()!=15){
         if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
             dmgUp->render(*target);
         if(cardChoice2[Menu1]=="FIRERATE"||cardChoice2[Menu2]=="FIRERATE")  
@@ -497,8 +497,14 @@ void MainMap::render(sf::RenderTarget* target) {
             sniperSwitch->render(*target);
     }
 
+    if(upgrading&&levelBar->getLvl()==15){
+        maxLvlUp(target);
+    }
+
     if(!player->isAlive()) {
         target->draw(tint);
+        scoreText();
+        target->draw(scoreDisplay);
         menuButton->render(*target);
     }
 }
@@ -620,4 +626,45 @@ void MainMap::initializeFonts() {
 
     if(temp.loadFromFile("Fonts/Sono-Bold.ttf"))
         fonts["SONO_B"] = temp;
+}
+
+void MainMap::scoreText()
+{
+    scoreDisplay.setFont(fonts["SONO_B"]);
+    std::ostringstream scoreOut;
+    scoreOut<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
+    scoreDisplay.setString(scoreOut.str());
+    scoreDisplay.setFillColor(sf::Color::White);
+    scoreDisplay.setPosition(map->getViewCenter().x-200,map->getViewCenter().y);
+}
+
+void MainMap::maxLvlUp(sf::RenderTarget* target)
+{
+    lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
+    lazerGunSwitch->render(*target);
+    lazerGunSwitch->update(mousePosView);
+    if(lazerGunSwitch->getState()==2){
+        player->equipLazergun(textures);
+        upgrading=false;
+        finalUp=true;
+    }
+    shotGunSwitch->setPosition(player->getPosition());
+    shotGunSwitch->render(*target);
+    shotGunSwitch->update(mousePosView);
+    if(shotGunSwitch->getState()==2){
+        player->equipShotgun(textures);
+        upgrading=false;
+        finalUp=true;
+    }
+    sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
+    sniperSwitch->render(*target);
+    sniperSwitch->update(mousePosView);
+    if(sniperSwitch->getState()==2){
+        player->equipSniper(textures);
+        upgrading=false;
+        finalUp=true;
+    }
+
+
+
 }

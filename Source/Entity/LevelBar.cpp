@@ -32,7 +32,7 @@ LevelBar::LevelBar(sf::Font& font, float size_x, float size_y, float pos_x, floa
     text.setFont(font);
     text.setCharacterSize(barBack.getGlobalBounds().height * 1.25f);
 
-    level = 1;
+    level = 14;
     text.setString("LVL " + std::to_string(level));
 
     text.setOrigin(text.getGlobalBounds().width / 2, text.getGlobalBounds().height / 2);
