@@ -19,6 +19,7 @@ class HealthBar {
         void setHealth(int new_health);
 
         int getHealth() const;
+        int getMaxHealth() const;
 
         void render(sf::RenderTarget& target);
     private:

@@ -13,8 +13,18 @@
  * @param texture 
  * @param scale 
  */
-Tree::Tree(sf::Texture& texture, float scale) {
-    createSprite(&texture, scale);
+Tree::Tree(std::map<std::string, sf::Texture>& textures, float scale, int seed) {
+    switch(seed) {
+        case 1:
+            createSprite(&textures["APPLE_TREE"], scale);
+            type = apple;
+            break;
+        default:
+            createSprite(&textures["OAK_TREE"], scale);
+            type = oak;
+            break;
+    }
+
     createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Blue);
 }
 
@@ -63,6 +73,15 @@ void Tree::setPosition(const sf::Vector2f& pos) {
  */
 sf::Vector2f Tree::getPosition() const {
     return sprite->getPosition();
+}
+
+/**
+ * @brief Returns the type of tree
+ * 
+ * @return short unsigned 
+ */
+short unsigned Tree::getType() const {
+    return type;
 }
 
 /**

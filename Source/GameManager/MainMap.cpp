@@ -138,7 +138,7 @@ void MainMap::spawnTrees(int sparsity) {
     for(size_t i = 0; i < amount; i++) {
         // 0.15 - 0.34 scale
         scale = (rand() % 20 + 15) / 100.f;
-        trees.emplace_back(new Tree(textures["TREE_1"], scale));
+        trees.emplace_back(new Tree(textures, scale, (i % 10 + 1)));
 
         angle = (rand() % 360 + 1);
         trees[i]->setRotation(angle);
@@ -321,11 +321,15 @@ void MainMap::updateMobs(const float& dt) {
  */
 void MainMap::updateTrees(const float& dt) {
     playerUnderTree = false;
+    playerUnderAppleTree = false;
     for(size_t i = 0; i < trees.size(); i++) {
         if(trees[i]->getHitboxBounds().intersects(player->getHitboxBounds())) {
             trees[i]->setOpacity(150);
             playerUnderTree = true;
-            player->addApple(textures);
+
+            if(trees[i]->getType() == 1)
+                playerUnderAppleTree = true;
+
         } else {
             trees[i]->setOpacity(255);
         }
@@ -360,15 +364,19 @@ void MainMap::updateInput(const float& dt) {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("MOVE_DOWN"))))
         velocity.y = 1;
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SWAP_TO_FISTS"))))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SWAP_TO_HANDS"))))
         player->setHandheldType(0);
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SWAP_TO_GUN_1"))))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("SWAP_TO_GUN"))))
         player->setHandheldType(1);
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("EAT_APPLE"))))
         player->eatApple();
 
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds.at("PICK_APPLE"))) && playerUnderAppleTree)
+        player->addApple(textures);
+
+    // Evens out diagonal movement to be the same velocity as unidirectional velocity
     if(abs(velocity.x) == abs(velocity.y) && velocity.x != 0) {
         velocity.x /= sqrt(2);
         velocity.y /= sqrt(2);
@@ -602,7 +610,10 @@ void MainMap::initializeTextures() {
         textures["SWITCHSNIPER"] = temp;   
 
     if(temp.loadFromFile("Textures/tree.png"))
-        textures["TREE_1"] = temp;
+        textures["OAK_TREE"] = temp;
+
+    if(temp.loadFromFile("Textures/apple_tree.png"))
+        textures["APPLE_TREE"] = temp;
 
     if(temp.loadFromFile("Textures/apple.png"))
         textures["APPLE"] = temp;
