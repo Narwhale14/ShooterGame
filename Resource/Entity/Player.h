@@ -39,7 +39,7 @@ class Player : public Entity {
         virtual void render(sf::RenderTarget& target);
         void addApple(std::map<std::string, sf::Texture> &textures);
         void eatApple();
-        void renderApple(sf::RenderTarget &target, sf::Vector2f view);
+        void renderAppleBag(sf::RenderTarget &target, sf::Vector2f position);
     private:
         Weapon* handheld;
 

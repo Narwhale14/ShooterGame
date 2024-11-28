@@ -297,11 +297,11 @@ void Player::eatApple()
  * 
  * @param target
  */
-void Player::renderApple(sf::RenderTarget &target, sf::Vector2f view)
+void Player::renderAppleBag(sf::RenderTarget &target, sf::Vector2f position)
 {
     if(appleBag.size()>0){
         for(unsigned i=0;i<appleBag.size();i++){
-            appleBag[i]->setPosition({view.x+390+(i*8),view.y+456});
+            appleBag[i]->setPosition(sf::Vector2f(position.x + hitbox->getGlobalBounds().width / 5 * i, position.y));
             appleBag[i]->render(target);
         }
     }
