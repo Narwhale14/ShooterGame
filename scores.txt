@@ -60,3 +60,7 @@ Level: 1  | Extra XP: 0
 Level: 2  | Extra XP: 5
 Level: 2  | Extra XP: 10
 Level: 2  | Extra XP: 0
+Level: 2  | Extra XP: 15
+Level: 2  | Extra XP: 55
+Level: 2  | Extra XP: 15
+Level: 2  | Extra XP: 15

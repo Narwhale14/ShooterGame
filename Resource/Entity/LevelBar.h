@@ -38,6 +38,7 @@ class LevelBar {
         bool addXp(int incoming);
 
         void render(sf::RenderTarget& target);
+        
     private:
         int level;
         int xp;

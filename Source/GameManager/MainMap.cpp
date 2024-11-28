@@ -212,7 +212,7 @@ void MainMap::update(const float& dt) {
     tint.setPosition(map->getViewCenter());
     menuButton->setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y + menuButton->getSize().y));
     
-    if(upgrading) {
+    if(upgrading&&levelBar->getLvl()!=levelBar->getLevelCap()) {
         updateUpgrade();
     } else if(player->isAlive() && !upgrading) {
         updateMobs(dt);
