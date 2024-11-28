@@ -19,6 +19,8 @@ class MainMap : public State {
 
         virtual void update(const float& dt);
         virtual void render(sf::RenderTarget* target = nullptr);
+
+        void scoreText();
     private:
         Player* player;
         bool playerUnderTree;
@@ -50,6 +52,7 @@ class MainMap : public State {
         void updateTrees(const float& dt);
         void updateLevelBar();
         void updateUpgrade();
+        void maxLvlUp(sf::RenderTarget* target);
 
         void renderEnemies(sf::RenderTarget& target);
         void renderTrees(sf::RenderTarget& target);
@@ -66,6 +69,7 @@ class MainMap : public State {
         int Menu2;
         std::map<int,std::string> cardChoice;
         std::vector<std::string> cardChoice2;
+        sf::Text scoreDisplay;
 };
 
 #endif
