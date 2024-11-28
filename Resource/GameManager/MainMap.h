@@ -26,6 +26,9 @@ class MainMap : public State {
         bool playerUnderTree;
         bool playerUnderAppleTree;
 
+        sf::RectangleShape appleBagDisplay;
+        sf::Text appleBagText;
+
         Map* map;
         std::vector<Tree*> trees;
         std::vector<Enemy*> enemies;
@@ -52,10 +55,10 @@ class MainMap : public State {
         void updateTrees(const float& dt);
         void updateLevelBar();
         void updateUpgrade();
-        void maxLvlUp(sf::RenderTarget* target);
 
         void renderEnemies(sf::RenderTarget& target);
         void renderTrees(sf::RenderTarget& target);
+        void renderCards(sf::RenderTarget& target);
 
         Button *dmgUp;
         Button *fireRateUp;

@@ -25,7 +25,7 @@ Object::~Object() {
 }
 
 /**
- * @brief Returns the hitbox bounds
+ * @brief Returns the hitbox bounds (NOTE: Object might not have a hitbox if it's not an entity or bullet)
  * 
  * @return sf::FloatRect 
  */

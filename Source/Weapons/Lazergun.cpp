@@ -22,6 +22,8 @@ Lazergun::Lazergun(std::map<std::string, sf::Texture>& textures){
             temp = new Bullet(range,bulletT);
             BulletShot.push_back(temp);
     }
+
+    dmg = 5;
 }
 
 /**

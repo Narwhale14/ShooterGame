@@ -65,12 +65,30 @@ int LevelBar::getXp() const {
 }
 
 /**
+ * @brief Returns the level bar size
+ * 
+ * @return sf::Vector2f 
+ */
+sf::Vector2f LevelBar::getSize() const {
+    return barBack.getSize();
+}
+
+/**
  * @brief Returns the xp amount
  * 
  * @return int 
  */
 int LevelBar::getLvl() const {
     return level;
+}
+
+/**
+ * @brief Returns the max level
+ * 
+ * @return int 
+ */
+int LevelBar::getLevelCap() const {
+    return levelCap;
 }
 
 /**

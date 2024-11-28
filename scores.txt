@@ -1,6 +1,7 @@
      Player Scores
 ------------------------
 
+<<<<<<< HEAD
 Level: 15 | Extra XP: 5
 Level: 15 | Extra XP: 157
 Level: 15 | Extra XP: 3557
@@ -9,3 +10,64 @@ Level: 3  | Extra XP: 24
 Level: 2  | Extra XP: 15
 Level: 2  | Extra XP: 15
 Level: 2  | Extra XP: 55
+=======
+Level: 3  | Extra XP: 24
+Level: 2  | Extra XP: 25
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 9  | Extra XP: 117
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 1  | Extra XP: 0
+Level: 2  | Extra XP: 5
+Level: 2  | Extra XP: 10
+Level: 2  | Extra XP: 0
+>>>>>>> main

@@ -97,7 +97,7 @@ void Game::run() {
 void Game::initializeWindow() {
     std::ifstream inputFile("Config/window.ini");
     
-    // Variables
+    // Default settings
     windowBounds.width = 1920;
     windowBounds.height = 1080;
     std::string title = "None";
