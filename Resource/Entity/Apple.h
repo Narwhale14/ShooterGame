@@ -15,11 +15,12 @@ class Apple : public Object{
     public:
         Apple(sf::Texture &texture);
         void setPosition(const sf::Vector2f &pos);
+        void rotateToMouse(const sf::Vector2f& mousePos);
+
         sf::Vector2f getPosition() const;
-        void render(sf::RenderTarget &target);
+
+        virtual void render(sf::RenderTarget &target);
     private:
 };
-
-
 
 #endif

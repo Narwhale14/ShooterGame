@@ -27,9 +27,15 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     handheld = new Pistol(textures);
     handheldType = gun;
 
+    displayApple = new Apple(textures["APPLE"]);
+
     maxVelocity = 240;
 
     timeUntilImmunityMS = 1000;
+
+    appleGatherIntervalMS = 1000;
+    appleEatingIntervalMS = 200;
+    appleHealingValue = 10;
 }
 
 /**
@@ -73,22 +79,40 @@ void Player::updateRotation(const sf::Vector2f& mousePos) {
 
     angle = ((atan2(dist_y, dist_x)) * 180 / 3.14);
 
-    weaponPos.x = sprite->getPosition().x + (hitbox->getGlobalBounds().width / 1.1f) * cos(angle * 3.14 / 180);
-    weaponPos.y = sprite->getPosition().y + (hitbox->getGlobalBounds().height / 1.1f) * sin(angle * 3.14 / 180);
+    if(handheldType == gun) {
+        handheldPos.x = sprite->getPosition().x + (hitbox->getGlobalBounds().width / 1.1f) * cos(angle * 3.14 / 180);
+        handheldPos.y = sprite->getPosition().y + (hitbox->getGlobalBounds().height / 1.1f) * sin(angle * 3.14 / 180);
+    } else {
+        handheldPos.x = sprite->getPosition().x + (hitbox->getGlobalBounds().width / 1.5f) * cos(angle * 3.14 / 180);
+        handheldPos.y = sprite->getPosition().y + (hitbox->getGlobalBounds().height / 1.5f) * sin(angle * 3.14 / 180);
+    }
     
     sprite->setRotation(angle - 90);
 
-    handheld->update(weaponPos);
+    handheld->update(handheldPos);
     handheld->rotateWeapon(mousePos);
+
+    displayApple->rotateToMouse(mousePos);
+    displayApple->setPosition(handheldPos);
 }
 
+/**
+ * @brief Fires bullet when pressing space
+ * 
+ * @param mousePos 
+ */
 void Player::useHandheld(const sf::Vector2f& mousePos) {
-    handheld->fire(mousePos, weaponPos);
+    handheld->fire(mousePos, handheldPos);
 }
 
+/**
+ * @brief Continues to fire bullet when not pressing space
+ * 
+ * @param mousePos 
+ */
 void Player::stopHandheld(const sf::Vector2f& mousePos)
 {
-    handheld->stopFire(mousePos, weaponPos);
+    handheld->stopFire(mousePos, handheldPos);
 }
 
 /**
@@ -132,6 +156,8 @@ void Player::render(sf::RenderTarget& target) {
 
     if(handheld && handheldType == gun)
         handheld->render(target);
+    else if(displayApple && handheldType == hands && appleBag.size() > 0)
+        displayApple->render(target);
 
     if(sprite)
         target.draw(*sprite);
@@ -149,9 +175,9 @@ void Player::update() {
     hitbox->update();
 
     switch(handheldType) {
-        case empty:
+        case hands:
             changeSprite(idle);
-            multiplier = 1.25f;
+            multiplier = 1.25f;      
             break;
         case gun:
             changeSprite(aimed);
@@ -246,13 +272,9 @@ void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
  */
 void Player::addApple(std::map<std::string, sf::Texture> &textures)
 {
-    tm=cl.getElapsedTime();
-    if(appleBag.size()<10 && tm.asSeconds()>1){
-        int luck=rand()%10;
-        if(luck==1){
-            appleBag.push_back(new Apple(textures["APPLE"]));
-        }
-        cl.restart();
+    if(appleBag.size() < 10 && pickingClock.getElapsedTime().asMilliseconds() > appleGatherIntervalMS && handheldType == hands){
+        appleBag.push_back(new Apple(textures["APPLE"]));
+        pickingClock.restart();
     }
 }
 
@@ -262,12 +284,11 @@ void Player::addApple(std::map<std::string, sf::Texture> &textures)
  */
 void Player::eatApple()
 {
-    tm=cl.getElapsedTime();
-    if(appleBag.size()>0 && tm.asSeconds()>1){
+    if(appleBag.size() > 0 && eatingClock.getElapsedTime().asMilliseconds() > appleEatingIntervalMS && handheldType == hands && healthBar->getHealth() < healthBar->getMaxHealth()){
         delete appleBag.back();
         appleBag.pop_back();
         changeHealth(10);
-        cl.restart();
+        eatingClock.restart();
     }
 }
 

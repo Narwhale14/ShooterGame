@@ -45,17 +45,24 @@ class Player : public Entity {
 
         sf::Texture* idle;
         sf::Texture* aimed;
-        sf::Vector2f weaponPos;
+        sf::Vector2f handheldPos;
 
         sf::Clock timeUnderTree;
         int timeUntilImmunityMS;
 
         short unsigned handheldType;
-        enum weaponTypes {empty = 0, gun};
+        enum weaponTypes {hands = 0, gun};
 
         std::vector<Apple*> appleBag;
-        sf::Time tm;
-        sf::Clock cl;
+        Apple* displayApple;
+
+        sf::Clock pickingClock;
+        sf::Clock eatingClock;
+
+        int appleGatherIntervalMS;
+        int appleEatingIntervalMS;
+
+        int appleHealingValue;
 };
 
 #endif

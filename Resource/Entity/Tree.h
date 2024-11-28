@@ -12,7 +12,7 @@
 
 class Tree : public Object {
     public:
-        Tree(sf::Texture& texture, float scale);
+        Tree(std::map<std::string, sf::Texture>& textures, float scale, int seed);
         virtual ~Tree();
 
         void setOpacity(int opacity);
@@ -20,11 +20,17 @@ class Tree : public Object {
         void setPosition(const sf::Vector2f& pos);
 
         sf::Vector2f getPosition() const;
+        short unsigned getType() const;
 
         virtual void update();
         virtual void render(sf::RenderTarget& target);
     private:
+        float appleTreeChance;
 
+        enum type {oak = 0, apple};
+        unsigned short type;
+
+        short unsigned getRandomTreeType();
 };
 
 #endif
