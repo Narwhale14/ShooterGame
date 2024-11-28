@@ -50,11 +50,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     playerUnderTree = false;
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("LAZERGUN");
+        cardChoice2.push_back("DMG");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("LAZERGUN");
+        cardChoice2.push_back("FIRERATE");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("LAZERGUN");
+        cardChoice2.push_back("BULLSPEED");
     cardChoice2.push_back("LAZERGUN");
     cardChoice2.push_back("SHOTGUN");
     cardChoice2.push_back("SNIPER");
@@ -504,7 +504,6 @@ void MainMap::render(sf::RenderTarget* target) {
         if(cardChoice2[Menu1]=="SNIPER"||cardChoice2[Menu2]=="SNIPER")
             sniperSwitch->render(*target);
     }
-
     if(upgrading&&levelBar->getLvl()==15){
         maxLvlUp(target);
     }
@@ -675,7 +674,4 @@ void MainMap::maxLvlUp(sf::RenderTarget* target)
         upgrading=false;
         finalUp=true;
     }
-
-
-
 }

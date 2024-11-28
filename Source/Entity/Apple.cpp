@@ -1,6 +1,6 @@
 /**
  * @file Apple.cpp
- * @author William Wotherspoon
+ * @author Will and Niall
  * @brief 
  * @version 0.1
  * @date 2024-11-26
