@@ -29,6 +29,7 @@ Map::Map(sf::RenderTarget* window, int mapS, float gridS, sf::Color color, sf::C
     mapColor = color;
     mapOutlineColor = outlineColor;
     totalMapSize = gridSize * mapSize;
+    cameraScale = 1.f;
 
     view.setSize(window->getSize().x, window->getSize().y);
     view.setCenter(totalMapSize / 2, totalMapSize / 2);
@@ -95,8 +96,17 @@ sf::Vector2f Map::getCameraSize() const {
  * 
  * @return sf::Vector2f 
  */
-sf::Vector2f Map::getViewCenter() const {
+sf::Vector2f Map::getCameraCenter() const {
     return view.getCenter();
+}
+
+/**
+ * @brief Returns camera scale
+ * 
+ * @return float 
+ */
+float Map::getCameraScale() const {
+    return cameraScale;
 }
 
 /**
@@ -104,8 +114,18 @@ sf::Vector2f Map::getViewCenter() const {
  * 
  * @param pos 
  */
-void Map::setViewCenter(float xpos, float ypos) {
+void Map::setCameraCenter(float xpos, float ypos) {
     view.setCenter(xpos, ypos);
+}
+
+/**
+ * @brief Zooms the camera
+ * 
+ * @param zoom 
+ */
+void Map::setCameraZoom(float zoom) {
+    view.zoom(zoom);
+    cameraScale = zoom;
 }
 
 /**

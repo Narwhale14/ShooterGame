@@ -12,7 +12,7 @@
 
 class Pistol : public Weapon {
     public:
-        Pistol(std::map<std::string, sf::Texture>& textures);
+        Pistol(std::map<std::string, sf::Texture>& textures, bool isSniper);
         ~Pistol();
         void fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);

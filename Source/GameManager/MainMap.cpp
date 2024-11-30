@@ -27,7 +27,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     // Player creation
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
-    levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
+    levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getCameraCenter().x, map->getCameraCenter().y + (map->getCameraSize().y * 0.85f / 2));
 
     // Apple bag display creation
     appleBagDisplay.setSize(sf::Vector2f(window->getSize().x / 13, window->getSize().y / 13));
@@ -45,7 +45,7 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     // Death screen creation
     tint.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
-    tint.setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y));
+    tint.setPosition(sf::Vector2f(map->getCameraCenter().x, map->getCameraCenter().y));
     tint.setFillColor(sf::Color(0, 0, 0, 100));
     menuButton = new Button(fonts["SONO_R"], "QUIT", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     menuButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2 + menuButton->getSize().y * 1.5f));
@@ -60,11 +60,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("DMG");
+        cardChoice2.push_back("SNIPER");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("FIRERATE");
+        cardChoice2.push_back("SNIPER");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("BULLSPEED");
+        cardChoice2.push_back("SNIPER");
     cardChoice2.push_back("LAZERGUN");
     cardChoice2.push_back("SHOTGUN");
     cardChoice2.push_back("SNIPER");
@@ -209,8 +209,8 @@ void MainMap::update(const float& dt) {
     checkForQuit();
     updateMousePositions();
 
-    tint.setPosition(map->getViewCenter());
-    menuButton->setPosition(sf::Vector2f(map->getViewCenter().x, map->getViewCenter().y + menuButton->getSize().y));
+    tint.setPosition(map->getCameraCenter());
+    menuButton->setPosition(sf::Vector2f(map->getCameraCenter().x, map->getCameraCenter().y + menuButton->getSize().y));
     
     if(upgrading&&levelBar->getLvl()!=levelBar->getLevelCap()) {
         updateUpgrade();
@@ -229,7 +229,7 @@ void MainMap::update(const float& dt) {
         menuButton->update(mousePosView);
     }
 
-    appleBagDisplay.setPosition(map->getViewCenter().x + (levelBar->getSize().x / 2) + appleBagDisplay.getSize().x * 0.75f, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
+    appleBagDisplay.setPosition(map->getCameraCenter().x + (levelBar->getSize().x / 2) + appleBagDisplay.getSize().x * 0.75f, map->getCameraCenter().y + (map->getCameraSize().y * 0.85f / 2));
     appleBagText.setPosition(appleBagDisplay.getPosition().x, appleBagDisplay.getPosition().y - (appleBagDisplay.getSize().y / 3));
 }
 
@@ -402,7 +402,7 @@ void MainMap::updateInput(const float& dt) {
     }
 
     map->updateCollision(player);
-    map->setViewCenter(player->getPosition().x, player->getPosition().y);
+    map->setCameraCenter(player->getPosition().x, player->getPosition().y);
 
     player->move(dt, velocity.x, velocity.y);
     player->updateRotation(mousePosView);
@@ -475,8 +475,8 @@ void MainMap::updateUpgrade()
             sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
+            map->setCameraZoom(1.75f);
             upgrading=false;
-            finalUp=true;
         }
     }
 }
@@ -486,7 +486,7 @@ void MainMap::updateUpgrade()
  * 
  */
 void MainMap::updateLevelBar() {
-    levelBar->setPosition(map->getViewCenter().x, map->getViewCenter().y + (map->getCameraSize().y * 0.85f / 2));
+    levelBar->setPosition(map->getCameraCenter().x, map->getCameraCenter().y + (map->getCameraSize().y * 0.85f / 2));
 }
 
 /**
@@ -591,8 +591,8 @@ void MainMap::renderCards(sf::RenderTarget& target) {
         sniperSwitch->update(mousePosView);
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
+            map->setCameraZoom(1.75f);
             upgrading=false;
-            finalUp=true;
         }
     }
 }
@@ -679,6 +679,12 @@ void MainMap::initializeTextures() {
 
     if(temp.loadFromFile("Textures/apple.png"))
         textures["APPLE"] = temp;
+
+    if(temp.loadFromFile("Textures/lazergun.png"))
+        textures["LAZERGUN"] = temp;
+
+    if(temp.loadFromFile("Textures/sniper.png"))
+        textures["SNIPER"] = temp;
 }
 
 /**
@@ -702,5 +708,5 @@ void MainMap::scoreText()
     scoreOut<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
     scoreDisplay.setString(scoreOut.str());
     scoreDisplay.setFillColor(sf::Color::White);
-    scoreDisplay.setPosition(map->getViewCenter().x-(map->getCameraSize().y / 5),map->getViewCenter().y);
+    scoreDisplay.setPosition(map->getCameraCenter().x-(map->getCameraSize().y / 5),map->getCameraCenter().y);
 }

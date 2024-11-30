@@ -15,7 +15,7 @@
  */
 Lazergun::Lazergun(std::map<std::string, sf::Texture>& textures){
     amount=100;
-    createSprite(&textures["GLOCK"], 0.05);
+    createSprite(&textures["LAZERGUN"], 0.055);
     sprite->setRotation(90);
     bulletT=&textures["LAZERBULL"];
     if(amount>0){
@@ -23,7 +23,7 @@ Lazergun::Lazergun(std::map<std::string, sf::Texture>& textures){
             BulletShot.push_back(temp);
     }
 
-    dmg = 5;
+    dmg = 1;
 }
 
 /**
