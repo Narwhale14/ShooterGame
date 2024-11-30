@@ -263,6 +263,7 @@ void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
     handheld->setFireRate(1);
     handheld->setBullSpeed(35);
     handheldType=gun;
+    handheld->setRange(2000);
 }
 
 /**

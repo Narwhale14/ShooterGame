@@ -28,6 +28,7 @@ class Weapon{
         void setDmg(int d);
         void setFireRate(int fr);
         void setBullSpeed(int spd);
+        void setRange(int r);
 
         void increaseDmg();
         void increaseBullSpeed();
