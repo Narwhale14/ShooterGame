@@ -24,7 +24,7 @@ Player::Player(std::map<std::string, sf::Texture>& textures, int x, int y, float
     createHitbox(sprite, sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2, sf::Color::Green);
     createHealthBar(hitbox->getGlobalBounds().width, hitbox->getGlobalBounds().height, sprite->getPosition().x, sprite->getPosition().y);
 
-    handheld = new Pistol(textures);
+    handheld = new Pistol(textures, false);
     handheldType = gun;
 
     displayApple = new Apple(textures["APPLE"]);
@@ -258,8 +258,8 @@ void Player::equipShotgun(std::map<std::string, sf::Texture>& textures)
 void Player::equipSniper(std::map<std::string, sf::Texture>& textures)
 {
     delete handheld;
-    handheld = new Pistol(textures);
-    handheld->setDmg(1000);
+    handheld = new Pistol(textures, true);
+    handheld->setDmg(45);
     handheld->setFireRate(1);
     handheld->setBullSpeed(35);
     handheldType=gun;

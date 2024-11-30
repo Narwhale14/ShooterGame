@@ -13,10 +13,15 @@
  * @param r range of the pistol
  * @param texture bullets texture
  */
-Pistol::Pistol(std::map<std::string, sf::Texture>& textures){
+Pistol::Pistol(std::map<std::string, sf::Texture>& textures, bool isSniper){
     //important firerate cannot go to much higher than move speed
     amount=30;
-    createSprite(&textures["GLOCK"], 0.05);
+    
+    if(!isSniper)
+        createSprite(&textures["GLOCK"], 0.05);
+    else
+        createSprite(&textures["SNIPER"], 0.05);
+
     sprite->setRotation(90);
     bulletT=&textures["BULLET"];
     if(amount>0){

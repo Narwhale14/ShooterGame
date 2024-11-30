@@ -25,6 +25,8 @@ Shotgun::Shotgun(std::map<std::string, sf::Texture>& textures){
         }
     }
     srand(time(0));
+
+    dmg = 5;
 }
 
 /**

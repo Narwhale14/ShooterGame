@@ -20,8 +20,10 @@ class Map {
         int getSizeAcross() const;
         sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
-        sf::Vector2f getViewCenter() const;
-        void setViewCenter(float xpos, float ypos);
+        sf::Vector2f getCameraCenter() const;
+        float getCameraScale() const;
+        void setCameraCenter(float xpos, float ypos);
+        void setCameraZoom(float zoom);
         
         bool viewContainsCoords(const sf::Vector2f& objPos) const;
         bool viewContainsObject(const sf::Vector2f& objPos, const sf::FloatRect& objBounds) const;
@@ -40,6 +42,7 @@ class Map {
         float gridSize;
         int mapSize;
         float totalMapSize;
+        float cameraScale;
 
         void initializeTileMap();
 };
