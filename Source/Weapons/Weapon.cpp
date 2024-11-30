@@ -151,3 +151,9 @@ void Weapon::increaseFireRate()
         fireRate-=.1;
     }
 }
+
+void Weapon::setRange(int r)
+{
+    if(r>0)
+        range=r;
+}
