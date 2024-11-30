@@ -68,6 +68,8 @@ class MainMap : public State {
         Button *sniperSwitch;
         bool upgrading;
         bool finalUp;
+        bool pen;
+        bool normUp;
         int Menu1;
         int Menu2;
         std::map<int,std::string> cardChoice;
