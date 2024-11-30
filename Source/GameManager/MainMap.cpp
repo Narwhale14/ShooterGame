@@ -72,6 +72,8 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     // Booleans
     upgrading = false;
     finalUp = false;
+    normUp = true;
+    pen = false;
     playerUnderTree = false;
     playerUnderAppleTree = false;
 }
@@ -248,29 +250,33 @@ void MainMap::updateMobs(const float& dt) {
             // Checks if player levels up from getting xp from killing enemy
             if(levelBar->addXp(enemies[i]->getXPValue())){
                 if(!finalUp){
-                    upgrading = true;
-                    //generates the the random menu choices
-                    Menu1=rand() % 32;
-                    if(Menu1<10){
-                        Menu2=(rand()%22)+10;
-                    }else if(Menu1<20){
-                        int coin=rand()%2;
-                        if(coin==1){
-                            Menu2=rand()%9;
-                        }else{
-                           Menu2=(rand()%12)+20; 
+                    if(levelBar->getLvl()==levelBar->getLevelCap())
+                        upgrading = true;
+                    if(normUp){
+                        upgrading=true;
+                        //generates the the random menu choices
+                        Menu1=rand() % 32;
+                        if(Menu1<10){
+                            Menu2=(rand()%22)+10;
+                        }else if(Menu1<20){
+                            int coin=rand()%2;
+                            if(coin==1){
+                                Menu2=rand()%9;
+                            }else{
+                            Menu2=(rand()%12)+20; 
+                            }
+                        }else if(Menu1<30){
+                            int coin=rand()%20;
+                            if(coin==1){
+                                Menu2=(rand()%2)+30;
+                            }else{
+                                Menu2=rand()%19;
+                            }
+                        }else if(Menu1>29){
+                            Menu2=rand()%29;
                         }
-                    }else if(Menu1<30){
-                        int coin=rand()%20;
-                        if(coin==1){
-                            Menu2=(rand()%2)+30;
-                        }else{
-                            Menu2=rand()%19;
-                        }
-                    }else if(Menu1>29){
-                        Menu2=rand()%29;
+                        //std::cout<<"Menu1="<<Menu1<<" | Menu2="<<Menu2<<"\n"; used for testing
                     }
-                    //std::cout<<"Menu1="<<Menu1<<" | Menu2="<<Menu2<<"\n"; used for testing
                 }
             }
             player->changeHealth(enemies[i]->getKillHealthValue());
@@ -314,7 +320,7 @@ void MainMap::updateMobs(const float& dt) {
             if(enemies[i]->checkCollision(player->getActiveBullets()[j]->getHitboxBounds())) {
 
                 /*IMPORTANT: when hitting with multiple bullets with shotgun the game crashes*/
-                if(!finalUp){
+                if(!pen){
                     delete player->getActiveBullets()[j];
                     player->getActiveBullets().erase(player->getActiveBullets().begin() + j);
                 }
@@ -454,7 +460,7 @@ void MainMap::updateUpgrade()
         if(lazerGunSwitch->getState()==2){
             player->equipLazergun(textures);
             upgrading=false;
-            finalUp=true;
+            normUp=false;
         }
     }if(cardChoice2[Menu1]=="SHOTGUN" || cardChoice2[Menu2]=="SHOTGUN"){
         shotGunSwitch->update(mousePosView);
@@ -465,7 +471,8 @@ void MainMap::updateUpgrade()
         if(shotGunSwitch->getState()==2){
             player->equipShotgun(textures);
             upgrading=false;
-            finalUp=true;
+            normUp=false;
+            pen=true;
         }
     }if(cardChoice2[Menu1]=="SNIPER" || cardChoice2[Menu2]=="SNIPER"){
         sniperSwitch->update(mousePosView);
@@ -477,6 +484,7 @@ void MainMap::updateUpgrade()
             player->equipSniper(textures);
             map->setCameraZoom(1.75f);
             upgrading=false;
+            normUp=false;
         }
     }
 }
@@ -585,14 +593,17 @@ void MainMap::renderCards(sf::RenderTarget& target) {
             player->equipShotgun(textures);
             upgrading=false;
             finalUp=true;
+            pen=true;
         }
         sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
         sniperSwitch->render(target);
         sniperSwitch->update(mousePosView);
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
-            map->setCameraZoom(1.75f);
+            if(map->getCameraScale()!=1.75f)
+                map->setCameraZoom(1.75f);
             upgrading=false;
+            finalUp=true;
         }
     }
 }
