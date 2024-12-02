@@ -59,6 +59,7 @@ Enemy::Enemy(std::map<std::string, sf::Texture>& textures, int x, int y) {
     sprite->setRotation(angle);
 
     hasBeenRestarted = false;
+    wolfSpawnRate = 15;
 }
 
 /**
@@ -76,6 +77,17 @@ Enemy::~Enemy() {
  */
 int Enemy::getXPValue() const {
     return xpValue;
+}
+
+/**
+ * @brief Scales the wolf spawn rate
+ * 
+ * @param change 
+ */
+void Enemy::updateWolfSpawnRate(int playerLevel) {
+    wolfSpawnRate *= (1 + (playerLevel / 10.f));
+
+    std::cout << wolfSpawnRate << std::endl;
 }
 
 /**
@@ -202,7 +214,7 @@ void Enemy::setState(short unsigned state) {
 short unsigned Enemy::generateEnemyType() {
     int value = (rand() % 100) + 1;
 
-    if(value <= 15)
+    if(value <= wolfSpawnRate)
         return wolf;
     else
         return bull;
