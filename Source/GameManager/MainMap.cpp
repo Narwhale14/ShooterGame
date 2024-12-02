@@ -277,7 +277,6 @@ void MainMap::updateMobs(const float& dt) {
                         }else if(Menu1>29){
                             Menu2=rand()%29;
                         }
-                        //std::cout<<"Menu1="<<Menu1<<" | Menu2="<<Menu2<<"\n"; used for testing
                     }
                 }
             }

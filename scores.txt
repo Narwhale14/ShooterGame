@@ -1,18 +1,2 @@
-     Player Scores
-------------------------
+Level: 5  | Extra XP: 19
 Level: 1  | Extra XP: 0
-Level: 2  | Extra XP: 5
-Level: 1  | Extra XP: 0
-Level: 3  | Extra XP: 14
-Level: 3  | Extra XP: 4
-Level: 11 | Extra XP: 142
-Level: 5  | Extra XP: 129
-Level: 3  | Extra XP: 34
-Level: 3  | Extra XP: 124
-Level: 3  | Extra XP: 94
-Level: 1  | Extra XP: 0
-Level: 1  | Extra XP: 0
-Level: 3  | Extra XP: 4
-Level: 5  | Extra XP: 99
-Level: 1  | Extra XP: 0
-Level: 5  | Extra XP: 14
