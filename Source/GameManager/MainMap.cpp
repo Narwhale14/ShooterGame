@@ -715,10 +715,14 @@ void MainMap::initializeFonts() {
 
 void MainMap::scoreText()
 {
+    int minutes = timeElapsed.getElapsedTime().asSeconds() / 60;
+    int seconds = static_cast<int>(timeElapsed.getElapsedTime().asSeconds()) % 60;
+
     scoreDisplay.setFont(fonts["SONO_B"]);
     std::ostringstream scoreOut;
-    scoreOut<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
+    scoreOut<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()
+     << "| Elapsed Time: " << minutes << ":" << seconds << "\n";
     scoreDisplay.setString(scoreOut.str());
     scoreDisplay.setFillColor(sf::Color::White);
-    scoreDisplay.setPosition(map->getCameraCenter().x-(map->getCameraSize().y / 5),map->getCameraCenter().y);
+    scoreDisplay.setPosition(map->getCameraCenter().x - (scoreDisplay.getGlobalBounds().width),map->getCameraCenter().y);
 }

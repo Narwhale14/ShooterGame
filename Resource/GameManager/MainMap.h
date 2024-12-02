@@ -75,6 +75,8 @@ class MainMap : public State {
         std::map<int,std::string> cardChoice;
         std::vector<std::string> cardChoice2;
         sf::Text scoreDisplay;
+
+        sf::Clock timeElapsed;
 };
 
 #endif
