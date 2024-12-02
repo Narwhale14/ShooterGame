@@ -20,6 +20,10 @@ State::State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys
     flush = false;
 }
 
+/**
+ * @brief Destroy the State:: State object
+ * 
+ */
 State::~State() {
 
 }

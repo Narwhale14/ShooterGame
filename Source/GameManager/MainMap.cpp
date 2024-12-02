@@ -249,6 +249,8 @@ void MainMap::updateMobs(const float& dt) {
 
             // Checks if player levels up from getting xp from killing enemy
             if(levelBar->addXp(enemies[i]->getXPValue())){
+                enemies[i]->updateWolfSpawnRate(levelBar->getLvl());
+
                 if(!finalUp){
                     if(levelBar->getLvl()==levelBar->getLevelCap())
                         upgrading = true;
@@ -275,7 +277,6 @@ void MainMap::updateMobs(const float& dt) {
                         }else if(Menu1>29){
                             Menu2=rand()%29;
                         }
-                        //std::cout<<"Menu1="<<Menu1<<" | Menu2="<<Menu2<<"\n"; used for testing
                     }
                 }
             }
