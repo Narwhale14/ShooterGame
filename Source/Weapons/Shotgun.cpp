@@ -69,7 +69,7 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         }
     }
     T=C.getElapsedTime();
-    if(T.asSeconds()>.3 && BulletShot.size()<amount){
+    if(T.asSeconds()>.4 && BulletShot.size()<amount){
         for(int i=0;i<5;i++){
             Bullet *newTemp = new Bullet(range,bulletT);
             BulletShot.push_back(newTemp);

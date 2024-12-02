@@ -127,7 +127,7 @@ void Weapon::setBullSpeed(int spd)
  */
 void Weapon::increaseDmg()
 {
-    dmg++;
+    dmg+=2;
 }
 
 /**
@@ -136,7 +136,7 @@ void Weapon::increaseDmg()
  */
 void Weapon::increaseBullSpeed()
 {
-    if(bulletSpeed>0 && bulletSpeed<20){
+    if(bulletSpeed>0 && bulletSpeed<100){
         bulletSpeed=bulletSpeed*1.2;
     }
 }
@@ -152,6 +152,11 @@ void Weapon::increaseFireRate()
     }
 }
 
+/**
+ * @brief set the distance the weapons bullets travel
+ * 
+ * @param r 
+ */
 void Weapon::setRange(int r)
 {
     if(r>0)

@@ -60,11 +60,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("SNIPER");
+        cardChoice2.push_back("DMG");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("SNIPER");
+        cardChoice2.push_back("FIRERATE");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("SNIPER");
+        cardChoice2.push_back("BULLSPEED");
     cardChoice2.push_back("LAZERGUN");
     cardChoice2.push_back("SHOTGUN");
     cardChoice2.push_back("SNIPER");
@@ -275,7 +275,6 @@ void MainMap::updateMobs(const float& dt) {
                         }else if(Menu1>29){
                             Menu2=rand()%29;
                         }
-                        //std::cout<<"Menu1="<<Menu1<<" | Menu2="<<Menu2<<"\n"; used for testing
                     }
                 }
             }
