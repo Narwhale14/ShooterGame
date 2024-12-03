@@ -86,7 +86,11 @@ void Pistol::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     }
 }
 
-
+/**
+ * @brief updates the weapons position to stay next the the player
+ * 
+ * @param playerTrack 
+ */
 void Pistol::update(sf::Vector2f playerTrack) {
     sprite->setPosition(playerTrack.x,playerTrack.y);
 }

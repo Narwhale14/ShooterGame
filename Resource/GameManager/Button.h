@@ -1,3 +1,9 @@
+/**
+ * @file Button.h
+ * @author Niall Murray
+ * @brief Button class declaration
+ * @date 2024-12-02
+ */
 #ifndef BUTTON_H
 #define BUTTON_H
 

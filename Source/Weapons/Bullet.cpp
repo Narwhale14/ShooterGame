@@ -26,10 +26,6 @@ Bullet::Bullet(float r, sf::Texture* texture){
     firing=false;
 }
 
-Bullet::~Bullet() {
-    
-}
-
 /**
  * @brief shoots the projectile from player to mouse
  * 
@@ -97,6 +93,11 @@ void Bullet::stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     }
 }
 
+/**
+ * @brief renders the bullet texture to the screen
+ * 
+ * @param target 
+ */
 void Bullet::render(sf::RenderTarget& target) {
     if(sprite)
         target.draw(*sprite);
@@ -104,6 +105,11 @@ void Bullet::render(sf::RenderTarget& target) {
     hitbox->render(target);
 }
 
+/**
+ * @brief returns the position of the bullet
+ * 
+ * @return sf::Vector2f 
+ */
 sf::Vector2f Bullet::getPostion(){
     return sprite->getPosition();
 }

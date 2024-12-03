@@ -1,6 +1,6 @@
 /**
  * @file GameState.cpp
- * @author Niall Murray
+ * @author Niall Murray and Will Wotherspoon
  * @brief GameState implementation file
  * @date 2024-10-23
  */
@@ -60,11 +60,11 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("SNIPER");
+        cardChoice2.push_back("DMG");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("SNIPER");
+        cardChoice2.push_back("FIRERATE");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("SNIPER");
+        cardChoice2.push_back("BULLSPEED");
     cardChoice2.push_back("LAZERGUN");
     cardChoice2.push_back("SHOTGUN");
     cardChoice2.push_back("SNIPER");
@@ -421,7 +421,7 @@ void MainMap::updateInput(const float& dt) {
  */
 void MainMap::updateUpgrade()
 {
-    //based off random menu1 choose the upgrade from cardChoice which conatians the upgrade options
+    //based off random menu1 and menu2 choose the upgrade from cardChoice which containns the upgrade options
     if(cardChoice2[Menu1]=="DMG" || cardChoice2[Menu2]=="DMG"){
         dmgUp->update(mousePosView);
         if(cardChoice2[Menu1]=="DMG")
@@ -700,7 +700,7 @@ void MainMap::initializeTextures() {
 }
 
 /**
- * @brief Loads all textures into map
+ * @brief Loads all texts fonts into map
  * 
  */
 void MainMap::initializeFonts() {
@@ -713,6 +713,10 @@ void MainMap::initializeFonts() {
         fonts["SONO_B"] = temp;
 }
 
+/**
+ * @brief sets the text for the score display at the end of the game
+ * 
+ */
 void MainMap::scoreText()
 {
     scoreDisplay.setFont(fonts["SONO_B"]);

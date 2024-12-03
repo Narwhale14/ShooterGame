@@ -1,5 +1,5 @@
 sfml-app: Object/main.o Object/Entity.o Object/Weapon.o Object/Game.o Object/State.o Object/MainMap.o Object/Player.o Object/Mortar.o Object/Bullet.o Object/Enemy.o Object/HealthBar.o Object/Hitbox.o Object/Pistol.o Object/Shotgun.o Object/Lazergun.o Object/MainMenu.o Object/Button.o Object/Map.o Object/Object.o Object/LevelBar.o Object/Tree.o Object/Apple.o
-	g++ -g -Wall Object/*.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+	g++ -g -Wall Object/*.o -o huntingSeason -lsfml-graphics -lsfml-window -lsfml-system
 
 Object/main.o: Source/main.cpp Resource/GameManager/Game.h
 	g++ -Wall -c Source/main.cpp -o Object/main.o
@@ -71,4 +71,4 @@ clean:
 	rm Object/*
 
 raw:
-	g++ -g -Wall Source/Entity/*.cpp Source/GameManager/*.cpp Source/Weapons/*.cpp Source/main.cpp -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+	g++ -g -Wall Source/Entity/*.cpp Source/GameManager/*.cpp Source/Weapons/*.cpp Source/main.cpp -o huntingSeason -lsfml-graphics -lsfml-window -lsfml-system

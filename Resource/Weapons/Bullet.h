@@ -16,7 +16,6 @@
 class Bullet : public Object {
     public:
         Bullet(float r, sf::Texture* texture);
-        virtual ~Bullet();
         void fireBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         void stopBull(sf::Vector2f mouseLoc,sf::Vector2f playerLoc);
         virtual void render(sf::RenderTarget& target);

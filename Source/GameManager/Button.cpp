@@ -125,7 +125,7 @@ void Button::update(const sf::Vector2f& mousePosition) {
 }
 
 /**
- * @brief 
+ * @brief renders the button its text if any and the sprite if the texutre is used for the button
  * 
  * @param target 
  * @param states 
