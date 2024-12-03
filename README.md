@@ -37,32 +37,32 @@ Step 3: Have fun!
 
 ### Welcome to The Wild
 
-![alt text](gameMap.png)
+![gameMap](ReadMeAssets/gameMap.png)
 
 When you first hit play, you will be welcome with an expansive dynamic map with different types of trees. Utilize swapping from weapon and fists using the controls to move around faster incase you need to run!
 The objective of the game is to hunt enough animals to reach the highest level: Level 15. But beware, the higher level you are, the more wolves will spawn. Not all is hopeless, however. At level 15, you'll be presented with guarenteed Legendary Cards, letting you choose from the three Super Weapons to enter endless mode. Have fun!
 
 ### Getting XP
 
-![alt text](ReadMeAssets/shootingEnemy.png)
+![shootingEnemy](ReadMeAssets/shootingEnemy.png)
 
 Control your aim with the mouse and point your cursor towards attacking enemies. Press space to fire a bullet from your gun to injure, and eventually kill the dangerous animals. Watch out for wolves!
 
 ### Leveling Up
 
-![alt text](ReadMeAssets/levelingUp.png)
+![levelingUp](ReadMeAssets/levelingUp.png)
 
 When your level bar fills, you'll be presented with a random selection of upgrades! Choose what you want to increase the power of your weapon, and work to the next level. Look out for Legendary Cards containing Super Weapons!
 
 ### Using Trees
 
-![alt text](ReadMeAssets/hidingUnderTree.png)
+![hidingUnderTree](ReadMeAssets/hidingUnderTree.png)
 
 If you're scared or low on health, don't be afraid to hide under the trees! Enemies will lose sight of you within seconds. However, if the enemy is right on your trail, the will follow you into the tree! Beware of hiding animals!
 
 ### Picking and Eating Apples
 
-![alt text](ReadMeAssets/undertree.png)
+![undertree](ReadMeAssets/undertree.png)
 
 For safety, make sure to find an apple tree and fill your apple basket! When under the tree, swap to your fists and press 'R' to collect an apple every second. To eat when low on health, just hold your apples in your fists and press 'E' to consume!
 
