@@ -12,7 +12,7 @@ Move Up: W
 
 Move Left: A
 
-Move Left: S
+Move Down: S
 
 Move Right: D
 
