@@ -23,17 +23,17 @@ Eat Apple: E
 
 ### How to Run
 
-  Step 1: Compile the program if it hasn't compiled already
-  ```
-  make
+**Step 1: Compile the program if it hasn't compiled already**
+```
+make
+```
+
+**Step 2: Run the game**
+```
+./huntingSeason
   ```
 
-  Step 2: Run the game
-  ```
-  ./huntingSeason
-  ```
-
-  Step 3: Have fun!
+Step 3: Have fun!
 
 ### Welcome to The Wild
 
