@@ -14,7 +14,7 @@
 Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
-    fireRate=1; //the closer to 0 the less time between each shot
+    fireRate=1.2; //the closer to 0 the less time between each shot
     bulletSpeed=6; 
     dmg=10;
 }
@@ -127,7 +127,9 @@ void Weapon::setBullSpeed(int spd)
  */
 void Weapon::increaseDmg()
 {
-    dmg+=2;
+    if(dmg<100){
+        dmg+=2;
+    }
 }
 
 /**

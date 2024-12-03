@@ -22,8 +22,6 @@ Lazergun::Lazergun(std::map<std::string, sf::Texture>& textures){
             temp = new Bullet(range,bulletT);
             BulletShot.push_back(temp);
     }
-
-    dmg = 1;
 }
 
 /**
@@ -32,8 +30,6 @@ Lazergun::Lazergun(std::map<std::string, sf::Texture>& textures){
  */
 Lazergun::~Lazergun() {
     for(unsigned int i=0;i<BulletShot.size();i++){
-        // BulletShot.front()=nullptr;
-        // BulletShot.pop();
         delete BulletShot[i];
     }
 }
@@ -81,7 +77,11 @@ void Lazergun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     }
 }
 
-
+/**
+ * @brief updates the position of the lazer gun to keep it with the player
+ * 
+ * @param playerTrack 
+ */
 void Lazergun::update(sf::Vector2f playerTrack) {
     sprite->setPosition(playerTrack.x,playerTrack.y);
 }

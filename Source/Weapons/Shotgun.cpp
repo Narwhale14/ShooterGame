@@ -103,7 +103,11 @@ void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     }
 }
 
-
+/**
+ * @brief updates the weapon to stay with the player
+ * 
+ * @param playerTrack 
+ */
 void Shotgun::update(sf::Vector2f playerTrack) {
     sprite->setPosition(playerTrack.x,playerTrack.y);
 }

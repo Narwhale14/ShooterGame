@@ -1,6 +1,6 @@
 /**
  * @file GameState.cpp
- * @author Niall Murray
+ * @author Niall Murray and Will Wotherspoon
  * @brief GameState implementation file
  * @date 2024-10-23
  */
@@ -421,7 +421,7 @@ void MainMap::updateInput(const float& dt) {
  */
 void MainMap::updateUpgrade()
 {
-    //based off random menu1 choose the upgrade from cardChoice which conatians the upgrade options
+    //based off random menu1 and menu2 choose the upgrade from cardChoice which containns the upgrade options
     if(cardChoice2[Menu1]=="DMG" || cardChoice2[Menu2]=="DMG"){
         dmgUp->update(mousePosView);
         if(cardChoice2[Menu1]=="DMG")
@@ -700,7 +700,7 @@ void MainMap::initializeTextures() {
 }
 
 /**
- * @brief Loads all textures into map
+ * @brief Loads all texts fonts into map
  * 
  */
 void MainMap::initializeFonts() {
@@ -713,6 +713,10 @@ void MainMap::initializeFonts() {
         fonts["SONO_B"] = temp;
 }
 
+/**
+ * @brief sets the text for the score display at the end of the game
+ * 
+ */
 void MainMap::scoreText()
 {
     scoreDisplay.setFont(fonts["SONO_B"]);
