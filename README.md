@@ -9,14 +9,21 @@ Hello and Welcome to hunting Season. Your mission is to survive the wild beasts 
 ## CONTROLS:
 
 Move Up: W
+
 Move Left: A
+
 Move Left: S
+
 Move Right: D
 
 Swap To Weapon: 2
+
 Swap To Fists: 1
+
 Shoot Weapon: Space
+
 Pick Apple: R
+
 Eat Apple: E
 
 ## HOW TO RUN:
