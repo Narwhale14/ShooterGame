@@ -16,6 +16,7 @@ class Button {
         ~Button();
 
         void setPosition(const sf::Vector2f& position);
+        void setSize(const sf::Vector2f& size);
 
         short unsigned getState();
         sf::Vector2f getSize() const;
