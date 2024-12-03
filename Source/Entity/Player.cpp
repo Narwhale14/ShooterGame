@@ -236,7 +236,7 @@ void Player::equipLazergun(std::map<std::string, sf::Texture>& textures)
     delete handheld;
     handheld=new Lazergun(textures);
     handheldType=gun;
-    handheld->setDmg(15);
+    handheld->setDmg(5);
 }
 
 /**
