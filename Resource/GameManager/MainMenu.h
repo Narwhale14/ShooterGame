@@ -21,6 +21,7 @@ class MainMenu : public State {
         virtual void update(const float& dt);
 
         virtual void render(sf::RenderTarget* target = nullptr);
+        void controlText();
     private:
         Button* playButton;
         Button* exitButton;
@@ -29,6 +30,8 @@ class MainMenu : public State {
 
         virtual void initializeFonts();
         virtual void initializeTextures();
+        sf::Text controlDisplay;
+        sf::RectangleShape tint;
 };
 
 #endif

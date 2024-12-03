@@ -85,6 +85,9 @@ void MainMenu::render(sf::RenderTarget* target) {
     target->draw(background);
     playButton->render(*target);
     exitButton->render(*target);
+    controlText();
+    target->draw(controlDisplay);
+    target->draw(tint);
 }
 
 /**
@@ -96,6 +99,8 @@ void MainMenu::initializeFonts() {
 
     if(temp.loadFromFile("Fonts/Sono-Regular.ttf"))
         fonts["SONO_R"] = temp;
+    if(temp.loadFromFile("Fonts/Sono-Bold.ttf"))
+        fonts["SONO_B"] = temp;
 }
 
 /**
@@ -107,4 +112,18 @@ void MainMenu::initializeTextures() {
 
     if(temp.loadFromFile("Textures/background.png"))
         textures["BACKGROUND"] = temp;
+}
+
+void MainMenu::controlText()
+{
+    tint.setSize(sf::Vector2f(window->getSize().x/1.7, window->getSize().y/3));
+    tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
+    tint.setPosition(sf::Vector2f(window->getSize().x/50, window->getSize().y*(.8)));
+    tint.setFillColor(sf::Color(0, 0, 0, 100));
+    controlDisplay.setFont(fonts["SONO_B"]);
+    std::ostringstream scoreOut;
+    scoreOut<<"Move Character upwards: W\n"<<"Move character to the left: A\n"<<"Move Character down: S\n"<<"Move Caracter to the right: D\n"<<"Equip the Weapon: 2\n"<<"Unequip the Weapon: 1\n"<<"Shoot the Weapon: Space\n"<<"Pick up Apple: R\n"<<"Eat the apple: E";
+    controlDisplay.setString(scoreOut.str());
+    controlDisplay.setFillColor(sf::Color::White);
+    controlDisplay.setPosition(sf::Vector2f(window->getSize().x/50, window->getSize().y*(.65)));
 }
