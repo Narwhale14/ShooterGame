@@ -85,6 +85,19 @@ void Button::setPosition(const sf::Vector2f& position) {
 }
 
 /**
+ * @brief Sets the button size after it's created
+ * 
+ * @param size 
+ */
+void Button::setSize(const sf::Vector2f& size) {
+    button.setSize(size);
+    button.setOrigin(button.getSize().x / 2, button.getSize().y / 2);
+
+    text.setCharacterSize(button.getGlobalBounds().height / 2);
+    text.setOrigin(text.getGlobalBounds().width / 2, text.getGlobalBounds().height / 2);
+}
+
+/**
  * @brief Gets the button state
  * 
  * @return short unsigned 

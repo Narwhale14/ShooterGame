@@ -49,6 +49,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     tint.setFillColor(sf::Color(0, 0, 0, 100));
     menuButton = new Button(fonts["SONO_R"], "QUIT", sf::Vector2f(map->getCameraSize().x / 6, map->getCameraSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
     menuButton->setPosition(sf::Vector2f(map->getCameraSize().x / 2, map->getCameraSize().y / 2 + menuButton->getSize().y * 1.5f));
+    scoreDisplay.setFont(fonts["SONO_B"]);
+    scoreDisplay.setCharacterSize(map->getCameraSize().x / 65);
+    scoreDisplay.setString("");
+    scoreDisplay.setFillColor(sf::Color::White);
 
     // Upgrade buttons creation
     dmgUp = new Button(sf::Vector2f(map->getCameraSize().x/6, map->getCameraSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
@@ -215,8 +219,10 @@ void MainMap::spawnEnemy() {
  * 
  */
 void MainMap::resize(float value) {
-    if(map->getCameraScale() != 1.75f)
-        map->setCameraZoom(1.75f);
+    if(map->getCameraScale() != value)
+        map->setCameraZoom(value);
+    else
+        return;
 
     levelBar->setSize(sf::Vector2f(map->getCameraSize().x / 3, map->getCameraSize().y / 12));
 
@@ -224,6 +230,12 @@ void MainMap::resize(float value) {
     appleBagDisplay.setOrigin(sf::Vector2f(appleBagDisplay.getSize().x / 2, appleBagDisplay.getSize().y / 2));
     appleBagText.setCharacterSize(appleBagDisplay.getGlobalBounds().width / 6);
     appleBagText.setOrigin(appleBagText.getGlobalBounds().width / 2, appleBagText.getGlobalBounds().height / 2);
+    player->scaleAppleBag(map->getCameraScale());
+
+    tint.setSize(sf::Vector2f(map->getCameraSize().x, map->getCameraSize().y));
+    tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
+    menuButton->setSize(sf::Vector2f(map->getCameraSize().x / 6, map->getCameraSize().y / 8));
+    scoreDisplay.setCharacterSize(map->getCameraSize().x / 65);
 }
 
 /**
@@ -485,6 +497,7 @@ void MainMap::updateUpgrade()
             lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(lazerGunSwitch->getState()==2){
             player->equipLazergun(textures);
+            resize(1);
             upgrading=false;
             normUp=false;
         }
@@ -496,6 +509,7 @@ void MainMap::updateUpgrade()
             shotGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(shotGunSwitch->getState()==2){
             player->equipShotgun(textures);
+            resize(1);
             upgrading=false;
             normUp=false;
             pen=true;
@@ -508,7 +522,7 @@ void MainMap::updateUpgrade()
             sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
-            resize(1.75f);
+            resize(1.5f);
             upgrading=false;
             normUp=false;
         }
@@ -609,6 +623,7 @@ void MainMap::renderCards(sf::RenderTarget& target) {
         lazerGunSwitch->update(mousePosView);
         if(lazerGunSwitch->getState()==2){
             player->equipLazergun(textures);
+            resize(1);
             upgrading=false;
             finalUp=true;
         }
@@ -617,6 +632,7 @@ void MainMap::renderCards(sf::RenderTarget& target) {
         shotGunSwitch->update(mousePosView);
         if(shotGunSwitch->getState()==2){
             player->equipShotgun(textures);
+            resize(1);
             upgrading=false;
             finalUp=true;
             pen=true;
@@ -626,7 +642,7 @@ void MainMap::renderCards(sf::RenderTarget& target) {
         sniperSwitch->update(mousePosView);
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
-            resize(1.75f);
+            resize(1.5f);
             upgrading=false;
             finalUp=true;
         }
@@ -748,10 +764,9 @@ void MainMap::scoreText()
         seconds = static_cast<int>(timeElapsed.getElapsedTime().asSeconds()) % 60;
     }
 
-    scoreDisplay.setFont(fonts["SONO_B"]);
     std::ostringstream scoreOut;
     scoreOut << "Level: " << levelBar->getLvl() << " | Extra XP: " << levelBar->getXp() << " | Elapsed Time: " << minutes << ":" << seconds << "\n";
+
     scoreDisplay.setString(scoreOut.str());
-    scoreDisplay.setFillColor(sf::Color::White);
     scoreDisplay.setPosition(map->getCameraCenter().x - (scoreDisplay.getGlobalBounds().width / 2),map->getCameraCenter().y);
 }

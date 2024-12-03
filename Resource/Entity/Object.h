@@ -17,7 +17,11 @@ class Object {
         
         sf::FloatRect getHitboxBounds() const;
         sf::Color getHitboxColor() const;
+        float getScale() const;
+        float getDefaultScale() const;
         void showHitbox(bool visible);
+
+        void setScale(float scale);
         
         void createHitbox(sf::Sprite* s, float width, float height, sf::Color color);
 
@@ -28,7 +32,9 @@ class Object {
         sf::Texture* texture;
         sf::Sprite* sprite;
         sf::Color color;
+        
         float scale;
+        float defaultScale;
 
         Hitbox* hitbox;
 };

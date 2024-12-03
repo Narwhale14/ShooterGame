@@ -12,7 +12,14 @@
  * 
  */
 Object::Object() {
-    
+    scale = 0;
+    defaultScale = 0;
+
+    texture = nullptr;
+    sprite = nullptr;
+    hitbox = nullptr;
+
+    color = sf::Color::White;
 }
 
 /**
@@ -40,6 +47,33 @@ sf::FloatRect Object::getHitboxBounds() const {
  */
 sf::Color Object::getHitboxColor() const {
     return color;
+}
+
+/**
+ * @brief Gets scale
+ * 
+ * @return float 
+ */
+float Object::getScale() const {
+    return scale;
+}
+
+/**
+ * @brief Set's object sprite scale
+ * 
+ * @param scale 
+ */
+void Object::setScale(float scale) {
+    this->scale = scale;
+    sprite->setScale(this->scale, this->scale);
+}
+
+/**
+ * @brief Sets back to default scale
+ * 
+ */
+float Object::getDefaultScale() const {
+    return defaultScale;
 }
 
 /**
@@ -74,6 +108,7 @@ void Object::createHitbox(sf::Sprite* s, float width, float height, sf::Color co
 void Object::createSprite(sf::Texture* texture, float scale) {
     this->texture = texture;
     this->scale = scale;
+    defaultScale = this->scale;
     sprite = new sf::Sprite(*this->texture);
 
     sprite->setOrigin(sprite->getGlobalBounds().width / 2, sprite->getGlobalBounds().height / 2);

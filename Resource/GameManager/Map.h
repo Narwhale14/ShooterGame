@@ -21,7 +21,6 @@ class Map {
 
         sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
-        sf::Vector2f getDefaultCameraSize() const;
         sf::Vector2f getCameraCenter() const;
 
         float getCameraScale() const;
@@ -41,6 +40,7 @@ class Map {
         sf::Color mapOutlineColor;
 
         sf::View view;
+        sf::View defaultView;
         
         float gridSize;
         int mapSize;

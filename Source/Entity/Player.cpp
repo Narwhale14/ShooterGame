@@ -221,9 +221,23 @@ void Player::increaseBullSpeed()
  * 
  * @return int the damage number
  */
-int Player::getDmg()
+int Player::getDmg() const
 {
     return handheld->getDmg();
+}
+
+/**
+ * @brief Scales the apple size in apple bag
+ * 
+ * @param scale 
+ */
+void Player::scaleAppleBag(float s) {
+    for(size_t i = 0; i < appleBag.size(); i++) {
+        if(s != 1)
+            appleBag[i]->setScale(appleBag[i]->getScale() * s);
+        else
+            appleBag[i]->setScale(appleBag[i]->getDefaultScale());
+    }
 }
 
 /**
