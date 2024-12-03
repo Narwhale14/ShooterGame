@@ -1,6 +1,6 @@
 /**
  * @file Player.h
- * @author Niall Murray
+ * @author Niall Murray and Will Wotherspoon
  * @brief Player class declaration (controllable player)
  * @date 2024-10-23
  */

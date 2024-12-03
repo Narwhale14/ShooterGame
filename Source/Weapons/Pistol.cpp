@@ -36,8 +36,6 @@ Pistol::Pistol(std::map<std::string, sf::Texture>& textures, bool isSniper){
  */
 Pistol::~Pistol() {
     for(unsigned int i=0;i<BulletShot.size();i++){
-        // BulletShot.front()=nullptr;
-        // BulletShot.pop();
         delete BulletShot[i];
     }
 }
