@@ -37,6 +37,7 @@ class Enemy : public Entity {
 
         virtual void render(sf::RenderTarget& target);
         virtual void update();
+        void updateWolfSpawnRate(int playerLevel);
     private:
         enum type {wolf = 0, bull};
         short unsigned type;
@@ -64,6 +65,8 @@ class Enemy : public Entity {
 
         int angleDeviation;
         int relaxedAngle;
+
+        float wolfSpawnRate;
 
         short unsigned generateEnemyType();
 };

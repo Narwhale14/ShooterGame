@@ -15,7 +15,7 @@ Game::Game() {
     // Both of these are essentially just functions that purposefully clean up the constructor
     initializeWindow();
     initializeKeys();
-    sf::Clock c;
+    dt = 0;
 
     states.push(new MainMap(window, &supportedKeys));
     states.push(new MainMenu(window, &supportedKeys));
@@ -115,7 +115,7 @@ void Game::initializeWindow() {
 
     inputFile.close();
 
-    window = new sf::RenderWindow(windowBounds, title, sf::Style::Fullscreen);
+    window = new sf::RenderWindow(windowBounds, title);
     window->setFramerateLimit(framerate_limit);
     window->setVerticalSyncEnabled(vertical_sync_enabled);
 }
