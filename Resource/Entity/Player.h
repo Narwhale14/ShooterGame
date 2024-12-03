@@ -17,6 +17,10 @@ class Player : public Entity {
 
         std::deque<Bullet*>& getActiveBullets() const;
         unsigned short getHandheldType() const;
+        int getDmg() const;
+
+        void scaleAppleBag(float s);
+
         void equipLazergun(std::map<std::string, sf::Texture>& textures);
         void equipShotgun(std::map<std::string, sf::Texture>& textures);
         void equipSniper(std::map<std::string, sf::Texture>& textures);
@@ -34,7 +38,6 @@ class Player : public Entity {
 
         virtual void updateRotation(const sf::Vector2f& mousePos);
         virtual void update();
-        int getDmg();
 
         virtual void render(sf::RenderTarget& target);
         void addApple(std::map<std::string, sf::Texture> &textures);

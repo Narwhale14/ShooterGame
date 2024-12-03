@@ -35,6 +35,7 @@ class LevelBar {
         sf::Vector2f getSize() const;
 
         void setPosition(float pos_x, float pos_y);
+        void setSize(const sf::Vector2f& size);
         bool addXp(int incoming);
 
         void render(sf::RenderTarget& target);

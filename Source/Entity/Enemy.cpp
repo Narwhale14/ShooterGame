@@ -85,7 +85,7 @@ int Enemy::getXPValue() const {
  * @param change 
  */
 void Enemy::updateWolfSpawnRate(int playerLevel) {
-    wolfSpawnRate *= (1 + (playerLevel / 10.f));
+    wolfSpawnRate *= (1 + (playerLevel / 20.f));
 }
 
 /**
