@@ -14,7 +14,7 @@
 Weapon::Weapon() {
     texture = nullptr;
     sprite = nullptr;
-    fireRate=1; //the closer to 0 the less time between each shot
+    fireRate=1.2; //the closer to 0 the less time between each shot
     bulletSpeed=6; 
     dmg=10;
 }
@@ -127,7 +127,9 @@ void Weapon::setBullSpeed(int spd)
  */
 void Weapon::increaseDmg()
 {
-    dmg++;
+    if(dmg<100){
+        dmg+=2;
+    }
 }
 
 /**
@@ -136,7 +138,7 @@ void Weapon::increaseDmg()
  */
 void Weapon::increaseBullSpeed()
 {
-    if(bulletSpeed>0 && bulletSpeed<20){
+    if(bulletSpeed>0 && bulletSpeed<100){
         bulletSpeed=bulletSpeed*1.2;
     }
 }
@@ -152,6 +154,11 @@ void Weapon::increaseFireRate()
     }
 }
 
+/**
+ * @brief set the distance the weapons bullets travel
+ * 
+ * @param r 
+ */
 void Weapon::setRange(int r)
 {
     if(r>0)

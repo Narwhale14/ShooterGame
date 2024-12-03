@@ -1,3 +1,9 @@
+/**
+ * @file Mortar.h
+ * @author William Wotherspoon
+ * @brief relic from the games beginning
+ * @date 2024-12-02
+ */
 #ifndef MORTAR_H
 #define MORTAR_H
 

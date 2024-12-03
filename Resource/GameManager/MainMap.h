@@ -1,6 +1,6 @@
 /**
  * @file GameState.h
- * @author Niall Murray
+ * @author Niall Murray and Will Wotherspoon
  * @brief GameState class declaration file. This class takes the State template and finishes construction of it's pure virtual functions. Any object of this class will contain
  *        it's scene worth of entities, textures, whatever is visible
  * @date 2024-10-23

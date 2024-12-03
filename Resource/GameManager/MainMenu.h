@@ -29,6 +29,9 @@ class MainMenu : public State {
 
         virtual void initializeFonts();
         virtual void initializeTextures();
+        
+        sf::Text controlDisplay;
+        sf::RectangleShape backDropTint;
 };
 
 #endif

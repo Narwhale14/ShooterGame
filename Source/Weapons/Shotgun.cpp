@@ -69,7 +69,7 @@ void Shotgun::fire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
         }
     }
     T=C.getElapsedTime();
-    if(T.asSeconds()>.3 && BulletShot.size()<amount){
+    if(T.asSeconds()>.4 && BulletShot.size()<amount){
         for(int i=0;i<5;i++){
             Bullet *newTemp = new Bullet(range,bulletT);
             BulletShot.push_back(newTemp);
@@ -103,7 +103,11 @@ void Shotgun::stopFire(sf::Vector2f mouseLoc,sf::Vector2f playerLoc)
     }
 }
 
-
+/**
+ * @brief updates the weapon to stay with the player
+ * 
+ * @param playerTrack 
+ */
 void Shotgun::update(sf::Vector2f playerTrack) {
     sprite->setPosition(playerTrack.x,playerTrack.y);
 }
