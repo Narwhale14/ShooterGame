@@ -72,8 +72,7 @@ class MainMap : public State {
         bool normUp;
         int Menu1;
         int Menu2;
-        std::map<int,std::string> cardChoice;
-        std::vector<std::string> cardChoice2;
+        std::vector<std::string> cardChoice;
         sf::Text scoreDisplay;
 };
 

@@ -60,14 +60,14 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("DMG");
+        cardChoice.push_back("DMG");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("FIRERATE");
+        cardChoice.push_back("FIRERATE");
     for(unsigned int i=0; i<10;i++)
-        cardChoice2.push_back("BULLSPEED");
-    cardChoice2.push_back("LAZERGUN");
-    cardChoice2.push_back("SHOTGUN");
-    cardChoice2.push_back("SNIPER");
+        cardChoice.push_back("BULLSPEED");
+    cardChoice.push_back("LAZERGUN");
+    cardChoice.push_back("SHOTGUN");
+    cardChoice.push_back("SNIPER");
 
     // Booleans
     upgrading = false;
@@ -422,52 +422,52 @@ void MainMap::updateInput(const float& dt) {
 void MainMap::updateUpgrade()
 {
     //based off random menu1 and menu2 choose the upgrade from cardChoice which containns the upgrade options
-    if(cardChoice2[Menu1]=="DMG" || cardChoice2[Menu2]=="DMG"){
+    if(cardChoice[Menu1]=="DMG" || cardChoice[Menu2]=="DMG"){
         dmgUp->update(mousePosView);
-        if(cardChoice2[Menu1]=="DMG")
+        if(cardChoice[Menu1]=="DMG")
             dmgUp->setPosition(sf::Vector2f(player->getPosition().x - (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
-        if(cardChoice2[Menu2]=="DMG")
+        if(cardChoice[Menu2]=="DMG")
             dmgUp->setPosition(sf::Vector2f(player->getPosition().x + (dmgUp->getSize().x * 3 / 2), player->getPosition().y));
         if(dmgUp->getState()==2){
             player->increaseDmg();
             upgrading=false;
         }
-    }if(cardChoice2[Menu1]=="FIRERATE" || cardChoice2[Menu2]=="FIRERATE"){
+    }if(cardChoice[Menu1]=="FIRERATE" || cardChoice[Menu2]=="FIRERATE"){
         fireRateUp->update(mousePosView);
-        if(cardChoice2[Menu1]=="FIRERATE")
+        if(cardChoice[Menu1]=="FIRERATE")
             fireRateUp->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
-        if(cardChoice2[Menu2]=="FIRERATE")
+        if(cardChoice[Menu2]=="FIRERATE")
             fireRateUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(fireRateUp->getState()==2){
             player->increasefireRate();
             upgrading=false;
         } 
-    }if(cardChoice2[Menu1]=="BULLSPEED" || cardChoice2[Menu2]=="BULLSPEED"){
+    }if(cardChoice[Menu1]=="BULLSPEED" || cardChoice[Menu2]=="BULLSPEED"){
         bullSpeedUp->update(mousePosView);
-        if(cardChoice2[Menu1]=="BULLSPEED")
+        if(cardChoice[Menu1]=="BULLSPEED")
             bullSpeedUp->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
-        if(cardChoice2[Menu2]=="BULLSPEED")
+        if(cardChoice[Menu2]=="BULLSPEED")
             bullSpeedUp->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(bullSpeedUp->getState()==2){
             player->increaseBullSpeed();
             upgrading=false;
         }
-    }if(cardChoice2[Menu1]=="LAZERGUN" || cardChoice2[Menu2]=="LAZERGUN"){
+    }if(cardChoice[Menu1]=="LAZERGUN" || cardChoice[Menu2]=="LAZERGUN"){
         lazerGunSwitch->update(mousePosView);
-        if(cardChoice2[Menu1]=="LAZERGUN")
+        if(cardChoice[Menu1]=="LAZERGUN")
             lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
-        if(cardChoice2[Menu2]=="LAZERGUN")
+        if(cardChoice[Menu2]=="LAZERGUN")
             lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(lazerGunSwitch->getState()==2){
             player->equipLazergun(textures);
             upgrading=false;
             normUp=false;
         }
-    }if(cardChoice2[Menu1]=="SHOTGUN" || cardChoice2[Menu2]=="SHOTGUN"){
+    }if(cardChoice[Menu1]=="SHOTGUN" || cardChoice[Menu2]=="SHOTGUN"){
         shotGunSwitch->update(mousePosView);
-        if(cardChoice2[Menu1]=="SHOTGUN")
+        if(cardChoice[Menu1]=="SHOTGUN")
             shotGunSwitch->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
-        if(cardChoice2[Menu2]=="SHOTGUN")
+        if(cardChoice[Menu2]=="SHOTGUN")
             shotGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(shotGunSwitch->getState()==2){
             player->equipShotgun(textures);
@@ -475,11 +475,11 @@ void MainMap::updateUpgrade()
             normUp=false;
             pen=true;
         }
-    }if(cardChoice2[Menu1]=="SNIPER" || cardChoice2[Menu2]=="SNIPER"){
+    }if(cardChoice[Menu1]=="SNIPER" || cardChoice[Menu2]=="SNIPER"){
         sniperSwitch->update(mousePosView);
-        if(cardChoice2[Menu1]=="SNIPER")
+        if(cardChoice[Menu1]=="SNIPER")
             sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x - (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
-        if(cardChoice2[Menu2]=="SNIPER")
+        if(cardChoice[Menu2]=="SNIPER")
             sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
@@ -563,17 +563,17 @@ void MainMap::renderTrees(sf::RenderTarget& target) {
 void MainMap::renderCards(sf::RenderTarget& target) {
     // Normal upgrading
     if(upgrading && levelBar->getLvl() != levelBar->getLevelCap()){
-        if(cardChoice2[Menu1]=="DMG"||cardChoice2[Menu2]=="DMG")
+        if(cardChoice[Menu1]=="DMG"||cardChoice[Menu2]=="DMG")
             dmgUp->render(target);
-        if(cardChoice2[Menu1]=="FIRERATE"||cardChoice2[Menu2]=="FIRERATE")  
+        if(cardChoice[Menu1]=="FIRERATE"||cardChoice[Menu2]=="FIRERATE")  
             fireRateUp->render(target);
-        if(cardChoice2[Menu1]=="BULLSPEED"||cardChoice2[Menu2]=="BULLSPEED")
+        if(cardChoice[Menu1]=="BULLSPEED"||cardChoice[Menu2]=="BULLSPEED")
             bullSpeedUp->render(target);
-        if(cardChoice2[Menu1]=="LAZERGUN"||cardChoice2[Menu2]=="LAZERGUN")
+        if(cardChoice[Menu1]=="LAZERGUN"||cardChoice[Menu2]=="LAZERGUN")
             lazerGunSwitch->render(target);
-        if(cardChoice2[Menu1]=="SHOTGUN"||cardChoice2[Menu2]=="SHOTGUN")
+        if(cardChoice[Menu1]=="SHOTGUN"||cardChoice[Menu2]=="SHOTGUN")
             shotGunSwitch->render(target);
-        if(cardChoice2[Menu1]=="SNIPER"||cardChoice2[Menu2]=="SNIPER")
+        if(cardChoice[Menu1]=="SNIPER"||cardChoice[Menu2]=="SNIPER")
             sniperSwitch->render(target);
     }
 
