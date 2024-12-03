@@ -19,9 +19,7 @@ Shoot Weapon: Space
 Pick Apple: R
 Eat Apple: E
 
-## GAMEPLAY:
-
-### How to Run
+## HOW TO RUN:
 
 **Step 1: Compile the program if it hasn't compiled already**
 ```
@@ -34,6 +32,8 @@ make
   ```
 
 Step 3: Have fun!
+
+## GAMEPLAY:
 
 ### Welcome to The Wild
 
