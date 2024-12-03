@@ -49,6 +49,7 @@ class MainMap : public State {
         bool checkSpawnTimer();
         void spawnTrees(int sparsity);
         void spawnEnemy();
+        void resize(float value);
 
         void updateInput(const float& dt);
         void updateMobs(const float& dt);

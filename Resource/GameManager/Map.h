@@ -18,9 +18,12 @@ class Map {
         float getTotalSize() const;
         float getGridSize() const;
         int getSizeAcross() const;
+
         sf::Vector2f getMapCenter() const;
         sf::Vector2f getCameraSize() const;
+        sf::Vector2f getDefaultCameraSize() const;
         sf::Vector2f getCameraCenter() const;
+
         float getCameraScale() const;
         void setCameraCenter(float xpos, float ypos);
         void setCameraZoom(float zoom);

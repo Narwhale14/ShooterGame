@@ -134,6 +134,23 @@ void LevelBar::setPosition(float pos_x, float pos_y) {
 }
 
 /**
+ * @brief Sets level bar size
+ * 
+ * @param size 
+ */
+void LevelBar::setSize(const sf::Vector2f& size) {
+    barBack.setSize(sf::Vector2f(size.x, size.y / 5));
+    barMain.setSize(sf::Vector2f(size.x, size.y / 5));
+    maxMainBarSize = barMain.getSize().x;
+
+    barBack.setOrigin(barBack.getGlobalBounds().width / 2, barBack.getGlobalBounds().height / 2);
+    barMain.setOrigin(barBack.getGlobalBounds().width / 2, barBack.getGlobalBounds().height / 2);
+
+    text.setCharacterSize(barBack.getGlobalBounds().height * 1.25f);
+    text.setOrigin(text.getGlobalBounds().width / 2, text.getGlobalBounds().height / 2);
+}
+
+/**
  * @brief Renders visual levelbar
  * 
  * @param target 
