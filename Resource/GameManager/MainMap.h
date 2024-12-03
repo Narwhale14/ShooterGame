@@ -77,6 +77,8 @@ class MainMap : public State {
         sf::Text scoreDisplay;
 
         sf::Clock timeElapsed;
+        int minutes;
+        int seconds;
 };
 
 #endif

@@ -19,10 +19,10 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     srand(time(0));
 
     spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 50;
+    enemyCap = 20;
 
     // Map creation
-    map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     // Player creation
@@ -76,6 +76,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     pen = false;
     playerUnderTree = false;
     playerUnderAppleTree = false;
+
+    minutes = -1;
+    seconds = -1;
 }
 
 /**
@@ -85,7 +88,12 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 MainMap::~MainMap() {
     std::ofstream file("scores.txt", std::ios::out | std::ios::app);
     if(file){
-        file<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
+        if(player->isAlive()) {
+            minutes = timeElapsed.getElapsedTime().asSeconds() / 60;
+            seconds = static_cast<int>(timeElapsed.getElapsedTime().asSeconds()) % 60;
+        }
+
+        file << "Level: " << levelBar->getLvl() << " | Extra XP: " << levelBar->getXp() << " | Elapsed Time: " << minutes << ":" << seconds << "\n";
         file.close();
     }
     while(!enemies.empty()) {
@@ -106,6 +114,7 @@ MainMap::~MainMap() {
     delete shotGunSwitch;
     delete sniperSwitch;
     delete menuButton;
+    delete player;
 }
 
 /**
@@ -337,6 +346,7 @@ void MainMap::updateMobs(const float& dt) {
                     enemies[i]->setState(2);
             }
         }
+
     }
 }
 
@@ -715,14 +725,15 @@ void MainMap::initializeFonts() {
 
 void MainMap::scoreText()
 {
-    int minutes = timeElapsed.getElapsedTime().asSeconds() / 60;
-    int seconds = static_cast<int>(timeElapsed.getElapsedTime().asSeconds()) % 60;
+    if(minutes == -1 && seconds == -1) {
+        minutes = timeElapsed.getElapsedTime().asSeconds() / 60;
+        seconds = static_cast<int>(timeElapsed.getElapsedTime().asSeconds()) % 60;
+    }
 
     scoreDisplay.setFont(fonts["SONO_B"]);
     std::ostringstream scoreOut;
-    scoreOut<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()
-     << "| Elapsed Time: " << minutes << ":" << seconds << "\n";
+    scoreOut << "Level: " << levelBar->getLvl() << " | Extra XP: " << levelBar->getXp() << " | Elapsed Time: " << minutes << ":" << seconds << "\n";
     scoreDisplay.setString(scoreOut.str());
     scoreDisplay.setFillColor(sf::Color::White);
-    scoreDisplay.setPosition(map->getCameraCenter().x - (scoreDisplay.getGlobalBounds().width),map->getCameraCenter().y);
+    scoreDisplay.setPosition(map->getCameraCenter().x - (scoreDisplay.getGlobalBounds().width / 2),map->getCameraCenter().y);
 }
