@@ -1,2 +1,3 @@
      Player Scores
 ------------------------
+Level: 1 | Extra XP: 0 | Elapsed Time: 0:56
