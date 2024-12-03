@@ -31,6 +31,8 @@ Map::Map(sf::RenderTarget* window, int mapS, float gridS, sf::Color color, sf::C
     totalMapSize = gridSize * mapSize;
     cameraScale = 1.f;
 
+    defaultView = window->getDefaultView();
+
     view.setSize(window->getSize().x, window->getSize().y);
     view.setCenter(totalMapSize / 2, totalMapSize / 2);
 
@@ -124,6 +126,9 @@ void Map::setCameraCenter(float xpos, float ypos) {
  * @param zoom 
  */
 void Map::setCameraZoom(float zoom) {
+    if(zoom == 1)
+        view = defaultView;
+
     view.zoom(zoom);
     cameraScale = zoom;
 }

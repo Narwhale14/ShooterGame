@@ -6,9 +6,6 @@
  * @param texture a pointer pointing to a texture
  */
 Entity::Entity() {
-    texture = nullptr;
-    sprite = nullptr;
-    hitbox = nullptr;
     healthBar = nullptr;
     
     angle = 0.f;

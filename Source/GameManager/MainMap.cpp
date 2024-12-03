@@ -18,19 +18,19 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     initializeTextures();
     srand(time(0));
 
-    spawnIntervalMS = 1100; // Don't go below 1000 MS (1 second) because rand only updates every second
-    enemyCap = 50;
+    spawnIntervalMS = 2000; // Don't go below 1000 MS (1 second) because rand only updates every second
+    enemyCap = 20;
 
     // Map creation
-    map = new Map(window, 100, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
+    map = new Map(window, 50, 75.f, sf::Color(59, 104, 38, 255), sf::Color(49, 94, 28, 255));
     spawnTrees(3); // # Multiplier of trees (Scales with map size) (0 for no trees)
 
     // Player creation
     player = new Player(textures, map->getMapCenter().x, map->getMapCenter().y, 0.075f);
-    levelBar = new LevelBar(fonts["SONO_B"], window->getSize().x / 3, window->getSize().y / 12, map->getCameraCenter().x, map->getCameraCenter().y + (map->getCameraSize().y * 0.85f / 2));
+    levelBar = new LevelBar(fonts["SONO_B"], map->getCameraSize().x / 3, map->getCameraSize().y / 12, map->getCameraCenter().x, map->getCameraCenter().y + (map->getCameraSize().y * 0.85f / 2));
 
     // Apple bag display creation
-    appleBagDisplay.setSize(sf::Vector2f(window->getSize().x / 13, window->getSize().y / 13));
+    appleBagDisplay.setSize(sf::Vector2f(map->getCameraSize().x / 13, map->getCameraSize().y / 13));
     appleBagDisplay.setOrigin(sf::Vector2f(appleBagDisplay.getSize().x / 2, appleBagDisplay.getSize().y / 2));
     appleBagDisplay.setPosition(map->getMapCenter().x, map->getMapCenter().y);
     appleBagDisplay.setFillColor(sf::Color(0, 0, 0, 100));
@@ -43,20 +43,24 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     appleBagText.setFillColor(sf::Color::White);
 
     // Death screen creation
-    tint.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
+    tint.setSize(sf::Vector2f(map->getCameraSize().x, map->getCameraSize().y));
     tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
     tint.setPosition(sf::Vector2f(map->getCameraCenter().x, map->getCameraCenter().y));
     tint.setFillColor(sf::Color(0, 0, 0, 100));
-    menuButton = new Button(fonts["SONO_R"], "QUIT", sf::Vector2f(window->getSize().x / 6, window->getSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
-    menuButton->setPosition(sf::Vector2f(window->getSize().x / 2, window->getSize().y / 2 + menuButton->getSize().y * 1.5f));
+    menuButton = new Button(fonts["SONO_R"], "QUIT", sf::Vector2f(map->getCameraSize().x / 6, map->getCameraSize().y / 8), sf::Color(70, 70, 70, 150), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200));
+    menuButton->setPosition(sf::Vector2f(map->getCameraSize().x / 2, map->getCameraSize().y / 2 + menuButton->getSize().y * 1.5f));
+    scoreDisplay.setFont(fonts["SONO_B"]);
+    scoreDisplay.setCharacterSize(map->getCameraSize().x / 65);
+    scoreDisplay.setString("");
+    scoreDisplay.setFillColor(sf::Color::White);
 
     // Upgrade buttons creation
-    dmgUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
-    fireRateUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
-    bullSpeedUp = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
-    lazerGunSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHLAZERGUN"]);
-    shotGunSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSHOTGUN"]);
-    sniperSwitch = new Button(sf::Vector2f(window->getSize().x/6, window->getSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSNIPER"]);
+    dmgUp = new Button(sf::Vector2f(map->getCameraSize().x/6, map->getCameraSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseDmgCard"]);
+    fireRateUp = new Button(sf::Vector2f(map->getCameraSize().x/6, map->getCameraSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseFireRateCard"]);
+    bullSpeedUp = new Button(sf::Vector2f(map->getCameraSize().x/6, map->getCameraSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["increaseBullSpeedCard"]);
+    lazerGunSwitch = new Button(sf::Vector2f(map->getCameraSize().x/6, map->getCameraSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHLAZERGUN"]);
+    shotGunSwitch = new Button(sf::Vector2f(map->getCameraSize().x/6, map->getCameraSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSHOTGUN"]);
+    sniperSwitch = new Button(sf::Vector2f(map->getCameraSize().x/6, map->getCameraSize().y/2), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200), &textures["SWITCHSNIPER"]);
 
     //adds the upgrade options to the vector
     for(unsigned int i=0; i<10;i++)
@@ -76,6 +80,9 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
     pen = false;
     playerUnderTree = false;
     playerUnderAppleTree = false;
+
+    minutes = -1;
+    seconds = -1;
 }
 
 /**
@@ -85,7 +92,12 @@ MainMap::MainMap(sf::RenderWindow* window, std::map<std::string, int>* supported
 MainMap::~MainMap() {
     std::ofstream file("scores.txt", std::ios::out | std::ios::app);
     if(file){
-        file<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
+        if(player->isAlive()) {
+            minutes = timeElapsed.getElapsedTime().asSeconds() / 60;
+            seconds = static_cast<int>(timeElapsed.getElapsedTime().asSeconds()) % 60;
+        }
+
+        file << "Level: " << levelBar->getLvl() << " | Extra XP: " << levelBar->getXp() << " | Elapsed Time: " << minutes << ":" << seconds << "\n";
         file.close();
     }
     while(!enemies.empty()) {
@@ -203,6 +215,30 @@ void MainMap::spawnEnemy() {
 }
 
 /**
+ * @brief Resizes GUI to fit new camera size
+ * 
+ */
+void MainMap::resize(float value) {
+    if(map->getCameraScale() != value)
+        map->setCameraZoom(value);
+    else
+        return;
+
+    levelBar->setSize(sf::Vector2f(map->getCameraSize().x / 3, map->getCameraSize().y / 12));
+
+    appleBagDisplay.setSize(sf::Vector2f(map->getCameraSize().x / 13, map->getCameraSize().y / 13));
+    appleBagDisplay.setOrigin(sf::Vector2f(appleBagDisplay.getSize().x / 2, appleBagDisplay.getSize().y / 2));
+    appleBagText.setCharacterSize(appleBagDisplay.getGlobalBounds().width / 6);
+    appleBagText.setOrigin(appleBagText.getGlobalBounds().width / 2, appleBagText.getGlobalBounds().height / 2);
+    player->scaleAppleBag(map->getCameraScale());
+
+    tint.setSize(sf::Vector2f(map->getCameraSize().x, map->getCameraSize().y));
+    tint.setOrigin(tint.getSize().x / 2, tint.getSize().y / 2);
+    menuButton->setSize(sf::Vector2f(map->getCameraSize().x / 6, map->getCameraSize().y / 8));
+    scoreDisplay.setCharacterSize(map->getCameraSize().x / 65);
+}
+
+/**
  * @brief Updates GameState based on deltaTime and any entities
  * 
  * @param dt deltaTime
@@ -231,7 +267,7 @@ void MainMap::update(const float& dt) {
         menuButton->update(mousePosView);
     }
 
-    appleBagDisplay.setPosition(map->getCameraCenter().x + (levelBar->getSize().x / 2) + appleBagDisplay.getSize().x * 0.75f, map->getCameraCenter().y + (map->getCameraSize().y * 0.85f / 2));
+    appleBagDisplay.setPosition(map->getCameraCenter().x + (levelBar->getSize().x / 2) + appleBagDisplay.getSize().x * 0.75f, map->getCameraCenter().y + (appleBagDisplay.getSize().y * 5.5f));
     appleBagText.setPosition(appleBagDisplay.getPosition().x, appleBagDisplay.getPosition().y - (appleBagDisplay.getSize().y / 3));
 }
 
@@ -337,6 +373,7 @@ void MainMap::updateMobs(const float& dt) {
                     enemies[i]->setState(2);
             }
         }
+
     }
 }
 
@@ -460,6 +497,7 @@ void MainMap::updateUpgrade()
             lazerGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(lazerGunSwitch->getState()==2){
             player->equipLazergun(textures);
+            resize(1);
             upgrading=false;
             normUp=false;
         }
@@ -471,6 +509,7 @@ void MainMap::updateUpgrade()
             shotGunSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(shotGunSwitch->getState()==2){
             player->equipShotgun(textures);
+            resize(1);
             upgrading=false;
             normUp=false;
             pen=true;
@@ -483,7 +522,7 @@ void MainMap::updateUpgrade()
             sniperSwitch->setPosition(sf::Vector2f(player->getPosition().x + (fireRateUp->getSize().x * 3 / 2), player->getPosition().y));
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
-            map->setCameraZoom(1.75f);
+            resize(1.5f);
             upgrading=false;
             normUp=false;
         }
@@ -584,6 +623,7 @@ void MainMap::renderCards(sf::RenderTarget& target) {
         lazerGunSwitch->update(mousePosView);
         if(lazerGunSwitch->getState()==2){
             player->equipLazergun(textures);
+            resize(1);
             upgrading=false;
             finalUp=true;
         }
@@ -592,6 +632,7 @@ void MainMap::renderCards(sf::RenderTarget& target) {
         shotGunSwitch->update(mousePosView);
         if(shotGunSwitch->getState()==2){
             player->equipShotgun(textures);
+            resize(1);
             upgrading=false;
             finalUp=true;
             pen=true;
@@ -601,8 +642,7 @@ void MainMap::renderCards(sf::RenderTarget& target) {
         sniperSwitch->update(mousePosView);
         if(sniperSwitch->getState()==2){
             player->equipSniper(textures);
-            if(map->getCameraScale()!=1.75f)
-                map->setCameraZoom(1.75f);
+            resize(1.5f);
             upgrading=false;
             finalUp=true;
         }
@@ -719,10 +759,14 @@ void MainMap::initializeFonts() {
  */
 void MainMap::scoreText()
 {
-    scoreDisplay.setFont(fonts["SONO_B"]);
+    if(minutes == -1 && seconds == -1) {
+        minutes = timeElapsed.getElapsedTime().asSeconds() / 60;
+        seconds = static_cast<int>(timeElapsed.getElapsedTime().asSeconds()) % 60;
+    }
+
     std::ostringstream scoreOut;
-    scoreOut<<"Level: "<<std::setw(3)<<std::left<<levelBar->getLvl()<<"| Extra XP: "<<levelBar->getXp()<<"\n";
+    scoreOut << "Level: " << levelBar->getLvl() << " | Extra XP: " << levelBar->getXp() << " | Elapsed Time: " << minutes << ":" << seconds << "\n";
+
     scoreDisplay.setString(scoreOut.str());
-    scoreDisplay.setFillColor(sf::Color::White);
-    scoreDisplay.setPosition(map->getCameraCenter().x-(map->getCameraSize().y / 5),map->getCameraCenter().y);
+    scoreDisplay.setPosition(map->getCameraCenter().x - (scoreDisplay.getGlobalBounds().width / 2),map->getCameraCenter().y);
 }
