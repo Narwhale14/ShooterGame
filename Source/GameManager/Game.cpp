@@ -115,7 +115,7 @@ void Game::initializeWindow() {
 
     inputFile.close();
 
-    window = new sf::RenderWindow(windowBounds, title, sf::Style::Fullscreen);
+    window = new sf::RenderWindow(windowBounds, title);
     window->setFramerateLimit(framerate_limit);
     window->setVerticalSyncEnabled(vertical_sync_enabled);
 }
