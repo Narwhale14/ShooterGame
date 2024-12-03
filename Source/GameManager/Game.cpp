@@ -15,7 +15,7 @@ Game::Game() {
     // Both of these are essentially just functions that purposefully clean up the constructor
     initializeWindow();
     initializeKeys();
-    sf::Clock c;
+    dt = 0;
 
     states.push(new MainMap(window, &supportedKeys));
     states.push(new MainMenu(window, &supportedKeys));
